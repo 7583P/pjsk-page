@@ -125,7 +125,7 @@
       methods: {
         async fetchPlayers() {
           try {
-            const resp = await axios.get('https:/worker-production-1ad2.up.railway.app/api/players');
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const playersSorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = playersSorted;
 
