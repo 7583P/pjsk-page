@@ -6,154 +6,230 @@
   <style>
     body {
       font-family: sans-serif;
-      margin: 20px;
-      background-color: #383838;
-      color: #ffffff;
+      background: #383838;
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
     #app {
       max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin: 30px auto;
+      background: #2a2a2a;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
     }
     h1 {
+      text-align: center;
+      margin-bottom: 24px;
       font-size: 2em;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .controls {
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    input {
-      padding: 5px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 4px;
-      text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      background: #232323;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
     }
     th {
-      padding: 10px;
-      background-color: #030050 !important;
-      text-align: center;
+      background: #222;
     }
-    td {
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #555;
+    tbody tr:nth-child(odd) {
+      background: #282828;
     }
-    tbody tr:nth-child(odd)  { background-color: #333; }
-    tbody tr:nth-child(even) { background-color: #2a2a2a; }
-
+    .position-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 60px;
+      font-variant-numeric: tabular-nums;
+    }
     .flag {
       width: 24px;
-      vertical-align: middle;
-      margin-left: 8px;
+      height: 18px;
+      display: inline-block;
+      border-radius: 3px;
+      box-shadow: 0 0 2px #0008;
+      object-fit: cover;
+      margin-left: 3px;
     }
 
-    .rank-Placement { color: #ff7000 !important; }
-    .rank-Bronze    { color: #66311e; }
-    .rank-Gold      { color: #ffaf00; }
-    .rank-Diamond   { color: #0080ff; }
+    /* PAGINATION */
+    .pagination-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 22px;
+    }
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #212121;
+      border-radius: 6px;
+      padding: 10px 22px;
+      box-shadow: 0 2px 10px #0002;
+    }
+    .pagination-btn {
+      background: #313131;
+      border: none;
+      color: #fff;
+      padding: 6px 14px;
+      margin: 0 3px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.13s;
+    }
+    .pagination-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    .page-input-label {
+      color: #bbb;
+      font-size: 0.92em;
+      margin-bottom: 3px;
+      text-align: center;
+    }
+    .page-input {
+      width: 42px;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #555;
+      background: #1b1b1b;
+      color: #fff;
+      padding: 4px;
+      font-size: 1em;
+      outline: none;
+    }
+    .page-info {
+      color: #ddd;
+      font-size: 1em;
+    }
   </style>
 </head>
 <body>
-  <div id="app">
-    <h1>PJSK LOUNGE – Temporada {{ seasonLabel }}</h1>
-    <div class="controls">
-      <input type="text" v-model="filter" placeholder="Buscar por nombre…">
+<div id="app">
+  <h1>PJSK LOUNGE</h1>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:70px;">Puesto</th>
+        <th>Jugador</th>
+        <th>Puntaje</th>
+      </tr>
+    </thead>
+    <tbody id="players-tbody"></tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div class="pagination-container" id="pagination-container" style="display:none;">
+    <div class="page-input-label">Number of pages</div>
+    <div class="pagination">
+      <button class="pagination-btn" id="prev-btn">&lt;</button>
+      <span class="page-info" id="page-info"></span>
+      <input class="page-input" id="page-input" type="number" min="1">
+      <button class="pagination-btn" id="next-btn">&gt;</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Player</th>
-          <th>MMR</th>
-          <th>Rango</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="p in filteredPlayers" :key="p.id">
-          <td :class="rankClass(p.rank)">
-            {{ playerRankMap[p.id] }}
-            <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
-          </td>
-          <td :class="rankClass(p.rank)">{{ p.name }}</td>
-          <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
-          <td :class="rankClass(p.rank)">{{ p.rank }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
+</div>
+<script>
+  // --- MOCK DATA ---
+  // Para probar, genera 138 jugadores con banderas aleatorias.
+  const flags = ['https://flagcdn.com/pe.svg','https://flagcdn.com/jp.svg','https://flagcdn.com/br.svg','https://flagcdn.com/ar.svg','https://flagcdn.com/fr.svg','https://flagcdn.com/gb.svg'];
+  function getRandomFlag() { return flags[Math.floor(Math.random() * flags.length)]; }
+  const players = Array.from({length: 138}, (_,i) => ({
+    name: `Jugador_${i+1}`,
+    score: Math.floor(Math.random()*10000),
+    countryFlag: getRandomFlag(),
+  }));
 
-  <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    const { createApp } = Vue;
-    createApp({
-      data() {
-        return {
-          players: [],
-          filter: '',
-          playerRankMap: {}
-        };
-      },
-      computed: {
-        filteredPlayers() {
-          const q = this.filter.toLowerCase();
-          return this.players.filter(p =>
-            p.name.toLowerCase().includes(q)
-          );
-        },
-        seasonLabel() {
-          const start = new Date(2025, 4, 16);
-          const now   = new Date();
-          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
-                           + (now.getMonth() - start.getMonth());
-          const period = Math.floor(monthsDiff / 3);
-          return period === 0 ? 'Beta' : period;
-        }
-      },
-      methods: {
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const playersSorted = resp.data.sort((a, b) => b.mmr - a.mmr);
-            this.players = playersSorted;
+  // --- PAGINATION SETTINGS ---
+  const PAGE_SIZE = 50;
+  let currentPage = 1;
+  const pageCount = Math.ceil(players.length / PAGE_SIZE);
 
-            // Crear mapa de posiciones reales por ID
-            const rankMap = {};
-            playersSorted.forEach((p, idx) => {
-              rankMap[p.id] = idx + 1;
-            });
-            this.playerRankMap = rankMap;
-          } catch (err) {
-            console.error(err);
-            alert('Error al cargar los datos de jugadores');
-          }
-        },
-        flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
-        },
-        rankClass(rank) {
-          return `rank-${rank}`;
-        }
-      },
-      mounted() {
-        this.fetchPlayers();
-        setInterval(() => {
-          this.fetchPlayers();
-        }, 10000); // actualiza cada 10 segundos
+  // --- RENDER TABLE ---
+  function renderTable() {
+    const tbody = document.getElementById('players-tbody');
+    tbody.innerHTML = '';
+    const start = (currentPage-1) * PAGE_SIZE;
+    const pagePlayers = players.slice(start, start + PAGE_SIZE);
+    pagePlayers.forEach((player, idx) => {
+      const tr = document.createElement('tr');
+      // Celda de posición y bandera
+      const tdPos = document.createElement('td');
+      tdPos.className = "position-cell";
+      tdPos.innerHTML = `
+        <span>${start+idx+1}</span>
+        <img class="flag" src="${player.countryFlag}" alt="Flag">
+      `;
+      // Nombre y puntaje
+      const tdName = document.createElement('td');
+      tdName.textContent = player.name;
+      const tdScore = document.createElement('td');
+      tdScore.textContent = player.score;
+      tr.appendChild(tdPos);
+      tr.appendChild(tdName);
+      tr.appendChild(tdScore);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // --- PAGINATION ---
+  function renderPagination() {
+    const container = document.getElementById('pagination-container');
+    if (players.length > PAGE_SIZE) {
+      container.style.display = 'flex';
+      document.getElementById('page-info').textContent = `Page ${currentPage} of ${pageCount}`;
+      document.getElementById('page-input').value = '';
+    } else {
+      container.style.display = 'none';
+    }
+    // Botones prev/next
+    document.getElementById('prev-btn').disabled = currentPage === 1;
+    document.getElementById('next-btn').disabled = currentPage === pageCount;
+  }
+
+  // --- EVENTOS DE NAVEGACIÓN ---
+  document.getElementById('prev-btn').onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable();
+      renderPagination();
+    }
+  };
+  document.getElementById('next-btn').onclick = () => {
+    if (currentPage < pageCount) {
+      currentPage++;
+      renderTable();
+      renderPagination();
+    }
+  };
+  document.getElementById('page-input').addEventListener('keydown', function(e) {
+    if (e.key === "Enter") {
+      let page = Number(this.value);
+      if (Number.isNaN(page) || page < 1) page = 1;
+      if (page > pageCount) page = pageCount;
+      if (page !== currentPage) {
+        currentPage = page;
+        renderTable();
+        renderPagination();
       }
-    }).mount('#app');
-  </script>
+      this.value = '';
+    }
+  });
+
+  // --- INICIALIZAR ---
+  renderTable();
+  renderPagination();
+</script>
 </body>
 </html>
+
