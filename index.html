@@ -53,12 +53,23 @@
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
 
+    /* NUEVO: alineación perfecta del puesto + bandera */
+    .rank-pos-cell {
+      text-align: right;
+      padding-right: 16px;
+      white-space: nowrap;
+    }
+    .rank-num {
+      display: inline-block;
+      width: 56px;      /* Aumenta si tienes puestos de más dígitos */
+      text-align: right;
+      font-weight: bold;
+    }
     .flag {
       width: 24px;
       vertical-align: middle;
       margin-left: 8px;
     }
-
     .rank-Placement { color: #ff7000 !important; }
     .rank-Bronze    { color: #66311e; }
     .rank-Gold      { color: #ffaf00; }
@@ -82,8 +93,10 @@
       </thead>
       <tbody>
         <tr v-for="p in filteredPlayers" :key="p.id">
-          <td :class="rankClass(p.rank)">
-            {{ playerRankMap[p.id] }}
+          <td class="rank-pos-cell">
+            <span class="rank-num" :class="rankClass(p.rank)">
+              {{ playerRankMap[p.id] }}
+            </span>
             <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
           </td>
           <td :class="rankClass(p.rank)">{{ p.name }}</td>
