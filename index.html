@@ -125,7 +125,7 @@
       methods: {
         async fetchPlayers() {
           try {
-            const resp = await axios.get('/api/players');
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const playersSorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = playersSorted;
 
@@ -141,10 +141,10 @@
           }
         },
         flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+          return https://flagcdn.com/24x18/${cc.toLowerCase()}.png;
         },
         rankClass(rank) {
-          return `rank-${rank}`;
+          return rank-${rank};
         }
       },
       mounted() {
@@ -157,6 +157,3 @@
   </script>
 </body>
 </html>
-
-
-
