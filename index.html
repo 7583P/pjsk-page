@@ -24,11 +24,7 @@
       font-size: 2em;
       margin-bottom: 20px;
       text-align: center;
-      background: linear-gradient(
-        90deg,
-        #9e6bff,
-        #9fedff
-      );
+      background: linear-gradient(90deg, #9e6bff, #9fedff);
       background-size: 300% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -65,11 +61,13 @@
       padding: 10px;
       background-color: #030050 !important;
       text-align: center;
+      color: #fff;
     }
     td {
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
+      color: #fff;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
@@ -90,21 +88,18 @@
       transform: translateY(-50%);
     }
 
-    /* Colores sólidos para todos los rangos */
-    .rank-Placement { color: #ff7000 !important; }
-    .rank-Bronze    { color: #66311e; }
-    .rank-Gold      { color: #ffaf00; }
-    .rank-Diamond   { color: #0080ff; }
+    /* Colores sólidos para filas no-Placement */
+    .rank-Placement td:not(.placement-gradient),
+    .rank-Bronze td,
+    .rank-Gold td,
+    .rank-Diamond td {
+      /* nada: mantienen color de clase en <td> */
+    }
 
-    /* Gradiente animado cruzando toda la fila para “Placement” */
-    .gradientPlacement {
+    /* Aplicamos degradado a cada <td> con este span, solo en Placement */
+    .placement-gradient {
       display: inline-block;
-      background: linear-gradient(
-        90deg,
-        #ff7000,
-        #ff4600,
-        #ff7000
-      );
+      background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
       background-size: 400% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -167,11 +162,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id">
+        <tr v-for="p in paginatedPlayers" :key="p.id"
+            :class="`rank-${p.rank}`">
           <!-- POSICIÓN -->
-          <td :class="rankClass(p.rank)">
+          <td>
             <span class="pos-wrapper">
-              {{ playerRankMap[p.id] }}
+              <span
+                :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
+              >
+                {{ playerRankMap[p.id] }}
+              </span>
               <img
                 v-if="p.country"
                 :src="flagUrl(p.country)"
@@ -180,13 +180,26 @@
               />
             </span>
           </td>
-          <!-- NOMBRE y MMR -->
-          <td :class="rankClass(p.rank)">{{ p.name }}</td>
-          <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
+          <!-- NOMBRE -->
+          <td>
+            <span
+              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
+            >
+              {{ p.name }}
+            </span>
+          </td>
+          <!-- MMR -->
+          <td>
+            <span
+              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
+            >
+              {{ p.mmr }}
+            </span>
+          </td>
           <!-- RANGO -->
           <td>
             <span
-              :class="p.rank === 'Placement' ? 'gradientPlacement' : rankClass(p.rank)"
+              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
             >
               {{ p.rank }}
             </span>
@@ -267,7 +280,7 @@
           if (this.currentPage < this.totalPages) this.currentPage++;
         },
         goToPage() {
-          // El watcher valida el número de página ingresado
+          // el watcher valida la página
         },
         async fetchPlayers() {
           try {
@@ -299,4 +312,5 @@
   </script>
 </body>
 </html>
+
 
