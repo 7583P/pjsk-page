@@ -18,7 +18,8 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    /* — TÍTULO HOLOGRÁFICO — */
+
+    /* — TÍTULO CON DEGRADADO L→R — */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
@@ -44,7 +45,7 @@
       margin-bottom: 15px;
       text-align: center;
     }
-    input {
+    input[type="text"] {
       padding: 5px;
       width: 80%;
       max-width: 400px;
@@ -52,6 +53,7 @@
       border-radius: 4px;
       text-align: center;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -74,7 +76,6 @@
       width: 24px;
     }
 
-    /* ---------------------- */
     /* WRAPPER PARA POSICIÓN + BANDERA */
     .pos-wrapper {
       display: inline-block;
@@ -86,7 +87,6 @@
       left: calc(100% + 4px);
       transform: translateY(-50%);
     }
-    /* ---------------------- */
 
     /* Colores sólidos para todos los rangos */
     .rank-Placement { color: #ff7000 !important; }
@@ -94,7 +94,7 @@
     .rank-Gold      { color: #ffaf00; }
     .rank-Diamond   { color: #0080ff; }
 
-    /* Gradiente animado L→R solo para el texto “Placement” */
+    /* Gradiente animado L→R para el texto “Placement” */
     .gradientPlacement {
       display: inline-block;
       background: linear-gradient(
@@ -114,14 +114,45 @@
       0%   { background-position: 0%   50%; }
       100% { background-position: 100% 50%; }
     }
+
+    /* Estilos de paginación */
+    .pagination {
+      margin-top: 15px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination button {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .pagination input[type="number"] {
+      width: 50px;
+      padding: 4px;
+      text-align: center;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <div id="app">
     <h1>PJSK LOUNGE – Temporada {{ seasonLabel }}</h1>
+
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…">
     </div>
+
     <table>
       <thead>
         <tr>
@@ -132,8 +163,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in filteredPlayers" :key="p.id">
-          <!-- POSICIÓN: mantiene color según rango -->
+        <tr v-for="p in paginatedPlayers" :key="p.id">
+          <!-- POSICIÓN -->
           <td :class="rankClass(p.rank)">
             <span class="pos-wrapper">
               {{ playerRankMap[p.id] }}
@@ -148,7 +179,7 @@
           <!-- NOMBRE y MMR -->
           <td :class="rankClass(p.rank)">{{ p.name }}</td>
           <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
-          <!-- RANGO: degradado solo en “Placement” -->
+          <!-- RANGO -->
           <td>
             <span
               :class="p.rank === 'Placement' ? 'gradientPlacement' : rankClass(p.rank)"
@@ -159,6 +190,20 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- CONTROLES DE PAGINACIÓN -->
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
+      <input
+        type="number"
+        v-model.number="currentPage"
+        @keyup.enter="goToPage"
+        :min="1"
+        :max="totalPages"
+      />
+      <span>/ {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage >= totalPages">&raquo;</button>
+    </div>
   </div>
 
   <script src="https://unpkg.com/vue@3"></script>
@@ -170,7 +215,9 @@
         return {
           players: [],
           filter: '',
-          playerRankMap: {}
+          playerRankMap: {},
+          currentPage: 1,
+          pageSize: 50
         };
       },
       computed: {
@@ -179,6 +226,16 @@
           return this.players.filter(p =>
             p.name.toLowerCase().includes(q)
           );
+        },
+        totalPages() {
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
+        },
+        paginatedPlayers() {
+          const start = (this.currentPage - 1) * this.pageSize;
+          return this.filteredPlayers.slice(start, start + this.pageSize);
         },
         seasonLabel() {
           const start = new Date(2025, 4, 16);
@@ -189,40 +246,56 @@
           return period === 0 ? 'Beta' : period;
         }
       },
+      watch: {
+        // Si cambia el filtro, vuelve a la primera página
+        filter() {
+          this.currentPage = 1;
+        },
+        // Asegura que currentPage esté en rango
+        currentPage(val) {
+          if (val < 1) this.currentPage = 1;
+          else if (val > this.totalPages) this.currentPage = this.totalPages;
+        }
+      },
       methods: {
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        goToPage() {
+          // v-model ya ha actualizado currentPage; el watcher lo valida
+        },
         async fetchPlayers() {
           try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const playersSorted = resp.data.sort((a, b) => b.mmr - a.mmr);
-            this.players = playersSorted;
-
-            const rankMap = {};
-            playersSorted.forEach((p, idx) => {
-              rankMap[p.id] = idx + 1;
-            });
-            this.playerRankMap = rankMap;
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
+            // mapa de posiciones
+            const map = {};
+            sorted.forEach((p, i) => map[p.id] = i + 1);
+            this.playerRankMap = map;
           } catch (err) {
             console.error(err);
             alert('Error al cargar los datos de jugadores');
           }
         },
         flagUrl(cc) {
-           return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
         },
         rankClass(rank) {
-           return `rank-${rank}`;
+          return `rank-${rank}`;
         }
       },
       mounted() {
         this.fetchPlayers();
-        setInterval(() => {
-          this.fetchPlayers();
-        }, 10000);
+        setInterval(this.fetchPlayers, 10000);
       }
     }).mount('#app');
   </script>
 </body>
 </html>
-
-
 
