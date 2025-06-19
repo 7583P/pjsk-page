@@ -168,12 +168,14 @@
               class="flag"
             />
           </td>
-          <!-- NOMBRE (incluye emojis intactos) -->
+          <!-- NOMBRE (separa emojis) -->
           <td>
-            <span
-              v-if="p.rank==='Placement'"
-              class="placement-gradient"
-            >{{ p.name }}</span>
+            <template v-if="p.rank==='Placement'">
+              <template v-for="(chunk, i) in splitName(p.name)" :key="i">
+                <span v-if="chunk.isEmoji">{{ chunk.text }}</span>
+                <span v-else class="placement-gradient">{{ chunk.text }}</span>
+              </template>
+            </template>
             <span v-else>{{ p.name }}</span>
           </td>
           <!-- MMR -->
@@ -196,6 +198,7 @@
       </tbody>
     </table>
 
+    <!-- CONTROLES DE PAGINACIÓN -->
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
       <input
@@ -213,6 +216,7 @@
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    const emojiRegex = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u;
     const { createApp } = Vue;
     createApp({
       data() {
@@ -224,12 +228,35 @@
           pageSize: 50
         };
       },
+      methods: {
+        splitName(name) {
+          // devuelve array de { text, isEmoji }
+          return [...name].map(ch => ({
+            text: ch,
+            isEmoji: emojiRegex.test(ch)
+          }));
+        },
+        prevPage() { if (this.currentPage > 1) this.currentPage--; },
+        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
+        goToPage() {},
+        async fetchPlayers() {
+          try {
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
+            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m, [p.id]: i+1 }), {});
+          } catch {
+            alert('Error al cargar datos de jugadores');
+          }
+        },
+        flagUrl(cc) {
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+        }
+      },
       computed: {
         filteredPlayers() {
           const q = this.filter.toLowerCase();
-          return this.players.filter(p =>
-            p.name.toLowerCase().includes(q)
-          );
+          return this.players.filter(p => p.name.toLowerCase().includes(q));
         },
         totalPages() {
           return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
@@ -240,10 +267,9 @@
         },
         seasonLabel() {
           const start = new Date(2025, 4, 16);
-          const now = new Date();
-          const monthsDiff =
-            (now.getFullYear() - start.getFullYear()) * 12 +
-            (now.getMonth() - start.getMonth());
+          const now   = new Date();
+          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
+                           + (now.getMonth() - start.getMonth());
           const period = Math.floor(monthsDiff / 3);
           return period === 0 ? 'Beta' : period;
         }
@@ -255,22 +281,6 @@
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
-      methods: {
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() {},
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
-            this.players = sorted;
-            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m,[p.id]: i+1 }), {});
-          } catch {
-            alert('Error al cargar datos de jugadores');
-          }
-        },
-        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; }
-      },
       mounted() {
         this.fetchPlayers();
         setInterval(this.fetchPlayers, 10000);
@@ -279,6 +289,3 @@
   </script>
 </body>
 </html>
-
-</html>
-
