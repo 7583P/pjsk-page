@@ -19,7 +19,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* — TÍTULO: degradado L→R animado — */
+    /* — TÍTULO: degradado L→R suave — */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
@@ -30,11 +30,12 @@
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
-      animation: titleGradient 6s linear infinite;
+      animation: titleGradient 6s ease-in-out infinite;
     }
     @keyframes titleGradient {
-      0%   { background-position: 0%   50%; }
-      100% { background-position: 100% 50%; }
+      0%   { background-position:   0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position:   0% 50%; }
     }
 
     .controls {
@@ -90,20 +91,21 @@
     .rank-Gold td    { color: #ffaf00; }
     .rank-Diamond td { color: #0080ff; }
 
-    /* Degradado L→R solo para texto de filas Placement */
+    /* Degradado L→R arrancando en “#” y cruzando toda la fila para Placement */
     .placement-gradient {
       display: inline-block;
       background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
-      background-size: 300% 100%;
+      background-size: 400% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
-      animation: placementGradient 8s linear infinite;
+      animation: placementGradient 8s ease-in-out infinite;
     }
     @keyframes placementGradient {
-      0%   { background-position: 0%   50%; }
-      100% { background-position: 100% 50%; }
+      0%   { background-position: -100% 50%; } /* empieza a la izquierda de “#” */
+      50%  { background-position: 100% 50%; } /* cruza posición→nombre→MMR */
+      100% { background-position: 300% 50%; } /* termina en rango */
     }
 
     /* Estilos de paginación */
@@ -256,7 +258,7 @@
       methods: {
         prevPage() { if (this.currentPage > 1) this.currentPage--; },
         nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() { /* ya lo valida el watcher */ },
+        goToPage() {},
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
@@ -279,3 +281,4 @@
   </script>
 </body>
 </html>
+
