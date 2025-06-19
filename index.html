@@ -29,7 +29,7 @@
         #9e6bff,
         #9fedff
       );
-      background-size: 200% 100%;
+      background-size: 300% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
@@ -52,6 +52,8 @@
       border: none;
       border-radius: 4px;
       text-align: center;
+      background: #555;
+      color: #fff;
     }
 
     table {
@@ -94,7 +96,7 @@
     .rank-Gold      { color: #ffaf00; }
     .rank-Diamond   { color: #0080ff; }
 
-    /* Gradiente animado L→R para el texto “Placement” */
+    /* Gradiente animado cruzando toda la fila para “Placement” */
     .gradientPlacement {
       display: inline-block;
       background: linear-gradient(
@@ -103,16 +105,16 @@
         #ff4600,
         #ff7000
       );
-      background-size: 200% 100%;
+      background-size: 400% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
-      animation: placementGradient 8s ease infinite;
+      animation: placementGradient 8s linear infinite;
     }
     @keyframes placementGradient {
-      0%   { background-position: 0%   50%; }
-      100% { background-position: 100% 50%; }
+      0%   { background-position: -200% 50%; }
+      100% { background-position:  200% 50%; }
     }
 
     /* Estilos de paginación */
@@ -129,6 +131,8 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      background: #555;
+      color: #fff;
     }
     .pagination button:disabled {
       opacity: 0.4;
@@ -247,11 +251,9 @@
         }
       },
       watch: {
-        // Si cambia el filtro, vuelve a la primera página
         filter() {
           this.currentPage = 1;
         },
-        // Asegura que currentPage esté en rango
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
@@ -265,7 +267,7 @@
           if (this.currentPage < this.totalPages) this.currentPage++;
         },
         goToPage() {
-          // v-model ya ha actualizado currentPage; el watcher lo valida
+          // El watcher valida el número de página ingresado
         },
         async fetchPlayers() {
           try {
@@ -274,7 +276,6 @@
             );
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
-            // mapa de posiciones
             const map = {};
             sorted.forEach((p, i) => map[p.id] = i + 1);
             this.playerRankMap = map;
