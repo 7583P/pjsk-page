@@ -82,7 +82,6 @@
     .pos-wrapper {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 4px;
     }
 
@@ -91,27 +90,25 @@
     .rank-Gold td    { color: #ffaf00; }
     .rank-Diamond td { color: #0080ff; }
 
-    /* Degradado L→R arrancando en “#” y cruzando toda la fila para Placement */
+    /* Degradado L→R cruzando toda la fila para Placement */
     .placement-gradient {
       display: inline-block;
       background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
-      background-size: 400% 100%;
+      background-size: 300% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
-      animation: placementGradient 8s ease-in-out infinite;
+      animation: placementGradient 8s linear infinite;
     }
     @keyframes placementGradient {
-      0%   { background-position: -100% 50%; } /* empieza a la izquierda de “#” */
-      50%  { background-position: 100% 50%; } /* cruza posición→nombre→MMR */
-      100% { background-position: 300% 50%; } /* termina en rango */
+      0%   { background-position:   0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
     /* Estilos de paginación */
     .pagination {
       margin-top: 15px;
-      text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -162,9 +159,11 @@
           <!-- POSICIÓN -->
           <td>
             <div class="pos-wrapper">
-              <span :class="{ 'placement-gradient': p.rank==='Placement' }">
-                {{ playerRankMap[p.id] }}
-              </span>
+              <span
+                class="placement-gradient"
+                v-if="p.rank==='Placement'"
+              >{{ playerRankMap[p.id] }}</span>
+              <span v-else>{{ playerRankMap[p.id] }}</span>
               <img
                 v-if="p.country"
                 :src="flagUrl(p.country)"
@@ -175,21 +174,27 @@
           </td>
           <!-- NOMBRE -->
           <td>
-            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
-              {{ p.name }}
-            </span>
+            <span
+              class="placement-gradient"
+              v-if="p.rank==='Placement'"
+            >{{ p.name }}</span>
+            <span v-else>{{ p.name }}</span>
           </td>
           <!-- MMR -->
           <td>
-            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
-              {{ p.mmr }}
-            </span>
+            <span
+              class="placement-gradient"
+              v-if="p.rank==='Placement'"
+            >{{ p.mmr }}</span>
+            <span v-else>{{ p.mmr }}</span>
           </td>
           <!-- RANGO -->
           <td>
-            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
-              {{ p.rank }}
-            </span>
+            <span
+              class="placement-gradient"
+              v-if="p.rank==='Placement'"
+            >{{ p.rank }}</span>
+            <span v-else>{{ p.rank }}</span>
           </td>
         </tr>
       </tbody>
