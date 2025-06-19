@@ -75,6 +75,21 @@
     .rank-Bronze    { color: #66311e; }
     .rank-Gold      { color: #ffaf00; }
     .rank-Diamond   { color: #0080ff; }
+    /* Gradiente animado para Placement */
+.rank-Placement {
+  background: linear-gradient(270deg, #ff7000, #ff4600, #ff7000);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent !important;
+  animation: gradientPlacement 8s ease infinite;
+}
+
+@keyframes gradientPlacement {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
   </style>
 </head>
 <body>
