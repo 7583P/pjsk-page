@@ -69,20 +69,18 @@
       text-align: center;
       border-bottom: 1px solid #555;
       color: #fff;
+      position: relative;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
 
     .flag {
       width: 24px;
-      vertical-align: middle;
-    }
-
-    /* WRAPPER PARA POSICIÓN + BANDERA */
-    .pos-wrapper {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      margin-left: 4px;
     }
 
     /* Colores sólidos para filas no-Placement */
@@ -90,7 +88,7 @@
     .rank-Gold td    { color: #ffaf00; }
     .rank-Diamond td { color: #0080ff; }
 
-    /* Degradado L→R cruzando toda la fila para Placement */
+    /* Degradado L→R para filas Placement */
     .placement-gradient {
       display: inline-block;
       background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
@@ -106,7 +104,7 @@
       100% { background-position: 100% 50%; }
     }
 
-    /* Estilos de paginación */
+    /* Paginación */
     .pagination {
       margin-top: 15px;
       display: flex;
@@ -158,41 +156,39 @@
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="`rank-${p.rank}`">
           <!-- POSICIÓN -->
           <td>
-            <div class="pos-wrapper">
-              <span
-                class="placement-gradient"
-                v-if="p.rank==='Placement'"
-              >{{ playerRankMap[p.id] }}</span>
-              <span v-else>{{ playerRankMap[p.id] }}</span>
-              <img
-                v-if="p.country"
-                :src="flagUrl(p.country)"
-                :alt="p.country"
-                class="flag"
-              />
-            </div>
+            <span
+              v-if="p.rank==='Placement'"
+              class="placement-gradient"
+            >{{ playerRankMap[p.id] }}</span>
+            <span v-else>{{ playerRankMap[p.id] }}</span>
+            <img
+              v-if="p.country"
+              :src="flagUrl(p.country)"
+              :alt="p.country"
+              class="flag"
+            />
           </td>
-          <!-- NOMBRE -->
+          <!-- NOMBRE (incluye emojis intactos) -->
           <td>
             <span
-              class="placement-gradient"
               v-if="p.rank==='Placement'"
+              class="placement-gradient"
             >{{ p.name }}</span>
             <span v-else>{{ p.name }}</span>
           </td>
           <!-- MMR -->
           <td>
             <span
-              class="placement-gradient"
               v-if="p.rank==='Placement'"
+              class="placement-gradient"
             >{{ p.mmr }}</span>
             <span v-else>{{ p.mmr }}</span>
           </td>
           <!-- RANGO -->
           <td>
             <span
-              class="placement-gradient"
               v-if="p.rank==='Placement'"
+              class="placement-gradient"
             >{{ p.rank }}</span>
             <span v-else>{{ p.rank }}</span>
           </td>
@@ -200,7 +196,6 @@
       </tbody>
     </table>
 
-    <!-- CONTROLES DE PAGINACIÓN -->
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
       <input
@@ -269,14 +264,12 @@
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
-            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m, [p.id]: i+1 }), {});
+            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m,[p.id]: i+1 }), {});
           } catch {
-            alert('Error al cargar los datos de jugadores');
+            alert('Error al cargar datos de jugadores');
           }
         },
-        flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
-        }
+        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; }
       },
       mounted() {
         this.fetchPlayers();
@@ -285,5 +278,7 @@
     }).mount('#app');
   </script>
 </body>
+</html>
+
 </html>
 
