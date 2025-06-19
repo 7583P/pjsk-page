@@ -19,18 +19,18 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* — TÍTULO CON DEGRADADO L→R — */
+    /* — TÍTULO: degradado L→R animado — */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
       text-align: center;
       background: linear-gradient(90deg, #9e6bff, #9fedff);
-      background-size: 300% 100%;
+      background-size: 200% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
-      animation: titleGradient 6s ease infinite;
+      animation: titleGradient 6s linear infinite;
     }
     @keyframes titleGradient {
       0%   { background-position: 0%   50%; }
@@ -74,45 +74,43 @@
 
     .flag {
       width: 24px;
+      vertical-align: middle;
     }
 
     /* WRAPPER PARA POSICIÓN + BANDERA */
     .pos-wrapper {
-      display: inline-block;
-      position: relative;
-    }
-    .pos-wrapper .flag {
-      position: absolute;
-      top: 50%;
-      left: calc(100% + 4px);
-      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
 
     /* Colores sólidos para filas no-Placement */
-    .rank-Placement td:not(.placement-gradient),
-    .rank-Bronze td,
-    .rank-Gold td,
-    .rank-Diamond td {
-      /* nada: mantienen color de clase en <td> */
-    }
+    .rank-Bronze td  { color: #66311e; }
+    .rank-Gold td    { color: #ffaf00; }
+    .rank-Diamond td { color: #0080ff; }
 
-    /* Aplicamos degradado a cada <td> con este span, solo en Placement */
-    .placement-gradient {
+    /* Gradiente animado L→R sólo para texto de filas Placement */
+    .rank-Placement td span.text-gradient {
       display: inline-block;
       background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
-      background-size: 400% 100%;
+      background-size: 300% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
               background-clip: text;
               color: transparent;
       animation: placementGradient 8s linear infinite;
     }
+    /* Aseguramos que las imágenes no se vean afectadas */
+    .rank-Placement td img {
+      filter: none !important;
+    }
     @keyframes placementGradient {
-      0%   { background-position: -200% 50%; }
-      100% { background-position:  200% 50%; }
+      0%   { background-position: 0%   50%; }
+      100% { background-position: 100% 50%; }
     }
 
-    /* Estilos de paginación */
+    /* Paginación */
     .pagination {
       margin-top: 15px;
       text-align: center;
@@ -166,43 +164,27 @@
             :class="`rank-${p.rank}`">
           <!-- POSICIÓN -->
           <td>
-            <span class="pos-wrapper">
-              <span
-                :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
-              >
-                {{ playerRankMap[p.id] }}
-              </span>
+            <div class="pos-wrapper">
+              <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
               <img
                 v-if="p.country"
                 :src="flagUrl(p.country)"
                 :alt="p.country"
                 class="flag"
               />
-            </span>
+            </div>
           </td>
           <!-- NOMBRE -->
           <td>
-            <span
-              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
-            >
-              {{ p.name }}
-            </span>
+            <span class="text-gradient">{{ p.name }}</span>
           </td>
           <!-- MMR -->
           <td>
-            <span
-              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
-            >
-              {{ p.mmr }}
-            </span>
+            <span class="text-gradient">{{ p.mmr }}</span>
           </td>
           <!-- RANGO -->
           <td>
-            <span
-              :class="p.rank === 'Placement' ? 'placement-gradient' : ''"
-            >
-              {{ p.rank }}
-            </span>
+            <span class="text-gradient">{{ p.rank }}</span>
           </td>
         </tr>
       </tbody>
@@ -245,10 +227,7 @@
           );
         },
         totalPages() {
-          return Math.max(
-            1,
-            Math.ceil(this.filteredPlayers.length / this.pageSize)
-          );
+          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
@@ -257,51 +236,36 @@
         seasonLabel() {
           const start = new Date(2025, 4, 16);
           const now   = new Date();
-          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
-                           + (now.getMonth() - start.getMonth());
+          const monthsDiff =
+            (now.getFullYear() - start.getFullYear()) * 12 +
+            (now.getMonth() - start.getMonth());
           const period = Math.floor(monthsDiff / 3);
           return period === 0 ? 'Beta' : period;
         }
       },
       watch: {
-        filter() {
-          this.currentPage = 1;
-        },
+        filter() { this.currentPage = 1; },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
-        prevPage() {
-          if (this.currentPage > 1) this.currentPage--;
-        },
-        nextPage() {
-          if (this.currentPage < this.totalPages) this.currentPage++;
-        },
-        goToPage() {
-          // el watcher valida la página
-        },
+        prevPage() { if (this.currentPage > 1) this.currentPage--; },
+        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
+        goToPage() { /* ya lo valida el watcher */ },
         async fetchPlayers() {
           try {
-            const resp = await axios.get(
-              'https://worker-production-1ad2.up.railway.app/api/players'
-            );
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
-            const map = {};
-            sorted.forEach((p, i) => map[p.id] = i + 1);
-            this.playerRankMap = map;
-          } catch (err) {
-            console.error(err);
+            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m,[p.id]:i+1 }), {});
+          } catch {
             alert('Error al cargar los datos de jugadores');
           }
         },
         flagUrl(cc) {
           return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
-        },
-        rankClass(rank) {
-          return `rank-${rank}`;
         }
       },
       mounted() {
