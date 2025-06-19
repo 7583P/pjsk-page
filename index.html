@@ -90,8 +90,8 @@
     .rank-Gold td    { color: #ffaf00; }
     .rank-Diamond td { color: #0080ff; }
 
-    /* Gradiente animado L→R sólo para texto de filas Placement */
-    .rank-Placement td span.text-gradient {
+    /* Degradado L→R solo para texto de filas Placement */
+    .placement-gradient {
       display: inline-block;
       background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
       background-size: 300% 100%;
@@ -101,16 +101,12 @@
               color: transparent;
       animation: placementGradient 8s linear infinite;
     }
-    /* Aseguramos que las imágenes no se vean afectadas */
-    .rank-Placement td img {
-      filter: none !important;
-    }
     @keyframes placementGradient {
       0%   { background-position: 0%   50%; }
       100% { background-position: 100% 50%; }
     }
 
-    /* Paginación */
+    /* Estilos de paginación */
     .pagination {
       margin-top: 15px;
       text-align: center;
@@ -160,12 +156,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id"
-            :class="`rank-${p.rank}`">
+        <tr v-for="p in paginatedPlayers" :key="p.id" :class="`rank-${p.rank}`">
           <!-- POSICIÓN -->
           <td>
             <div class="pos-wrapper">
-              <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
+              <span :class="{ 'placement-gradient': p.rank==='Placement' }">
+                {{ playerRankMap[p.id] }}
+              </span>
               <img
                 v-if="p.country"
                 :src="flagUrl(p.country)"
@@ -176,15 +173,21 @@
           </td>
           <!-- NOMBRE -->
           <td>
-            <span class="text-gradient">{{ p.name }}</span>
+            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
+              {{ p.name }}
+            </span>
           </td>
           <!-- MMR -->
           <td>
-            <span class="text-gradient">{{ p.mmr }}</span>
+            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
+              {{ p.mmr }}
+            </span>
           </td>
           <!-- RANGO -->
           <td>
-            <span class="text-gradient">{{ p.rank }}</span>
+            <span :class="{ 'placement-gradient': p.rank==='Placement' }">
+              {{ p.rank }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -235,7 +238,7 @@
         },
         seasonLabel() {
           const start = new Date(2025, 4, 16);
-          const now   = new Date();
+          const now = new Date();
           const monthsDiff =
             (now.getFullYear() - start.getFullYear()) * 12 +
             (now.getMonth() - start.getMonth());
@@ -259,7 +262,7 @@
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
-            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m,[p.id]:i+1 }), {});
+            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m, [p.id]: i+1 }), {});
           } catch {
             alert('Error al cargar los datos de jugadores');
           }
@@ -276,5 +279,3 @@
   </script>
 </body>
 </html>
-
-
