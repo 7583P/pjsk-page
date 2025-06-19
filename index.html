@@ -18,11 +18,28 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
+    /* — TÍTULO HOLOGRÁFICO — */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
       text-align: center;
+      background: linear-gradient(
+        90deg,
+        #9e6bff,
+        #9fedff
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
+      animation: titleGradient 6s ease infinite;
     }
+    @keyframes titleGradient {
+      0%   { background-position: 0%   50%; }
+      100% { background-position: 100% 50%; }
+    }
+
     .controls {
       margin-bottom: 15px;
       text-align: center;
@@ -71,40 +88,32 @@
     }
     /* ---------------------- */
 
+    /* Colores sólidos para todos los rangos */
     .rank-Placement { color: #ff7000 !important; }
     .rank-Bronze    { color: #66311e; }
     .rank-Gold      { color: #ffaf00; }
     .rank-Diamond   { color: #0080ff; }
- /* Gradiente animado L→R para Placement */
-.rank-Placement {
-  background: linear-gradient(
-    90deg,
-    #ff7000,
-    #ff4600,
-    #ff7000
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-          background-clip: text;
-          color: transparent !important;
-  animation: gradientPlacement 8s ease infinite;
-}
 
-@keyframes gradientPlacement {
-  0%   { background-position: 0%   50%; }
-  100% { background-position: 100% 50%; }
-}
-
-
-@keyframes gradientPlacement {
-  0%,100% { background-position: 0% 50%; }
-  50%     { background-position: 100% 50%; }
-}
-@keyframes gradientPlacement {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
+    /* Gradiente animado L→R solo para el texto “Placement” */
+    .gradientPlacement {
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #ff7000,
+        #ff4600,
+        #ff7000
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
+      animation: placementGradient 8s ease infinite;
+    }
+    @keyframes placementGradient {
+      0%   { background-position: 0%   50%; }
+      100% { background-position: 100% 50%; }
+    }
   </style>
 </head>
 <body>
@@ -124,6 +133,7 @@
       </thead>
       <tbody>
         <tr v-for="p in filteredPlayers" :key="p.id">
+          <!-- POSICIÓN: mantiene color según rango -->
           <td :class="rankClass(p.rank)">
             <span class="pos-wrapper">
               {{ playerRankMap[p.id] }}
@@ -135,9 +145,17 @@
               />
             </span>
           </td>
+          <!-- NOMBRE y MMR -->
           <td :class="rankClass(p.rank)">{{ p.name }}</td>
           <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
-          <td :class="rankClass(p.rank)">{{ p.rank }}</td>
+          <!-- RANGO: degradado solo en “Placement” -->
+          <td>
+            <span
+              :class="p.rank === 'Placement' ? 'gradientPlacement' : rankClass(p.rank)"
+            >
+              {{ p.rank }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -178,7 +196,6 @@
             const playersSorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = playersSorted;
 
-            // Crear mapa de posiciones reales por ID
             const rankMap = {};
             playersSorted.forEach((p, idx) => {
               rankMap[p.id] = idx + 1;
@@ -190,7 +207,7 @@
           }
         },
         flagUrl(cc) {
-           return  `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+           return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
         },
         rankClass(rank) {
            return `rank-${rank}`;
@@ -200,11 +217,12 @@
         this.fetchPlayers();
         setInterval(() => {
           this.fetchPlayers();
-        }, 10000); // actualiza cada 10 segundos
+        }, 10000);
       }
     }).mount('#app');
   </script>
 </body>
 </html>
+
 
 
