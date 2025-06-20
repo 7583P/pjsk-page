@@ -19,23 +19,12 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* — TÍTULO: degradado L→R suave — */
+    /* TÍTULO ESTÁTICO */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
       text-align: center;
-      background: linear-gradient(90deg, #9e6bff, #9fedff);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-              background-clip: text;
-              color: transparent;
-      animation: titleGradient 6s ease-in-out infinite;
-    }
-    @keyframes titleGradient {
-      0%   { background-position:   0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position:   0% 50%; }
+      color: #ffffff;
     }
 
     .controls {
@@ -69,44 +58,36 @@
       text-align: center;
       border-bottom: 1px solid #555;
       color: #fff;
-      position: relative;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
 
     .flag {
       width: 24px;
+    }
+
+    /* WRAPPER PARA POSICIÓN + BANDERA */
+    .pos-wrapper {
+      display: inline-block;
+      position: relative;
+    }
+    .pos-wrapper .flag {
       position: absolute;
       top: 50%;
-      left: 100%;
+      left: calc(100% + 4px);
       transform: translateY(-50%);
-      margin-left: 4px;
     }
 
-    /* Colores sólidos para filas no-Placement */
-    .rank-Bronze td  { color: #66311e; }
-    .rank-Gold td    { color: #ffaf00; }
-    .rank-Diamond td { color: #0080ff; }
+    /* Colores sólidos para todos los rangos */
+    .rank-Placement { color: #ff7000 !important; }
+    .rank-Bronze    { color: #66311e; }
+    .rank-Gold      { color: #ffaf00; }
+    .rank-Diamond   { color: #0080ff; }
 
-    /* Degradado L→R para filas Placement */
-    .placement-gradient {
-      display: inline-block;
-      background: linear-gradient(90deg, #ff7000, #ff4600, #ff7000);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-              background-clip: text;
-              color: transparent;
-      animation: placementGradient 8s linear infinite;
-    }
-    @keyframes placementGradient {
-      0%   { background-position:   0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
-    /* Paginación */
+    /* Estilos de paginación */
     .pagination {
       margin-top: 15px;
+      text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -153,46 +134,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="`rank-${p.rank}`">
+        <tr v-for="p in paginatedPlayers" :key="p.id">
           <!-- POSICIÓN -->
-          <td>
-            <span
-              v-if="p.rank==='Placement'"
-              class="placement-gradient"
-            >{{ playerRankMap[p.id] }}</span>
-            <span v-else>{{ playerRankMap[p.id] }}</span>
-            <img
-              v-if="p.country"
-              :src="flagUrl(p.country)"
-              :alt="p.country"
-              class="flag"
-            />
+          <td :class="rankClass(p.rank)">
+            <span class="pos-wrapper">
+              {{ playerRankMap[p.id] }}
+              <img
+                v-if="p.country"
+                :src="flagUrl(p.country)"
+                :alt="p.country"
+                class="flag"
+              />
+            </span>
           </td>
-          <!-- NOMBRE (separa emojis) -->
-          <td>
-            <template v-if="p.rank==='Placement'">
-              <template v-for="(chunk, i) in splitName(p.name)" :key="i">
-                <span v-if="chunk.isEmoji">{{ chunk.text }}</span>
-                <span v-else class="placement-gradient">{{ chunk.text }}</span>
-              </template>
-            </template>
-            <span v-else>{{ p.name }}</span>
-          </td>
-          <!-- MMR -->
-          <td>
-            <span
-              v-if="p.rank==='Placement'"
-              class="placement-gradient"
-            >{{ p.mmr }}</span>
-            <span v-else>{{ p.mmr }}</span>
-          </td>
-          <!-- RANGO -->
-          <td>
-            <span
-              v-if="p.rank==='Placement'"
-              class="placement-gradient"
-            >{{ p.rank }}</span>
-            <span v-else>{{ p.rank }}</span>
+          <!-- NOMBRE y MMR -->
+          <td :class="rankClass(p.rank)">{{ p.name }}</td>
+          <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
+          <!-- RANGO: texto sin degradado -->
+          <td :class="rankClass(p.rank)">
+            {{ p.rank }}
           </td>
         </tr>
       </tbody>
@@ -216,7 +176,6 @@
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const emojiRegex = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/u;
     const { createApp } = Vue;
     createApp({
       data() {
@@ -228,38 +187,18 @@
           pageSize: 50
         };
       },
-      methods: {
-        splitName(name) {
-          // devuelve array de { text, isEmoji }
-          return [...name].map(ch => ({
-            text: ch,
-            isEmoji: emojiRegex.test(ch)
-          }));
-        },
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() {},
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
-            this.players = sorted;
-            this.playerRankMap = sorted.reduce((m,p,i)=>({ ...m, [p.id]: i+1 }), {});
-          } catch {
-            alert('Error al cargar datos de jugadores');
-          }
-        },
-        flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
-        }
-      },
       computed: {
         filteredPlayers() {
           const q = this.filter.toLowerCase();
-          return this.players.filter(p => p.name.toLowerCase().includes(q));
+          return this.players.filter(p =>
+            p.name.toLowerCase().includes(q)
+          );
         },
         totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
@@ -275,10 +214,44 @@
         }
       },
       watch: {
-        filter() { this.currentPage = 1; },
+        filter() {
+          this.currentPage = 1;
+        },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
+        }
+      },
+      methods: {
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        goToPage() {
+          // El watcher valida el número de página ingresado
+        },
+        async fetchPlayers() {
+          try {
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
+            const map = {};
+            sorted.forEach((p, i) => map[p.id] = i + 1);
+            this.playerRankMap = map;
+          } catch (err) {
+            console.error(err);
+            alert('Error al cargar los datos de jugadores');
+          }
+        },
+        flagUrl(cc) {
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+        },
+        rankClass(rank) {
+          return `rank-${rank}`;
         }
       },
       mounted() {
@@ -289,3 +262,7 @@
   </script>
 </body>
 </html>
+
+
+
+
