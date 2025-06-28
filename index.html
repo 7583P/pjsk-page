@@ -27,25 +27,6 @@
       color: #ffffff;
     }
 
-    /* PESTAÑAS DE SEASONS */
-    .seasons-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-      justify-content: center;
-    }
-    .seasons-tabs button {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      background: #555;
-      color: #fff;
-      cursor: pointer;
-    }
-    .seasons-tabs button.active {
-      background: #030050;
-    }
-
     .controls {
       margin-bottom: 15px;
       text-align: center;
@@ -85,6 +66,7 @@
       width: 24px;
     }
 
+    /* WRAPPER PARA POSICIÓN + BANDERA */
     .pos-wrapper {
       display: inline-block;
       position: relative;
@@ -96,11 +78,13 @@
       transform: translateY(-50%);
     }
 
+    /* Colores sólidos para todos los rangos */
     .rank-Placement { color: #ff7000 !important; }
     .rank-Bronze    { color: #66311e; }
     .rank-Gold      { color: #ffaf00; }
     .rank-Diamond   { color: #0080ff; }
 
+    /* Estilos de paginación */
     .pagination {
       margin-top: 15px;
       text-align: center;
@@ -134,17 +118,7 @@
 </head>
 <body>
   <div id="app">
-    <h1>PJSK LOUNGE — {{ activeTab.label }}</h1>
-
-    <!-- Pestañas de Seasons -->
-    <div class="seasons-tabs">
-      <button
-        v-for="tab in tabs"
-        :key="tab.key"
-        @click="selectTab(tab)"
-        :class="{ active: tab.key === activeTab.key }"
-      >{{ tab.label }}</button>
-    </div>
+    <h1>PJSK LOUNGE – Temporada {{ seasonLabel }}</h1>
 
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…">
@@ -161,6 +135,7 @@
       </thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id">
+          <!-- POSICIÓN -->
           <td :class="rankClass(p.rank)">
             <span class="pos-wrapper">
               {{ playerRankMap[p.id] }}
@@ -172,13 +147,18 @@
               />
             </span>
           </td>
+          <!-- NOMBRE y MMR -->
           <td :class="rankClass(p.rank)">{{ p.name }}</td>
           <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
-          <td :class="rankClass(p.rank)">{{ p.rank }}</td>
+          <!-- RANGO: texto sin degradado -->
+          <td :class="rankClass(p.rank)">
+            {{ p.rank }}
+          </td>
         </tr>
       </tbody>
     </table>
 
+    <!-- CONTROLES DE PAGINACIÓN -->
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
       <input
@@ -197,14 +177,9 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const { createApp } = Vue;
-
     createApp({
       data() {
         return {
-          tabs: [
-            { key: 'current', label: 'Season Actual', seasonId: null }
-          ],
-          activeTab: { key: 'current', label: 'Season Actual', seasonId: null },
           players: [],
           filter: '',
           playerRankMap: {},
@@ -220,11 +195,22 @@
           );
         },
         totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
           return this.filteredPlayers.slice(start, start + this.pageSize);
+        },
+        seasonLabel() {
+          const start = new Date(2025, 4, 16);
+          const now   = new Date();
+          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
+                           + (now.getMonth() - start.getMonth());
+          const period = Math.floor(monthsDiff / 3);
+          return period === 0 ? 'Beta' : period;
         }
       },
       watch: {
@@ -237,44 +223,6 @@
         }
       },
       methods: {
-        async loadSeasonTabs() {
-          try {
-            const res = await axios.get('https://tu.api.server/api/seasons');
-            const seasons = res.data;
-            const dynamic = seasons.map(s => ({
-              key: `s${s.id}`,
-              label: s.name,
-              seasonId: s.id,
-              closed: !!s.end_ts
-            }));
-            this.tabs = [{ key: 'current', label: 'Season Actual', seasonId: null }]
-                        .concat(dynamic);
-          } catch (err) {
-            console.error('Error cargando seasons:', err);
-          }
-        },
-        async selectTab(tab) {
-          this.activeTab = tab;
-          this.currentPage = 1;
-          let url = '';
-          if (tab.key === 'current') {
-            url = 'https://tu.api.server/api/current/players';
-          } else {
-            url = `https://tu.api.server/api/seasons/${tab.seasonId}/players`;
-          }
-          try {
-            const res = await axios.get(url);
-            const sorted = res.data.sort((a, b) => b.mmr - a.mmr);
-            this.players = sorted;
-            const map = {};
-            sorted.forEach((p, i) => map[p.id] = i + 1);
-            this.playerRankMap = map;
-          } catch (err) {
-            console.error('Error cargando jugadores:', err);
-            this.players = [];
-            this.playerRankMap = {};
-          }
-        },
         prevPage() {
           if (this.currentPage > 1) this.currentPage--;
         },
@@ -282,7 +230,22 @@
           if (this.currentPage < this.totalPages) this.currentPage++;
         },
         goToPage() {
-          // El watcher se encarga de validar
+          // El watcher valida el número de página ingresado
+        },
+        async fetchPlayers() {
+          try {
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
+            const map = {};
+            sorted.forEach((p, i) => map[p.id] = i + 1);
+            this.playerRankMap = map;
+          } catch (err) {
+            console.error(err);
+            alert('Error al cargar los datos de jugadores');
+          }
         },
         flagUrl(cc) {
           return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
@@ -291,17 +254,11 @@
           return `rank-${rank}`;
         }
       },
-      async mounted() {
-        await this.loadSeasonTabs();
-        this.selectTab(this.tabs[0]);
-        setInterval(() => this.selectTab(this.activeTab), 10000);
+      mounted() {
+        this.fetchPlayers();
+        setInterval(this.fetchPlayers, 10000);
       }
     }).mount('#app');
   </script>
 </body>
 </html>
-
-
-
-
-
