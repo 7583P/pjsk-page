@@ -18,52 +18,65 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
+
+    /* TÍTULO ESTÁTICO */
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .controls {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 5px;
+      width: 80%;
+      max-width: 400px;
+      border: none;
+      border-radius: 4px;
+      text-align: center;
+      background: #555;
+      color: #fff;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-    th, td {
+    th {
+      padding: 10px;
+      background-color: #030050 !important;
+      text-align: center;
+      color: #fff;
+    }
+    td {
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
-      vertical-align: middle;
-    }
-    th {
-      background-color: #030050 !important;
-      color: #fff;
+      color: #fff; /* fallback */
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
 
     .flag {
       width: 24px;
+      vertical-align: middle;
+      margin-left: 4px;
     }
 
-    /* flex para posición + bandera */
-    .pos-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    /* texto degradado */
+    /* GRADIENT TEXT HELPERS */
     .text-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    /* override para emojis: color sólido */
-    .emoji-char {
-      display: inline-block;
-      color: #fff !important;
-      background: none !important;
-      -webkit-text-fill-color: initial !important;
-    }
 
-    /* degradados por rango */
+    /* GRADIENTS POR RANGO (left → right) */
     .rank-Placement .text-gradient {
       background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
@@ -77,15 +90,46 @@
       background-image: linear-gradient(to right, #2797ff, #0063e4);
     }
 
-    /* resto de tu CSS… */
+    /* Estilos de paginación */
+    .pagination {
+      margin-top: 15px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination button {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #555;
+      color: #fff;
+    }
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .pagination input[type="number"] {
+      width: 50px;
+      padding: 4px;
+      text-align: center;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <div id="app">
     <h1>PJSK LOUNGE – Temporada {{ seasonLabel }}</h1>
+
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…">
     </div>
+
     <table>
       <thead>
         <tr>
@@ -99,31 +143,23 @@
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
           <!-- POSICIÓN -->
           <td>
-            <div class="pos-content">
-              <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
-              <img v-if="p.country"
-                   :src="flagUrl(p.country)"
-                   :alt="p.country"
-                   class="flag"/>
-            </div>
+            <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
+            <img
+              v-if="p.country"
+              :src="flagUrl(p.country)"
+              :alt="p.country"
+              class="flag"
+            />
           </td>
-
-          <!-- NOMBRE: iteramos cada carácter -->
+          <!-- NOMBRE -->
           <td>
-            <template v-for="(ch, idx) in [...p.name]" :key="idx">
-              <span
-                :class="isEmoji(ch) ? 'emoji-char' : 'text-gradient'">
-                {{ ch }}
-              </span>
-            </template>
+            <span class="text-gradient">{{ p.name }}</span>
           </td>
-
           <!-- MMR -->
           <td>
             <span class="text-gradient">{{ p.mmr }}</span>
           </td>
-
-          <!-- RANGO -->
+          <!-- RANGO: texto degradado igual -->
           <td>
             <span class="text-gradient">{{ p.rank }}</span>
           </td>
@@ -131,7 +167,19 @@
       </tbody>
     </table>
 
-    <!-- PAGINACIÓN… -->
+    <!-- CONTROLES DE PAGINACIÓN -->
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
+      <input
+        type="number"
+        v-model.number="currentPage"
+        @keyup.enter="goToPage"
+        :min="1"
+        :max="totalPages"
+      />
+      <span>/ {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage >= totalPages">&raquo;</button>
+    </div>
   </div>
 
   <script src="https://unpkg.com/vue@3"></script>
@@ -141,51 +189,79 @@
     createApp({
       data() {
         return {
-          players: [], filter: '',
+          players: [],
+          filter: '',
           playerRankMap: {},
-          currentPage: 1, pageSize: 50
+          currentPage: 1,
+          pageSize: 50
         };
       },
       computed: {
         filteredPlayers() {
           const q = this.filter.toLowerCase();
-          return this.players.filter(p => p.name.toLowerCase().includes(q));
+          return this.players.filter(p =>
+            p.name.toLowerCase().includes(q)
+          );
         },
         totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
           return this.filteredPlayers.slice(start, start + this.pageSize);
         },
         seasonLabel() {
-          const start = new Date(2025,4,16), now = new Date();
-          const months = (now.getFullYear()-start.getFullYear())*12 + (now.getMonth()-start.getMonth());
-          return Math.floor(months/3) === 0 ? 'Beta' : Math.floor(months/3);
+          const start = new Date(2025, 4, 16);
+          const now   = new Date();
+          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
+                           + (now.getMonth() - start.getMonth());
+          const period = Math.floor(monthsDiff / 3);
+          return period === 0 ? 'Beta' : period;
+        }
+      },
+      watch: {
+        filter() {
+          this.currentPage = 1;
+        },
+        currentPage(val) {
+          if (val < 1) this.currentPage = 1;
+          else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
-        isEmoji(ch) {
-          return /\p{Emoji}/u.test(ch);
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        goToPage() {
+          // El watcher valida el número de página ingresado
+        },
+        async fetchPlayers() {
+          try {
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
+            const map = {};
+            sorted.forEach((p, i) => map[p.id] = i + 1);
+            this.playerRankMap = map;
+          } catch (err) {
+            console.error(err);
+            alert('Error al cargar los datos de jugadores');
+          }
         },
         flagUrl(cc) {
           return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
         },
         rankClass(rank) {
           return `rank-${rank}`;
-        },
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const sorted = resp.data.sort((a,b)=> b.mmr - a.mmr);
-            this.players = sorted;
-            const map = {}; sorted.forEach((p,i)=> map[p.id]=i+1);
-            this.playerRankMap = map;
-          } catch(e){ console.error(e); alert('Error cargando jugadores'); }
-        },
-        prevPage(){ if(this.currentPage>1) this.currentPage--; },
-        nextPage(){ if(this.currentPage<this.totalPages) this.currentPage++; },
-        goToPage(){}  // el watcher valida
+        }
       },
       mounted() {
         this.fetchPlayers();
