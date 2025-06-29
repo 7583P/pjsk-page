@@ -68,6 +68,22 @@
       margin-left: 4px;
     }
 
+    /* --- Ajustes para centrar siempre el número y superponer la bandera --- */
+    .position-cell {
+      position: relative;
+      text-align: center;    /* centra el número */
+      padding-right: 32px;    /* deja espacio para la bandera */
+    }
+    .position-cell .position-number {
+      display: inline-block;  /* ancho propio para centrar correctamente */
+    }
+    .position-cell .flag {
+      position: absolute;
+      top: 50%;
+      right: 8px;               /* a 8px del borde derecho */
+      transform: translateY(-50%);
+    }
+
     /* GRADIENT TEXT HELPERS */
     .text-gradient {
       display: inline-block;
@@ -142,8 +158,8 @@
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
           <!-- POSICIÓN -->
-          <td>
-            <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
+          <td class="position-cell">
+            <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
             <img
               v-if="p.country"
               :src="flagUrl(p.country)"
@@ -159,7 +175,7 @@
           <td>
             <span class="text-gradient">{{ p.mmr }}</span>
           </td>
-          <!-- RANGO: texto degradado igual -->
+          <!-- RANGO -->
           <td>
             <span class="text-gradient">{{ p.rank }}</span>
           </td>
@@ -271,5 +287,4 @@
   </script>
 </body>
 </html>
-
 
