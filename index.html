@@ -57,7 +57,6 @@
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
-      /* By default, inherit white if no rank class */
       color: #fff;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
@@ -65,7 +64,6 @@
 
     .flag {
       width: 24px;
-      /* ensure flags remain full-color */
       filter: none;
     }
 
@@ -81,7 +79,7 @@
       transform: translateY(-50%);
     }
 
-    /* GRADIENT TEXT FOR RANK CLASSES */
+    /* GRADIENT TEXT PARA POSICIÓN, JUGADOR, MMR y RANGO */
     .rank-Placement,
     .rank-Bronze,
     .rank-Gold,
@@ -89,19 +87,20 @@
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      font-weight: 700;
     }
 
     .rank-Placement {
-      background-image: linear-gradient(to right, #ff7000, #ff4600);
+      background-image: linear-gradient(45deg, #ff7000, #ff4600);
     }
     .rank-Bronze {
-      background-image: linear-gradient(to right, #6d2a00, #3d1d00);
+      background-image: linear-gradient(45deg, #6d2a00, #3d1d00);
     }
     .rank-Gold {
-      background-image: linear-gradient(to right, #ffbf60, #c57600);
+      background-image: linear-gradient(45deg, #ffbf60, #c57600);
     }
     .rank-Diamond {
-      background-image: linear-gradient(to right, #2797ff, #0063e4);
+      background-image: linear-gradient(45deg, #2797ff, #0063e4);
     }
 
     /* Estilos de paginación */
@@ -147,7 +146,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Posición</th>
           <th>Player</th>
           <th>MMR</th>
           <th>Rango</th>
@@ -170,10 +169,8 @@
           <!-- NOMBRE y MMR -->
           <td :class="rankClass(p.rank)">{{ p.name }}</td>
           <td :class="rankClass(p.rank)">{{ p.mmr }}</td>
-          <!-- RANGO: texto sin degradado -->
-          <td :class="rankClass(p.rank)">
-            {{ p.rank }}
-          </td>
+          <!-- RANGO -->
+          <td :class="rankClass(p.rank)">{{ p.rank }}</td>
         </tr>
       </tbody>
     </table>
@@ -249,9 +246,7 @@
         nextPage() {
           if (this.currentPage < this.totalPages) this.currentPage++;
         },
-        goToPage() {
-          // El watcher valida el número de página ingresado
-        },
+        goToPage() {},
         async fetchPlayers() {
           try {
             const resp = await axios.get(
