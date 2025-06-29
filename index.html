@@ -71,16 +71,16 @@
     /* --- Ajustes para centrar siempre el número y superponer la bandera --- */
     .position-cell {
       position: relative;
-      text-align: center;    /* centra el número */
-      padding-right: 32px;    /* deja espacio para la bandera */
+      text-align: center;
+      padding-right: 32px;
     }
     .position-cell .position-number {
-      display: inline-block;  /* ancho propio para centrar correctamente */
+      display: inline-block;
     }
     .position-cell .flag {
       position: absolute;
       top: 50%;
-      right: 8px;               /* a 8px del borde derecho */
+      right: 8px;
       transform: translateY(-50%);
     }
 
@@ -90,6 +90,12 @@
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    /* Excepción para emojis dentro de nombres */
+    .text-gradient .emoji {
+      background: none !important;
+      -webkit-text-fill-color: currentColor !important;
     }
 
     /* GRADIENTS POR RANGO (left → right) */
@@ -167,9 +173,14 @@
               class="flag"
             />
           </td>
-          <!-- NOMBRE -->
+          <!-- NOMBRE: separamos texto y emojis -->
           <td>
-            <span class="text-gradient">{{ p.name }}</span>
+            <span class="text-gradient">
+              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
+                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
+                <span v-else>{{ seg.char }}</span>
+              </template>
+            </span>
           </td>
           <!-- MMR -->
           <td>
@@ -277,6 +288,15 @@
         },
         rankClass(rank) {
           return `rank-${rank}`;
+        },
+        // Divide el nombre en caracteres y marca los emojis
+        splitName(name) {
+          // Usa el regex Unicode de emoji
+          const emojiRegex = /\p{Emoji}/u;
+          return Array.from(name).map(char => ({
+            char,
+            isEmoji: emojiRegex.test(char)
+          }));
         }
       },
       mounted() {
@@ -287,4 +307,5 @@
   </script>
 </body>
 </html>
+
 
