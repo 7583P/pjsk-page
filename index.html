@@ -57,6 +57,7 @@
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
+      /* By default, inherit white if no rank class */
       color: #fff;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
@@ -64,6 +65,8 @@
 
     .flag {
       width: 24px;
+      /* ensure flags remain full-color */
+      filter: none;
     }
 
     /* WRAPPER PARA POSICIÓN + BANDERA */
@@ -78,11 +81,28 @@
       transform: translateY(-50%);
     }
 
-    /* Colores sólidos para todos los rangos */
-    .rank-Placement { color: #ff7000 !important; }
-    .rank-Bronze    { color: #66311e; }
-    .rank-Gold      { color: #ffaf00; }
-    .rank-Diamond   { color: #0080ff; }
+    /* GRADIENT TEXT FOR RANK CLASSES */
+    .rank-Placement,
+    .rank-Bronze,
+    .rank-Gold,
+    .rank-Diamond {
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .rank-Placement {
+      background-image: linear-gradient(to right, #ff7000, #ff4600);
+    }
+    .rank-Bronze {
+      background-image: linear-gradient(to right, #6d2a00, #3d1d00);
+    }
+    .rank-Gold {
+      background-image: linear-gradient(to right, #ffbf60, #c57600);
+    }
+    .rank-Diamond {
+      background-image: linear-gradient(to right, #2797ff, #0063e4);
+    }
 
     /* Estilos de paginación */
     .pagination {
@@ -262,3 +282,4 @@
   </script>
 </body>
 </html>
+
