@@ -19,7 +19,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* TÍTULO ESTÁTICO */
+    /* TÍTULO */
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
@@ -57,7 +57,7 @@
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
-      color: #fff; /* fallback */
+      color: #fff;
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
@@ -68,7 +68,7 @@
       margin-left: 4px;
     }
 
-    /* --- Ajustes para centrar siempre el número y superponer la bandera --- */
+    /* Posición centrada y bandera superpuesta */
     .position-cell {
       position: relative;
       text-align: center;
@@ -84,7 +84,7 @@
       transform: translateY(-50%);
     }
 
-    /* GRADIENT TEXT HELPERS */
+    /* Degradado para texto */
     .text-gradient {
       display: inline-block;
       background-clip: text;
@@ -92,13 +92,7 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Excepción para emojis dentro de nombres */
-    .text-gradient .emoji {
-      background: none !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
-
-    /* GRADIENTS POR RANGO (left → right) */
+    /* Gradientes por rango */
     .rank-Placement .text-gradient {
       background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
@@ -112,7 +106,7 @@
       background-image: linear-gradient(to right, #2797ff, #0063e4);
     }
 
-    /* Estilos de paginación */
+    /* Paginación */
     .pagination {
       margin-top: 15px;
       text-align: center;
@@ -173,14 +167,12 @@
               class="flag"
             />
           </td>
-          <!-- NOMBRE: separamos texto y emojis -->
+          <!-- NOMBRE (texto con degradado, emojis sin degradado) -->
           <td>
-            <span class="text-gradient">
-              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
-                <span v-else>{{ seg.char }}</span>
-              </template>
-            </span>
+            <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
+              <span v-if="seg.isEmoji">{{ seg.char }}</span>
+              <span v-else class="text-gradient">{{ seg.char }}</span>
+            </template>
           </td>
           <!-- MMR -->
           <td>
@@ -194,7 +186,6 @@
       </tbody>
     </table>
 
-    <!-- CONTROLES DE PAGINACIÓN -->
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
       <input
@@ -231,10 +222,7 @@
           );
         },
         totalPages() {
-          return Math.max(
-            1,
-            Math.ceil(this.filteredPlayers.length / this.pageSize)
-          );
+          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
@@ -250,29 +238,19 @@
         }
       },
       watch: {
-        filter() {
-          this.currentPage = 1;
-        },
+        filter() { this.currentPage = 1; },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
-        prevPage() {
-          if (this.currentPage > 1) this.currentPage--;
-        },
-        nextPage() {
-          if (this.currentPage < this.totalPages) this.currentPage++;
-        },
-        goToPage() {
-          // El watcher valida el número de página ingresado
-        },
+        prevPage() { if (this.currentPage > 1) this.currentPage--; },
+        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
+        goToPage() { /* validado por watcher */ },
         async fetchPlayers() {
           try {
-            const resp = await axios.get(
-              'https://worker-production-1ad2.up.railway.app/api/players'
-            );
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
@@ -289,13 +267,12 @@
         rankClass(rank) {
           return `rank-${rank}`;
         },
-        // Divide el nombre en caracteres y marca los emojis
         splitName(name) {
-          // Usa el regex Unicode de emoji
           const emojiRegex = /\p{Emoji}/u;
           return Array.from(name).map(char => ({
             char,
-            isEmoji: emojiRegex.test(char)
+            // dígitos ASCII no se tratan como emoji
+            isEmoji: emojiRegex.test(char) && !/^[0-9]$/.test(char)
           }));
         }
       },
@@ -307,5 +284,3 @@
   </script>
 </body>
 </html>
-
-
