@@ -57,40 +57,36 @@
       padding: 10px;
       text-align: center;
       border-bottom: 1px solid #555;
-      color: #fff;
+      color: #fff; /* fallback */
     }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
 
     .flag {
       width: 24px;
-      filter: none;
       vertical-align: middle;
       margin-left: 4px;
     }
 
-    /* Estilos de texto degradado */
-    .gradient-text {
+    /* GRADIENT TEXT HELPERS */
+    .text-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      font-weight: 700;
     }
 
-    /* Degradados left-to-right por rango */
-    .rank-Placement .gradient-text {
+    /* GRADIENTS POR RANGO (left → right) */
+    .rank-Placement .text-gradient {
       background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
-    .rank-Bronze .gradient-text {
+    .rank-Bronze .text-gradient {
       background-image: linear-gradient(to right, #6d2a00, #3d1d00);
     }
-    .rank-Gold .gradient-text {
+    .rank-Gold .text-gradient {
       background-image: linear-gradient(to right, #ffbf60, #c57600);
     }
-    .rank-Diamond .gradient-text {
+    .rank-Diamond .text-gradient {
       background-image: linear-gradient(to right, #2797ff, #0063e4);
     }
 
@@ -137,7 +133,7 @@
     <table>
       <thead>
         <tr>
-          <th>Posición</th>
+          <th>#</th>
           <th>Player</th>
           <th>MMR</th>
           <th>Rango</th>
@@ -145,20 +141,42 @@
       </thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
+          <!-- POSICIÓN -->
           <td>
-            <span class="gradient-text">{{ playerRankMap[p.id] }}</span>
-            <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
+            <span class="text-gradient">{{ playerRankMap[p.id] }}</span>
+            <img
+              v-if="p.country"
+              :src="flagUrl(p.country)"
+              :alt="p.country"
+              class="flag"
+            />
           </td>
-          <td><span class="gradient-text">{{ p.name }}</span></td>
-          <td><span class="gradient-text">{{ p.mmr }}</span></td>
-          <td><span class="gradient-text">{{ p.rank }}</span></td>
+          <!-- NOMBRE -->
+          <td>
+            <span class="text-gradient">{{ p.name }}</span>
+          </td>
+          <!-- MMR -->
+          <td>
+            <span class="text-gradient">{{ p.mmr }}</span>
+          </td>
+          <!-- RANGO: texto degradado igual -->
+          <td>
+            <span class="text-gradient">{{ p.rank }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
 
+    <!-- CONTROLES DE PAGINACIÓN -->
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
-      <input type="number" v-model.number="currentPage" @keyup.enter="goToPage" :min="1" :max="totalPages" />
+      <input
+        type="number"
+        v-model.number="currentPage"
+        @keyup.enter="goToPage"
+        :min="1"
+        :max="totalPages"
+      />
       <span>/ {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage >= totalPages">&raquo;</button>
     </div>
@@ -181,10 +199,15 @@
       computed: {
         filteredPlayers() {
           const q = this.filter.toLowerCase();
-          return this.players.filter(p => p.name.toLowerCase().includes(q));
+          return this.players.filter(p =>
+            p.name.toLowerCase().includes(q)
+          );
         },
         totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
@@ -193,25 +216,36 @@
         seasonLabel() {
           const start = new Date(2025, 4, 16);
           const now   = new Date();
-          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
+                           + (now.getMonth() - start.getMonth());
           const period = Math.floor(monthsDiff / 3);
           return period === 0 ? 'Beta' : period;
         }
       },
       watch: {
-        filter() { this.currentPage = 1; },
+        filter() {
+          this.currentPage = 1;
+        },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() {},
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        goToPage() {
+          // El watcher valida el número de página ingresado
+        },
         async fetchPlayers() {
           try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
@@ -222,8 +256,12 @@
             alert('Error al cargar los datos de jugadores');
           }
         },
-        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        rankClass(rank) { return `rank-${rank}`; }
+        flagUrl(cc) {
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+        },
+        rankClass(rank) {
+          return `rank-${rank}`;
+        }
       },
       mounted() {
         this.fetchPlayers();
