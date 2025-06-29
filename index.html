@@ -68,7 +68,7 @@
       margin-left: 4px;
     }
 
-    /* Posición centrada y bandera superpuesta */
+    /* POSICIÓN: número centrado y bandera superpuesta */
     .position-cell {
       position: relative;
       text-align: center;
@@ -84,15 +84,43 @@
       transform: translateY(-50%);
     }
 
-    /* Degradado para texto */
+    /* =====================================================================
+       GRADIENTE DE NOMBRE: desde el primer carácter hasta el último,
+       pero sin aplicar a los emojis. 
+       ===================================================================== */
+    .name-gradient {
+      display: inline-block;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Cada rango define su degradado sobre el wrapper .name-gradient */
+    .rank-Placement .name-gradient {
+      background-image: linear-gradient(to right, #ff7000, #ff4600);
+    }
+    .rank-Bronze .name-gradient {
+      background-image: linear-gradient(to right, #6d2a00, #3d1d00);
+    }
+    .rank-Gold .name-gradient {
+      background-image: linear-gradient(to right, #ffbf60, #c57600);
+    }
+    .rank-Diamond .name-gradient {
+      background-image: linear-gradient(to right, #2797ff, #0063e4);
+    }
+    /* Excepción: los emojis no recortan el fondo y recuperan su color normal */
+    .name-gradient .emoji {
+      background: none !important;
+      -webkit-background-clip: initial !important;
+      -webkit-text-fill-color: currentColor !important;
+    }
+
+    /* MMR y RANGO (mantienen su propio .text-gradient como antes) */
     .text-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    /* Gradientes por rango */
     .rank-Placement .text-gradient {
       background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
@@ -106,7 +134,7 @@
       background-image: linear-gradient(to right, #2797ff, #0063e4);
     }
 
-    /* Paginación */
+    /* PAGINACIÓN */
     .pagination {
       margin-top: 15px;
       text-align: center;
@@ -156,10 +184,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
+        <tr
+          v-for="p in paginatedPlayers"
+          :key="p.id"
+          :class="rankClass(p.rank)"
+        >
           <!-- POSICIÓN -->
           <td class="position-cell">
-            <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
+            <span class="position-number text-gradient">
+              {{ playerRankMap[p.id] }}
+            </span>
             <img
               v-if="p.country"
               :src="flagUrl(p.country)"
@@ -167,13 +201,23 @@
               class="flag"
             />
           </td>
-          <!-- NOMBRE (texto con degradado, emojis sin degradado) -->
+
+          <!-- NOMBRE CON GRADIENTE GLOBAL Y EMOJIS EXCLUIDOS -->
           <td>
-            <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-              <span v-if="seg.isEmoji">{{ seg.char }}</span>
-              <span v-else class="text-gradient">{{ seg.char }}</span>
-            </template>
+            <span class="name-gradient">
+              <template
+                v-for="(seg, idx) in splitName(p.name)"
+                :key="idx"
+              >
+                <span
+                  v-if="seg.isEmoji"
+                  class="emoji"
+                >{{ seg.char }}</span>
+                <span v-else>{{ seg.char }}</span>
+              </template>
+            </span>
           </td>
+
           <!-- MMR -->
           <td>
             <span class="text-gradient">{{ p.mmr }}</span>
@@ -187,7 +231,9 @@
     </table>
 
     <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
+      <button @click="prevPage" :disabled="currentPage <= 1">
+        &laquo;
+      </button>
       <input
         type="number"
         v-model.number="currentPage"
@@ -196,7 +242,9 @@
         :max="totalPages"
       />
       <span>/ {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage >= totalPages">&raquo;</button>
+      <button @click="nextPage" :disabled="currentPage >= totalPages">
+        &raquo;
+      </button>
     </div>
   </div>
 
@@ -222,7 +270,10 @@
           );
         },
         totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+          return Math.max(
+            1,
+            Math.ceil(this.filteredPlayers.length / this.pageSize)
+          );
         },
         paginatedPlayers() {
           const start = (this.currentPage - 1) * this.pageSize;
@@ -230,31 +281,44 @@
         },
         seasonLabel() {
           const start = new Date(2025, 4, 16);
-          const now   = new Date();
-          const monthsDiff = (now.getFullYear() - start.getFullYear()) * 12
-                           + (now.getMonth() - start.getMonth());
+          const now = new Date();
+          const monthsDiff =
+            (now.getFullYear() - start.getFullYear()) * 12 +
+            (now.getMonth() - start.getMonth());
           const period = Math.floor(monthsDiff / 3);
           return period === 0 ? 'Beta' : period;
         }
       },
       watch: {
-        filter() { this.currentPage = 1; },
+        filter() {
+          this.currentPage = 1;
+        },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() { /* validado por watcher */ },
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        goToPage() {
+          // validado por el watcher
+        },
         async fetchPlayers() {
           try {
-            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            const resp = await axios.get(
+              'https://worker-production-1ad2.up.railway.app/api/players'
+            );
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
-            sorted.forEach((p, i) => map[p.id] = i + 1);
+            sorted.forEach((p, i) => {
+              map[p.id] = i + 1;
+            });
             this.playerRankMap = map;
           } catch (err) {
             console.error(err);
@@ -271,7 +335,7 @@
           const emojiRegex = /\p{Emoji}/u;
           return Array.from(name).map(char => ({
             char,
-            // dígitos ASCII no se tratan como emoji
+            // dígitos ASCII siempre non-emoji
             isEmoji: emojiRegex.test(char) && !/^[0-9]$/.test(char)
           }));
         }
