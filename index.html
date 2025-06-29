@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>PJSK LOUNGE</title>
   <style>
-    /* ===== Reset y estilos base ===== */
+    /* ===== Base ===== */
     body {
       font-family: sans-serif;
       margin: 20px;
@@ -23,7 +23,6 @@
       font-size: 2em;
       margin-bottom: 20px;
       text-align: center;
-      color: #ffffff;
     }
     .controls {
       margin-bottom: 15px;
@@ -89,17 +88,23 @@
     .rank-Gold      .text-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
     .rank-Diamond   .text-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
 
-    /* ===== Degradado SOLO para emojis en nombres ===== */
-    .emoji-gradient {
+    /* ===== Degradado para NOMBRES (todo excepto emojis) ===== */
+    .name-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .rank-Placement .emoji-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .rank-Bronze    .emoji-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .rank-Gold      .emoji-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .rank-Diamond   .emoji-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
+    .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
+    .rank-Bronze    .name-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
+    .rank-Gold      .name-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
+    .rank-Diamond   .name-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
+    /* Excluimos los emojis oficiales del degradado */
+    .name-gradient .emoji {
+      background: none !important;
+      -webkit-background-clip: initial !important;
+      -webkit-text-fill-color: currentColor !important;
+    }
 
     /* ===== Paginación ===== */
     .pagination {
@@ -150,11 +155,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="p in paginatedPlayers"
-          :key="p.id"
-          :class="rankClass(p.rank)"
-        >
+        <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
           <!-- POSICIÓN + BANDERA -->
           <td class="position-cell">
             <span class="position-number text-gradient">
@@ -168,21 +169,21 @@
             />
           </td>
 
-          <!-- NOMBRE: texto normal + degradado SOLO en emojis -->
+          <!-- NOMBRE: degradado en todo menos emojis -->
           <td>
-            <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-              <span
-                v-if="seg.isEmoji"
-                class="emoji-gradient"
-              >{{ seg.char }}</span>
-              <span v-else>{{ seg.char }}</span>
-            </template>
+            <span class="name-gradient">
+              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
+                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
+                <span v-else>{{ seg.char }}</span>
+              </template>
+            </span>
           </td>
 
           <!-- MMR -->
           <td>
             <span class="text-gradient">{{ p.mmr }}</span>
           </td>
+
           <!-- RANGO -->
           <td>
             <span class="text-gradient">{{ p.rank }}</span>
@@ -239,7 +240,8 @@
           const monthsDiff =
             (now.getFullYear() - start.getFullYear()) * 12 +
             (now.getMonth() - start.getMonth());
-          return Math.floor(monthsDiff / 3) === 0 ? 'Beta' : Math.floor(monthsDiff / 3);
+          const period = Math.floor(monthsDiff / 3);
+          return period === 0 ? 'Beta' : period;
         }
       },
       watch: {
@@ -252,14 +254,14 @@
       methods: {
         prevPage() { if (this.currentPage > 1) this.currentPage--; },
         nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() { /* el watcher valida */ },
+        goToPage() { /* validado por watcher */ },
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
-            sorted.forEach((p, i) => { map[p.id] = i + 1; });
+            sorted.forEach((p, i) => map[p.id] = i + 1);
             this.playerRankMap = map;
           } catch (err) {
             console.error(err);
@@ -273,7 +275,7 @@
           return `rank-${rank}`;
         },
         splitName(name) {
-          // Solo marcamos como emoji los de Emoji_Presentation (excluye símbolos raros)
+          // Solo los emojis oficiales (Emoji_Presentation) quedan sin degradado
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({
             char: c,
@@ -289,3 +291,4 @@
   </script>
 </body>
 </html>
+
