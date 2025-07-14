@@ -76,29 +76,44 @@
       transform: translateY(-50%);
     }
 
-    /* ===== Degradado para MMR y Rango ===== */
-    .text-gradient {
+    /* ===== Degradados para MMR, Rango y Nombre ===== */
+    .text-gradient, .name-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .rank-Placement .text-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .rank-Bronze    .text-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .rank-Gold      .text-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .rank-Diamond   .text-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
+    .rank-Bronze .text-gradient, .rank-Bronze .name-gradient {
+      background-image: linear-gradient(to right, #6d2a00, #3d1d00);
+    }
+    .rank-Silver .text-gradient, .rank-Silver .name-gradient {
+      background-image: linear-gradient(to right, #b3b3b3, #696969);
+    }
+    .rank-Gold .text-gradient, .rank-Gold .name-gradient {
+      background-image: linear-gradient(to right, #ffbf60, #c57600);
+    }
+    .rank-Platinum .text-gradient, .rank-Platinum .name-gradient {
+      background-image: linear-gradient(to right, #9966ff, #3800a8);
+    }
+    .rank-Sapphire .text-gradient, .rank-Sapphire .name-gradient {
+      background-image: linear-gradient(to right, #000ace, #000333);
+    }
+    .rank-Diamond .text-gradient, .rank-Diamond .name-gradient {
+      background-image: linear-gradient(to right, #2797ff, #0063e4);
+    }
+    .rank-Crystal .text-gradient, .rank-Crystal .name-gradient {
+      background-image: linear-gradient(to right, #acd2ff, #184981);
+    }
+    .rank-Champion .text-gradient, .rank-Champion .name-gradient {
+      background-image: linear-gradient(to right, #fe6767, #8f0000);
+    }
+    .rank-GrandChampion .text-gradient, .rank-GrandChampion .name-gradient {
+      background-image: linear-gradient(to right, #ff0800, #570300);
+    }
+    .rank-Legend .text-gradient, .rank-Legend .name-gradient {
+      background-image: linear-gradient(to right, #c9f4ff, #ffffff);
+    }
 
-    /* ===== Degradado para NOMBRES (todo excepto emojis) ===== */
-    .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .rank-Bronze    .name-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .rank-Gold      .name-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .rank-Diamond   .name-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
     /* Excluimos los emojis oficiales del degradado */
     .name-gradient .emoji {
       background: none !important;
@@ -184,9 +199,11 @@
             <span class="text-gradient">{{ p.mmr }}</span>
           </td>
 
-          <!-- RANGO -->
+          <!-- RANGO (mostrar Grand Champion con espacio) -->
           <td>
-            <span class="text-gradient">{{ p.rank }}</span>
+            <span class="text-gradient">
+              {{ displayRank(p.rank) }}
+            </span>
           </td>
         </tr>
       </tbody>
@@ -258,6 +275,7 @@
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            // Ordena por MMR
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
@@ -273,6 +291,10 @@
         },
         rankClass(rank) {
           return `rank-${rank}`;
+        },
+        displayRank(rank) {
+          if (rank === 'GrandChampion') return 'Grand Champion';
+          return rank;
         },
         splitName(name) {
           // Solo los emojis oficiales (Emoji_Presentation) quedan sin degradado
@@ -291,5 +313,3 @@
   </script>
 </body>
 </html>
-
-
