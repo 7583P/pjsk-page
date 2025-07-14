@@ -135,12 +135,16 @@
           <th>#</th>
           <th>Player</th>
           <th>MMR</th>
-          <th>♪</th>
+          <th>♪</th>          <!-- ← NUEVA COLUMNA -->
           <th>Rango</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
+        <tr
+          v-for="p in paginatedPlayers"
+          :key="p.id"
+          :class="rankClass(p.rank)"
+        >
           <!-- POSICIÓN + BANDERA -->
           <td class="position-cell">
             <span class="position-number text-gradient">
@@ -182,16 +186,19 @@
 
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage <= 1">&laquo;</button>
-      <input type="number"
-             v-model.number="currentPage"
-             @keyup.enter="goToPage"
-             :min="1"
-             :max="totalPages" />
+      <input
+        type="number"
+        v-model.number="currentPage"
+        @keyup.enter="goToPage"
+        :min="1"
+        :max="totalPages"
+      />
       <span>/ {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage >= totalPages">&raquo;</button>
     </div>
   </div>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
@@ -243,10 +250,12 @@
         goToPage() { /* validado por watcher */ },
         async fetchPlayers() {
           try {
-            const resp = await axios.get('/api/players');
-            this.players = resp.data.sort((a, b) => b.mmr - a.mmr);
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            // Esperamos que resp.data venga con { id, name, country, mmr, rank, points, … }
+            const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
+            this.players = sorted;
             const map = {};
-            this.players.forEach((p, i) => map[p.id] = i + 1);
+            sorted.forEach((p, i) => map[p.id] = i + 1);
             this.playerRankMap = map;
           } catch (err) {
             console.error(err);
@@ -275,5 +284,6 @@
   </script>
 </body>
 </html>
+
 
 
