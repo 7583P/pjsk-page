@@ -76,35 +76,19 @@
       transform: translateY(-50%);
     }
 
-    /* ===== Degradado para MMR y Rango ===== */
-    .text-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    /* ===== Degradados ===== */
+    .text-gradient { display: inline-block; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .rank-Placement .text-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
     .rank-Bronze    .text-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
     .rank-Gold      .text-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
     .rank-Diamond   .text-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
 
-    /* ===== Degradado para NOMBRES (todo excepto emojis) ===== */
-    .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .name-gradient { display: inline-block; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
     .rank-Bronze    .name-gradient { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
     .rank-Gold      .name-gradient { background-image: linear-gradient(to right, #ffbf60, #c57600); }
     .rank-Diamond   .name-gradient { background-image: linear-gradient(to right, #2797ff, #0063e4); }
-    /* Excluimos los emojis oficiales del degradado */
-    .name-gradient .emoji {
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
+    .name-gradient .emoji { background: none !important; -webkit-background-clip: initial !important; -webkit-text-fill-color: currentColor !important; }
 
     /* ===== Paginación ===== */
     .pagination {
@@ -151,25 +135,28 @@
           <th>#</th>
           <th>Player</th>
           <th>MMR</th>
+          <th>♪</th>          <!-- ← NUEVA COLUMNA -->
           <th>Rango</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
+        <tr
+          v-for="p in paginatedPlayers"
+          :key="p.id"
+          :class="rankClass(p.rank)"
+        >
           <!-- POSICIÓN + BANDERA -->
           <td class="position-cell">
             <span class="position-number text-gradient">
               {{ playerRankMap[p.id] }}
             </span>
-            <img
-              v-if="p.country"
-              :src="flagUrl(p.country)"
-              :alt="p.country"
-              class="flag"
-            />
+            <img v-if="p.country"
+                 :src="flagUrl(p.country)"
+                 :alt="p.country"
+                 class="flag" />
           </td>
 
-          <!-- NOMBRE: degradado en todo menos emojis -->
+          <!-- NOMBRE -->
           <td>
             <span class="name-gradient">
               <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
@@ -182,6 +169,11 @@
           <!-- MMR -->
           <td>
             <span class="text-gradient">{{ p.mmr }}</span>
+          </td>
+
+          <!-- ♪ POINTS -->
+          <td>
+            <span class="text-gradient">{{ p.points }}</span>
           </td>
 
           <!-- RANGO -->
@@ -206,6 +198,7 @@
     </div>
   </div>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
@@ -258,6 +251,7 @@
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            // Esperamos que resp.data venga con { id, name, country, mmr, rank, points, … }
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
@@ -275,7 +269,6 @@
           return `rank-${rank}`;
         },
         splitName(name) {
-          // Solo los emojis oficiales (Emoji_Presentation) quedan sin degradado
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({
             char: c,
