@@ -39,6 +39,44 @@
       color: #fff;
     }
 
+    /* ===== Dropdown ===== */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      margin-left: 10px;
+      font-family: sans-serif;
+    }
+    .dropbtn {
+      background: #ff0000;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: bold;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 1000;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 8px 12px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .dropdown-content a:hover {
+      opacity: 0.9;
+    }
+
     /* ===== Tabla ===== */
     table {
       width: 100%;
@@ -84,7 +122,7 @@
       -webkit-text-fill-color: transparent;
     }
     .rank-Placement .text-gradient, .rank-Placement .name-gradient {
-      background-image: linear-gradient(to right, #ff7000, #ff4600);     
+      background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
     .rank-Iron .text-gradient, .rank-Iron .name-gradient {
       background-image: linear-gradient(to right, #616161, #2e2e2e);
@@ -164,6 +202,25 @@
 
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…">
+
+      <!-- ▼ Mini pestaña desplegable de Rangos -->
+      <div class="dropdown">
+        <button class="dropbtn">Rangos ▾</button>
+        <div id="rankList" class="dropdown-content">
+          <a href="#" style="background: linear-gradient(to right, #616161, #2e2e2e);">Iron (0–100 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #6d2a00, #3d1d00);">Bronze (101–200 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #b3b3b3, #696969);">Silver (201–300 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #ffbf60, #c57600);">Gold (301–400 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #767ec2, #38429f);">Platinum (401–500 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #42a2ff, #003e8f);">Diamond (501–600 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #dca3ff, #883cb4);">Crystal (601–700 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #c34efd, #5f009e);">Master (701–800 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #fe6767, #8f0000);">Champion (801–900 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #ff0800, #570300);">Grand Champion (901–999 MMR)</a>
+          <a href="#" style="background: linear-gradient(to right, #c9f4ff, #c9f4ff);">Legend (≥1000 MMR)</a>
+        </div>
+      </div>
+      <!-- ▲ Fin mini pestaña -->
     </div>
 
     <table>
@@ -177,11 +234,8 @@
       </thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
-          <!-- POSICIÓN + BANDERA -->
           <td class="position-cell">
-            <span class="position-number text-gradient">
-              {{ playerRankMap[p.id] }}
-            </span>
+            <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
             <img
               v-if="p.country"
               :src="flagUrl(p.country)"
@@ -189,8 +243,6 @@
               class="flag"
             />
           </td>
-
-          <!-- NOMBRE: degradado en todo menos emojis -->
           <td>
             <span class="name-gradient">
               <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
@@ -199,18 +251,8 @@
               </template>
             </span>
           </td>
-
-          <!-- MMR -->
-          <td>
-            <span class="text-gradient">{{ p.mmr }}</span>
-          </td>
-
-          <!-- RANGO (mostrar Grand Champion con espacio) -->
-          <td>
-            <span class="text-gradient">
-              {{ displayRank(p.rank) }}
-            </span>
-          </td>
+          <td><span class="text-gradient">{{ p.mmr }}</span></td>
+          <td><span class="text-gradient">{{ displayRank(p.rank) }}</span></td>
         </tr>
       </tbody>
     </table>
@@ -299,11 +341,9 @@
           return `rank-${rank}`;
         },
         displayRank(rank) {
-          if (rank === 'GrandChampion') return 'Grand Champion';
-          return rank;
+          return rank === 'GrandChampion' ? 'Grand Champion' : rank;
         },
         splitName(name) {
-          // Solo los emojis oficiales (Emoji_Presentation) quedan sin degradado
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({
             char: c,
@@ -317,5 +357,22 @@
       }
     }).mount('#app');
   </script>
+  <script>
+    // Lógica del dropdown
+    document.addEventListener('DOMContentLoaded', () => {
+      const button = document.querySelector('.dropbtn');
+      const menu   = document.getElementById('rankList');
+      button.addEventListener('click', e => {
+        e.stopPropagation();
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      });
+      document.addEventListener('click', () => {
+        if (menu.style.display === 'block') {
+          menu.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
+
