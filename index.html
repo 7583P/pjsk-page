@@ -47,7 +47,7 @@
       font-family: sans-serif;
     }
     .dropbtn {
-      background: #595959;    /* fondo de la pestaña */
+      background: #737373;
       border: none;
       padding: 6px 12px;
       cursor: pointer;
@@ -61,6 +61,7 @@
       position: absolute;
       top: 100%;
       left: 0;
+      width: auto;
       min-width: 220px;
       background-color: #737373;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -73,11 +74,11 @@
       padding: 8px 12px;
       text-decoration: none;
       font-size: 14px;
+      background: transparent;
       white-space: nowrap;
-      transition: opacity .2s;
     }
-    .dropdown-content a:hover {
-      opacity: 0.8;
+    .dropdown-content a:hover .text-gradient {
+      opacity: 0.9;
     }
 
     /* ===== Tabla ===== */
@@ -117,38 +118,25 @@
       transform: translateY(-50%);
     }
 
-    /* ===== Degradados corregidos ===== */
+    /* ===== Degradados (derecha ➞ izquierda) ===== */
     .text-gradient, .name-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
-      color: transparent;
       -webkit-text-fill-color: transparent;
     }
-    .text-gradient.rank-Placement,
-    .name-gradient.rank-Placement      { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .text-gradient.rank-Iron,
-    .name-gradient.rank-Iron           { background-image: linear-gradient(to right, #616161, #2e2e2e); }
-    .text-gradient.rank-Bronze,
-    .name-gradient.rank-Bronze         { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .text-gradient.rank-Silver,
-    .name-gradient.rank-Silver         { background-image: linear-gradient(to right, #b3b3b3, #696969); }
-    .text-gradient.rank-Gold,
-    .name-gradient.rank-Gold           { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .text-gradient.rank-Platinum,
-    .name-gradient.rank-Platinum       { background-image: linear-gradient(to right, #767ec2, #38429f); }
-    .text-gradient.rank-Diamond,
-    .name-gradient.rank-Diamond        { background-image: linear-gradient(to right, #42a2ff, #003e8f); }
-    .text-gradient.rank-Crystal,
-    .name-gradient.rank-Crystal        { background-image: linear-gradient(to right, #dca3ff, #883cb4); }
-    .text-gradient.rank-Master,
-    .name-gradient.rank-Master         { background-image: linear-gradient(to right, #c34efd, #5f009e); }
-    .text-gradient.rank-Champion,
-    .name-gradient.rank-Champion       { background-image: linear-gradient(to right, #fe6767, #8f0000); }
-    .text-gradient.rank-GrandChampion,
-    .name-gradient.rank-GrandChampion  { background-image: linear-gradient(to right, #ff0800, #570300); }
-    .text-gradient.rank-Legend,
-    .name-gradient.rank-Legend         { background-image: linear-gradient(to right, #c9f4ff, #c9f4ff); }
+    .rank-Placement .text-gradient, .rank-Placement .name-gradient { background-image: linear-gradient(to left, #ff7000, #ff4600); }
+    .rank-Iron .text-gradient, .rank-Iron .name-gradient           { background-image: linear-gradient(to left, #616161, #2e2e2e); }
+    .rank-Bronze .text-gradient, .rank-Bronze .name-gradient       { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
+    .rank-Silver .text-gradient, .rank-Silver .name-gradient       { background-image: linear-gradient(to left, #b3b3b3, #696969); }
+    .rank-Gold .text-gradient, .rank-Gold .name-gradient           { background-image: linear-gradient(to left, #ffbf60, #c57600); }
+    .rank-Platinum .text-gradient, .rank-Platinum .name-gradient   { background-image: linear-gradient(to left, #767ec2, #38429f); }
+    .rank-Diamond .text-gradient, .rank-Diamond .name-gradient     { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
+    .rank-Crystal .text-gradient, .rank-Crystal .name-gradient     { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
+    .rank-Master .text-gradient, .rank-Master .name-gradient       { background-image: linear-gradient(to left, #c34efd, #5f009e); }
+    .rank-Champion .text-gradient, .rank-Champion .name-gradient   { background-image: linear-gradient(to left, #fe6767, #8f0000); }
+    .rank-GrandChampion .text-gradient, .rank-GrandChampion .name-gradient { background-image: linear-gradient(to left, #ff0800, #570300); }
+    .rank-Legend .text-gradient, .rank-Legend .name-gradient       { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
 
     /* Emojis sin degradado */
     .name-gradient .emoji {
@@ -200,8 +188,9 @@
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
             <span :class="['text-gradient', 'rank-'+selectedRank]">
-              Filtrar por {{ displayRank(selectedRank) }} ({{ filteredCount }})
-            </span> ▾
+              Filtrar por {{ displayRank(selectedRank) }}
+            </span>
+            ({{ filteredCount }}) ▾
           </template>
           <template v-else>
             Rangos ▾
@@ -213,7 +202,7 @@
              @click.prevent="selectRank(r.key)"
              class="text-gradient"
              :class="'rank-'+r.key">
-            {{ r.label }} ({{ r.range }} MMR)
+            {{ r.label }} ({{ r.range }})
           </a>
         </div>
       </div>
@@ -276,36 +265,97 @@
           pageSize: 50,
           selectedRank: null,
           ranks: [
-            { key:'Iron',          label:'Iron',           range:'-0-100'   },
-            { key:'Bronze',        label:'Bronze',         range:'101-200'  },
-            { key:'Silver',        label:'Silver',         range:'201-300'  },
-            { key:'Gold',          label:'Gold',           range:'301-400'  },
-            { key:'Platinum',      label:'Platinum',       range:'401-500'  },
-            { key:'Diamond',       label:'Diamond',        range:'501-600'  },
-            { key:'Crystal',       label:'Crystal',        range:'601-700'  },
-            { key:'Master',        label:'Master',         range:'701-800'  },
-            { key:'Champion',      label:'Champion',       range:'801-900'  },
-            { key:'GrandChampion', label:'Grand Champion', range:'901-999'  },
-            { key:'Legend',        label:'Legend',         range:'+1000'    }
+            { key:'Iron',   label:'Iron',          range:'-0-100' },
+            { key:'Bronze', label:'Bronze',        range:'101-200' },
+            { key:'Silver', label:'Silver',        range:'201-300' },
+            { key:'Gold',   label:'Gold',          range:'301-400' },
+            { key:'Platinum',label:'Platinum',     range:'401-500' },
+            { key:'Diamond',label:'Diamond',       range:'501-600' },
+            { key:'Crystal',label:'Crystal',       range:'601-700' },
+            { key:'Master', label:'Master',        range:'701-800' },
+            { key:'Champion',label:'Champion',     range:'801-900' },
+            { key:'GrandChampion',label:'Grand Champion',range:'901-999' },
+            { key:'Legend', label:'Legend',        range:'+1000' }
           ]
         };
       },
-      computed: {/* ...igual que antes... */},
-      methods: {/* ...igual que antes... */},
-      mounted() {/* ...igual que antes... */}
+      computed: {
+        filteredPlayers() {
+          let list = this.players;
+          if (this.selectedRank) {
+            list = list.filter(p => p.rank === this.selectedRank);
+          } else if (this.filter) {
+            const q = this.filter.toLowerCase();
+            list = list.filter(p => p.name.toLowerCase().includes(q));
+          }
+          return list;
+        },
+        filteredCount() {
+          return this.players.filter(p => p.rank === this.selectedRank).length;
+        },
+        totalPages() {
+          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
+        },
+        paginatedPlayers() {
+          const start = (this.currentPage - 1) * this.pageSize;
+          return this.filteredPlayers.slice(start, start + this.pageSize);
+        },
+        seasonLabel() {
+          return 'Beta';
+        }
+      },
+      watch: {
+        filter() { this.currentPage = 1; },
+        selectedRank() { this.currentPage = 1; this.filter = ''; },
+        currentPage(val) {
+          if (val < 1) this.currentPage = 1;
+          else if (val > this.totalPages) this.currentPage = this.totalPages;
+        }
+      },
+      methods: {
+        selectRank(rank) {
+          this.selectedRank = rank;
+          document.getElementById('rankList').style.display = 'none';
+        },
+        clearRank() {
+          this.selectedRank = null;
+        },
+        prevPage() { if (this.currentPage > 1) this.currentPage--; },
+        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
+        goToPage() {},
+        async fetchPlayers() {
+          try {
+            const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
+            const sorted = resp.data.sort((a,b)=>b.mmr-a.mmr);
+            this.players = sorted;
+            const map = {};
+            sorted.forEach((p,i)=>map[p.id]=i+1);
+            this.playerRankMap = map;
+          } catch(err) { console.error(err); alert('Error al cargar datos'); }
+        },
+        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
+        rankClass(rank) { return `rank-${rank}`; },
+        displayRank(rank) { return rank==='GrandChampion'? 'Grand Champion': rank; },
+        splitName(name) {
+          const emojiPres = /\p{Emoji_Presentation}/u;
+          return Array.from(name).map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
+        }
+      },
+      mounted() {
+        this.fetchPlayers();
+        setInterval(this.fetchPlayers, 10000);
+      }
     }).mount('#app');
 
-    // Toggle dropdown
-    document.addEventListener('click', e => {
+    // Dropdown toggle
+    document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector('.dropbtn');
       const menu = document.getElementById('rankList');
-      if (e.target === btn) {
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-      } else if (menu.style.display === 'block') {
-        menu.style.display = 'none';
-      }
+      btn.addEventListener('click', e => { e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
+      document.addEventListener('click', () => { if (menu.style.display === 'block') menu.style.display = 'none'; });
     });
   </script>
 </body>
 </html>
+
 
