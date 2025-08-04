@@ -57,16 +57,21 @@
       white-space: nowrap;
     }
     .dropdown-content {
-      display: none;
       position: absolute;
       top: 100%;
       left: 0;
       min-width: 220px;
+      width: max-content;
       background-color: #737373;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
-      overflow: hidden;
+      overflow: visible;
+      white-space: nowrap;
+      display: none;
+    }
+    .dropdown-content.show {
+      display: block;
     }
     .dropdown-content a {
       display: block;
@@ -75,8 +80,9 @@
       font-size: 14px;
       background: transparent;
       white-space: nowrap;
+      cursor: pointer;
     }
-    .dropdown-content a:hover .text-gradient {
+    .dropdown-content a:hover {
       opacity: 0.9;
     }
 
@@ -118,24 +124,91 @@
     }
 
     /* ===== Degradados ===== */
-    .text-gradient, .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    /* Para que funcione tanto en <tr class="rank-..."><span class="text-gradient">... como en <a class="text-gradient rank-..."> */
+    /* Placement */
+    .rank-Placement .text-gradient,
+    .rank-Placement .name-gradient,
+    .text-gradient.rank-Placement,
+    .name-gradient.rank-Placement {
+      background-image: linear-gradient(to right, #ff7000, #ff4600);
     }
-    .rank-Placement .text-gradient, .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .rank-Iron .text-gradient, .rank-Iron .name-gradient           { background-image: linear-gradient(to right, #616161, #2e2e2e); }
-    .rank-Bronze .text-gradient, .rank-Bronze .name-gradient       { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .rank-Silver .text-gradient, .rank-Silver .name-gradient       { background-image: linear-gradient(to right, #b3b3b3, #696969); }
-    .rank-Gold .text-gradient, .rank-Gold .name-gradient           { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .rank-Platinum .text-gradient, .rank-Platinum .name-gradient   { background-image: linear-gradient(to right, #767ec2, #38429f); }
-    .rank-Diamond .text-gradient, .rank-Diamond .name-gradient     { background-image: linear-gradient(to right, #42a2ff, #003e8f); }
-    .rank-Crystal .text-gradient, .rank-Crystal .name-gradient     { background-image: linear-gradient(to right, #dca3ff, #883cb4); }
-    .rank-Master .text-gradient, .rank-Master .name-gradient       { background-image: linear-gradient(to right, #c34efd, #5f009e); }
-    .rank-Champion .text-gradient, .rank-Champion .name-gradient   { background-image: linear-gradient(to right, #fe6767, #8f0000); }
-    .rank-GrandChampion .text-gradient, .rank-GrandChampion .name-gradient { background-image: linear-gradient(to right, #ff0800, #570300); }
-    .rank-Legend .text-gradient, .rank-Legend .name-gradient       { background-image: linear-gradient(to right, #c9f4ff, #c9f4ff); }
+    /* Iron */
+    .rank-Iron .text-gradient,
+    .rank-Iron .name-gradient,
+    .text-gradient.rank-Iron,
+    .name-gradient.rank-Iron {
+      background-image: linear-gradient(to right, #616161, #2e2e2e);
+    }
+    /* Bronze */
+    .rank-Bronze .text-gradient,
+    .rank-Bronze .name-gradient,
+    .text-gradient.rank-Bronze,
+    .name-gradient.rank-Bronze {
+      background-image: linear-gradient(to right, #6d2a00, #3d1d00);
+    }
+    /* Silver */
+    .rank-Silver .text-gradient,
+    .rank-Silver .name-gradient,
+    .text-gradient.rank-Silver,
+    .name-gradient.rank-Silver {
+      background-image: linear-gradient(to right, #b3b3b3, #696969);
+    }
+    /* Gold */
+    .rank-Gold .text-gradient,
+    .rank-Gold .name-gradient,
+    .text-gradient.rank-Gold,
+    .name-gradient.rank-Gold {
+      background-image: linear-gradient(to right, #ffbf60, #c57600);
+    }
+    /* Platinum */
+    .rank-Platinum .text-gradient,
+    .rank-Platinum .name-gradient,
+    .text-gradient.rank-Platinum,
+    .name-gradient.rank-Platinum {
+      background-image: linear-gradient(to right, #767ec2, #38429f);
+    }
+    /* Diamond */
+    .rank-Diamond .text-gradient,
+    .rank-Diamond .name-gradient,
+    .text-gradient.rank-Diamond,
+    .name-gradient.rank-Diamond {
+      background-image: linear-gradient(to right, #42a2ff, #003e8f);
+    }
+    /* Crystal */
+    .rank-Crystal .text-gradient,
+    .rank-Crystal .name-gradient,
+    .text-gradient.rank-Crystal,
+    .name-gradient.rank-Crystal {
+      background-image: linear-gradient(to right, #dca3ff, #883cb4);
+    }
+    /* Master */
+    .rank-Master .text-gradient,
+    .rank-Master .name-gradient,
+    .text-gradient.rank-Master,
+    .name-gradient.rank-Master {
+      background-image: linear-gradient(to right, #c34efd, #5f009e);
+    }
+    /* Champion */
+    .rank-Champion .text-gradient,
+    .rank-Champion .name-gradient,
+    .text-gradient.rank-Champion,
+    .name-gradient.rank-Champion {
+      background-image: linear-gradient(to right, #fe6767, #8f0000);
+    }
+    /* Grand Champion */
+    .rank-GrandChampion .text-gradient,
+    .rank-GrandChampion .name-gradient,
+    .text-gradient.rank-GrandChampion,
+    .name-gradient.rank-GrandChampion {
+      background-image: linear-gradient(to right, #ff0800, #570300);
+    }
+    /* Legend */
+    .rank-Legend .text-gradient,
+    .rank-Legend .name-gradient,
+    .text-gradient.rank-Legend,
+    .name-gradient.rank-Legend {
+      background-image: linear-gradient(to right, #c9f4ff, #c9f4ff);
+    }
 
     /* Emojis sin degradado */
     .name-gradient .emoji {
@@ -182,30 +255,30 @@
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
 
-      <!-- ▼ Mini pestaña desplegable de Rangos -->
-      <div class="dropdown">
-        <button class="dropbtn" @click.stop>
+      <div class="dropdown" @click="toggleDropdown">
+        <button class="dropbtn">
           <template v-if="selectedRank">
             <span :class="['text-gradient', 'rank-'+selectedRank]">
-              Filtrar por {{ displayRank(selectedRank) }}
-            </span>
-            ({{ filteredCount }}) ▾
+              Filtrar por {{ displayRank(selectedRank) }} ({{ filteredCount }})
+            </span> ▾
           </template>
           <template v-else>
             Rangos ▾
           </template>
         </button>
-        <div id="rankList" class="dropdown-content">
-          <a v-for="r in ranks" :key="r.key"
-             href="#"
-             @click.prevent="selectRank(r.key)"
-             class="text-gradient"
-             :class="'rank-'+r.key">
-            {{ r.label }} ({{ r.range }})
+        <div class="dropdown-content" :class="{ show: showDropdown }">
+          <a
+            v-for="r in ranks"
+            :key="r.key"
+            href="#"
+            @click.prevent="selectRank(r.key)"
+            class="text-gradient"
+            :class="'rank-'+r.key"
+          >
+            {{ r.label }} ({{ r.range }} MMR)
           </a>
         </div>
       </div>
-      <!-- ▲ Fin mini pestaña -->
 
       <button v-if="selectedRank" @click="clearRank"
               style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
@@ -215,9 +288,7 @@
 
     <table>
       <thead>
-        <tr>
-          <th>#</th><th>Player</th><th>MMR</th><th>Rango</th>
-        </tr>
+        <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
       </thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
@@ -263,18 +334,20 @@
           currentPage: 1,
           pageSize: 50,
           selectedRank: null,
+          showDropdown: false,
           ranks: [
-            { key:'Iron',   label:'Iron',          range:'-0-100' },
-            { key:'Bronze', label:'Bronze',        range:'101-200' },
-            { key:'Silver', label:'Silver',        range:'201-300' },
-            { key:'Gold',   label:'Gold',          range:'301-400' },
-            { key:'Platinum',label:'Platinum',     range:'401-500' },
-            { key:'Diamond',label:'Diamond',       range:'501-600' },
-            { key:'Crystal',label:'Crystal',       range:'601-700' },
-            { key:'Master', label:'Master',        range:'701-800' },
-            { key:'Champion',label:'Champion',     range:'801-900' },
-            { key:'GrandChampion',label:'Grand Champion',range:'901-999' },
-            { key:'Legend', label:'Legend',        range:'+1000' }
+            { key:'Placement',    label:'Placement',      range:'-0-100' },
+            { key:'Iron',         label:'Iron',           range:'-0-100' },
+            { key:'Bronze',       label:'Bronze',         range:'101-200' },
+            { key:'Silver',       label:'Silver',         range:'201-300' },
+            { key:'Gold',         label:'Gold',           range:'301-400' },
+            { key:'Platinum',     label:'Platinum',       range:'401-500' },
+            { key:'Diamond',      label:'Diamond',        range:'501-600' },
+            { key:'Crystal',      label:'Crystal',        range:'601-700' },
+            { key:'Master',       label:'Master',         range:'701-800' },
+            { key:'Champion',     label:'Champion',       range:'801-900' },
+            { key:'GrandChampion',label:'Grand Champion', range:'901-999' },
+            { key:'Legend',       label:'Legend',         range:'+1000' }
           ]
         };
       },
@@ -305,16 +378,18 @@
       },
       watch: {
         filter() { this.currentPage = 1; },
-        selectedRank() { this.currentPage = 1; this.filter = ''; },
+        selectedRank() { this.currentPage = 1; this.filter = ''; this.showDropdown = false; },
         currentPage(val) {
           if (val < 1) this.currentPage = 1;
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
       methods: {
+        toggleDropdown() {
+          this.showDropdown = !this.showDropdown;
+        },
         selectRank(rank) {
           this.selectedRank = rank;
-          document.getElementById('rankList').style.display = 'none';
         },
         clearRank() {
           this.selectedRank = null;
@@ -330,11 +405,20 @@
             const map = {};
             sorted.forEach((p,i)=>map[p.id]=i+1);
             this.playerRankMap = map;
-          } catch(err) { console.error(err); alert('Error al cargar datos'); }
+          } catch(err) {
+            console.error(err);
+            alert('Error al cargar datos');
+          }
         },
-        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        rankClass(rank) { return `rank-${rank}`; },
-        displayRank(rank) { return rank==='GrandChampion'? 'Grand Champion': rank; },
+        flagUrl(cc) {
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+        },
+        rankClass(rank) {
+          return `rank-${rank}`;
+        },
+        displayRank(rank) {
+          return rank==='GrandChampion'? 'Grand Champion': rank;
+        },
         splitName(name) {
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
@@ -345,17 +429,8 @@
         setInterval(this.fetchPlayers, 10000);
       }
     }).mount('#app');
-
-    // Dropdown toggle
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.querySelector('.dropbtn');
-      const menu = document.getElementById('rankList');
-      btn.addEventListener('click', e => { e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
-      document.addEventListener('click', () => { if (menu.style.display === 'block') menu.style.display = 'none'; });
-    });
   </script>
 </body>
 </html>
-
 
 
