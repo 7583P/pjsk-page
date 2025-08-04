@@ -47,7 +47,7 @@
       font-family: sans-serif;
     }
     .dropbtn {
-      background: #ff0000;
+      background: #737373;         /* pestaña gris */
       border: none;
       padding: 6px 12px;
       cursor: pointer;
@@ -61,6 +61,7 @@
       top: 100%;
       left: 0;
       min-width: 200px;
+      background-color: #737373;   /* fondo gris */
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
@@ -69,9 +70,9 @@
     .dropdown-content a {
       display: block;
       padding: 8px 12px;
-      color: #fff;
       text-decoration: none;
       font-size: 14px;
+      background: transparent;     /* transparente para ver fondo gris */
     }
     .dropdown-content a:hover {
       opacity: 0.9;
@@ -207,17 +208,39 @@
       <div class="dropdown">
         <button class="dropbtn">Rangos ▾</button>
         <div id="rankList" class="dropdown-content">
-          <a href="#" style="background: linear-gradient(to right, #616161, #2e2e2e);">Iron (0–100 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #6d2a00, #3d1d00);">Bronze (101–200 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #b3b3b3, #696969);">Silver (201–300 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #ffbf60, #c57600);">Gold (301–400 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #767ec2, #38429f);">Platinum (401–500 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #42a2ff, #003e8f);">Diamond (501–600 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #dca3ff, #883cb4);">Crystal (601–700 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #c34efd, #5f009e);">Master (701–800 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #fe6767, #8f0000);">Champion (801–900 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #ff0800, #570300);">Grand Champion (901–999 MMR)</a>
-          <a href="#" style="background: linear-gradient(to right, #c9f4ff, #c9f4ff);">Legend (≥1000 MMR)</a>
+          <a href="#" class="rank-Iron">
+            <span class="text-gradient">Iron (-0-100 MMR)</span>
+          </a>
+          <a href="#" class="rank-Bronze">
+            <span class="text-gradient">Bronze (101-200 MMR)</span>
+          </a>
+          <a href="#" class="rank-Silver">
+            <span class="text-gradient">Silver (201-300 MMR)</span>
+          </a>
+          <a href="#" class="rank-Gold">
+            <span class="text-gradient">Gold (301-400 MMR)</span>
+          </a>
+          <a href="#" class="rank-Platinum">
+            <span class="text-gradient">Platinum (401-500 MMR)</span>
+          </a>
+          <a href="#" class="rank-Diamond">
+            <span class="text-gradient">Diamond (501-600 MMR)</span>
+          </a>
+          <a href="#" class="rank-Crystal">
+            <span class="text-gradient">Crystal (601-700 MMR)</span>
+          </a>
+          <a href="#" class="rank-Master">
+            <span class="text-gradient">Master (701-800 MMR)</span>
+          </a>
+          <a href="#" class="rank-Champion">
+            <span class="text-gradient">Champion (801-900 MMR)</span>
+          </a>
+          <a href="#" class="rank-GrandChampion">
+            <span class="text-gradient">Grand Champion (901-999 MMR)</span>
+          </a>
+          <a href="#" class="rank-Legend">
+            <span class="text-gradient">Legend (+1000 MMR)</span>
+          </a>
         </div>
       </div>
       <!-- ▲ Fin mini pestaña -->
@@ -300,12 +323,6 @@
           return this.filteredPlayers.slice(start, start + this.pageSize);
         },
         seasonLabel() {
-          const start = new Date(2025, 4, 16);
-          const now = new Date();
-          const monthsDiff =
-            (now.getFullYear() - start.getFullYear()) * 12 +
-            (now.getMonth() - start.getMonth());
-          const period = Math.floor(monthsDiff / 3);
           return 'Beta';
         }
       },
@@ -319,11 +336,10 @@
       methods: {
         prevPage() { if (this.currentPage > 1) this.currentPage--; },
         nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() { /* validado por watcher */ },
+        goToPage() {},
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            // Ordena por MMR
             const sorted = resp.data.sort((a, b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
@@ -375,4 +391,5 @@
   </script>
 </body>
 </html>
+
 
