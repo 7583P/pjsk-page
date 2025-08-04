@@ -47,7 +47,7 @@
       font-family: sans-serif;
     }
     .dropbtn {
-      background: #4F4F4F;        /* Fondo actualizado */
+      background: #4F4F4F;
       border: none;
       padding: 6px 12px;
       cursor: pointer;
@@ -62,7 +62,7 @@
       top: 100%;
       left: 0;
       min-width: 220px;
-      background-color: #4F4F4F;  /* Fondo actualizado */
+      background-color: #737373;  /* fondo más claro */
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
@@ -74,10 +74,11 @@
       text-decoration: none;
       font-size: 14px;
       background: transparent;
-      white-space: nowrap;        /* Impide salto de línea */
+      white-space: nowrap;
+      transition: opacity .2s;
     }
-    .dropdown-content a:hover .text-gradient {
-      opacity: 0.9;
+    .dropdown-content a:hover {
+      opacity: 0.8;
     }
 
     /* ===== Tabla ===== */
@@ -122,6 +123,7 @@
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
+      color: transparent;            /* fallback */
       -webkit-text-fill-color: transparent;
     }
     .rank-Placement .text-gradient, .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
@@ -188,8 +190,8 @@
           <template v-if="selectedRank">
             <span :class="['text-gradient', 'rank-'+selectedRank]">
               Filtrar por {{ displayRank(selectedRank) }}
-            </span>
-            ({{ filteredCount }}) ▾
+              ({{ filteredCount }})
+            </span> ▾
           </template>
           <template v-else>
             Rangos ▾
