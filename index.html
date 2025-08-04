@@ -62,7 +62,7 @@
       top: 100%;
       left: 0;
       min-width: 220px;
-      background-color: #737373;  /* fondo más claro */
+      background-color: #737373;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
@@ -118,26 +118,38 @@
       transform: translateY(-50%);
     }
 
-    /* ===== Degradados ===== */
+    /* ===== Degradados corregidos ===== */
     .text-gradient, .name-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
-      color: transparent;            /* fallback */
+      color: transparent;
       -webkit-text-fill-color: transparent;
     }
-    .rank-Placement .text-gradient, .rank-Placement .name-gradient { background-image: linear-gradient(to right, #ff7000, #ff4600); }
-    .rank-Iron .text-gradient, .rank-Iron .name-gradient           { background-image: linear-gradient(to right, #616161, #2e2e2e); }
-    .rank-Bronze .text-gradient, .rank-Bronze .name-gradient       { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
-    .rank-Silver .text-gradient, .rank-Silver .name-gradient       { background-image: linear-gradient(to right, #b3b3b3, #696969); }
-    .rank-Gold .text-gradient, .rank-Gold .name-gradient           { background-image: linear-gradient(to right, #ffbf60, #c57600); }
-    .rank-Platinum .text-gradient, .rank-Platinum .name-gradient   { background-image: linear-gradient(to right, #767ec2, #38429f); }
-    .rank-Diamond .text-gradient, .rank-Diamond .name-gradient     { background-image: linear-gradient(to right, #42a2ff, #003e8f); }
-    .rank-Crystal .text-gradient, .rank-Crystal .name-gradient     { background-image: linear-gradient(to right, #dca3ff, #883cb4); }
-    .rank-Master .text-gradient, .rank-Master .name-gradient       { background-image: linear-gradient(to right, #c34efd, #5f009e); }
-    .rank-Champion .text-gradient, .rank-Champion .name-gradient   { background-image: linear-gradient(to right, #fe6767, #8f0000); }
-    .rank-GrandChampion .text-gradient, .rank-GrandChampion .name-gradient { background-image: linear-gradient(to right, #ff0800, #570300); }
-    .rank-Legend .text-gradient, .rank-Legend .name-gradient       { background-image: linear-gradient(to right, #c9f4ff, #c9f4ff); }
+    .text-gradient.rank-Placement,
+    .name-gradient.rank-Placement      { background-image: linear-gradient(to right, #ff7000, #ff4600); }
+    .text-gradient.rank-Iron,
+    .name-gradient.rank-Iron           { background-image: linear-gradient(to right, #616161, #2e2e2e); }
+    .text-gradient.rank-Bronze,
+    .name-gradient.rank-Bronze         { background-image: linear-gradient(to right, #6d2a00, #3d1d00); }
+    .text-gradient.rank-Silver,
+    .name-gradient.rank-Silver         { background-image: linear-gradient(to right, #b3b3b3, #696969); }
+    .text-gradient.rank-Gold,
+    .name-gradient.rank-Gold           { background-image: linear-gradient(to right, #ffbf60, #c57600); }
+    .text-gradient.rank-Platinum,
+    .name-gradient.rank-Platinum       { background-image: linear-gradient(to right, #767ec2, #38429f); }
+    .text-gradient.rank-Diamond,
+    .name-gradient.rank-Diamond        { background-image: linear-gradient(to right, #42a2ff, #003e8f); }
+    .text-gradient.rank-Crystal,
+    .name-gradient.rank-Crystal        { background-image: linear-gradient(to right, #dca3ff, #883cb4); }
+    .text-gradient.rank-Master,
+    .name-gradient.rank-Master         { background-image: linear-gradient(to right, #c34efd, #5f009e); }
+    .text-gradient.rank-Champion,
+    .name-gradient.rank-Champion       { background-image: linear-gradient(to right, #fe6767, #8f0000); }
+    .text-gradient.rank-GrandChampion,
+    .name-gradient.rank-GrandChampion  { background-image: linear-gradient(to right, #ff0800, #570300); }
+    .text-gradient.rank-Legend,
+    .name-gradient.rank-Legend         { background-image: linear-gradient(to right, #c9f4ff, #c9f4ff); }
 
     /* Emojis sin degradado */
     .name-gradient .emoji {
@@ -189,8 +201,7 @@
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
             <span :class="['text-gradient', 'rank-'+selectedRank]">
-              Filtrar por {{ displayRank(selectedRank) }}
-              ({{ filteredCount }})
+              Filtrar por {{ displayRank(selectedRank) }} ({{ filteredCount }})
             </span> ▾
           </template>
           <template v-else>
@@ -358,5 +369,4 @@
   </script>
 </body>
 </html>
-
 
