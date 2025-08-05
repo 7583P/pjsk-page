@@ -56,20 +56,23 @@
       font-weight: bold;
       white-space: nowrap;
     }
-    .dropbtn .text-gradient {
-      /* allow gradient on spans inside button */
+
+    /* Base para todos los textos en degradado */
+    .text-gradient,
+    .name-gradient {
       display: inline-block;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+
     .dropdown-content {
       display: none;
       position: absolute;
       top: 100%;
       left: 0;
       min-width: 220px;
-      background-color: #737373;
+      background-color: #595959;       /* fondo solicitado */
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
@@ -124,18 +127,18 @@
     }
 
     /* ===== Degradados (derecha ➞ izquierda) ===== */
-    .text-gradient.rank-Placement, .name-gradient.rank-Placement { background-image: linear-gradient(to left, #ff7000, #ff4600); }
-    .text-gradient.rank-Iron,      .name-gradient.rank-Iron      { background-image: linear-gradient(to left, #616161, #2e2e2e); }
-    .text-gradient.rank-Bronze,    .name-gradient.rank-Bronze    { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
-    .text-gradient.rank-Silver,    .name-gradient.rank-Silver    { background-image: linear-gradient(to left, #b3b3b3, #696969); }
-    .text-gradient.rank-Gold,      .name-gradient.rank-Gold      { background-image: linear-gradient(to left, #ffbf60, #c57600); }
-    .text-gradient.rank-Platinum,  .name-gradient.rank-Platinum  { background-image: linear-gradient(to left, #767ec2, #38429f); }
-    .text-gradient.rank-Diamond,   .name-gradient.rank-Diamond   { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
-    .text-gradient.rank-Crystal,   .name-gradient.rank-Crystal   { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
-    .text-gradient.rank-Master,    .name-gradient.rank-Master    { background-image: linear-gradient(to left, #c34efd, #5f009e); }
-    .text-gradient.rank-Champion,  .name-gradient.rank-Champion  { background-image: linear-gradient(to left, #fe6767, #8f0000); }
-    .text-gradient.rank-GrandChampion, .name-gradient.rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
-    .text-gradient.rank-Legend,    .name-gradient.rank-Legend    { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
+    .rank-Placement   { background-image: linear-gradient(to left, #ff7000, #ff4600); }
+    .rank-Iron        { background-image: linear-gradient(to left, #616161, #2e2e2e); }
+    .rank-Bronze      { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
+    .rank-Silver      { background-image: linear-gradient(to left, #b3b3b3, #696969); }
+    .rank-Gold        { background-image: linear-gradient(to left, #ffbf60, #c57600); }
+    .rank-Platinum    { background-image: linear-gradient(to left, #767ec2, #38429f); }
+    .rank-Diamond     { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
+    .rank-Crystal     { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
+    .rank-Master      { background-image: linear-gradient(to left, #c34efd, #5f009e); }
+    .rank-Champion    { background-image: linear-gradient(to left, #fe6767, #8f0000); }
+    .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
+    .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
 
     /* Emojis sin degradado */
     .name-gradient .emoji {
@@ -186,10 +189,10 @@
       <div class="dropdown">
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
-            <span :class="['text-gradient', 'rank-'+selectedRank]">
+            <span :class="['text-gradient','rank-'+selectedRank]">
               Filtrar por {{ displayRank(selectedRank) }}
             </span>
-            <span :class="['text-gradient', 'rank-'+selectedRank]">
+            <span :class="['text-gradient','rank-'+selectedRank]">
               ({{ filteredCount }}) ▾
             </span>
           </template>
@@ -201,8 +204,7 @@
           <a v-for="r in ranks" :key="r.key"
              href="#"
              @click.prevent="selectRank(r.key)"
-             class="text-gradient"
-             :class="'rank-'+r.key">
+             :class="['text-gradient','rank-'+r.key]">
             {{ r.label }} ({{ r.range }})
           </a>
         </div>
@@ -222,7 +224,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="rankClass(p.rank)">
+        <tr v-for="p in paginatedPlayers" :key="p.id" :class="'rank-'+p.rank">
           <td class="position-cell">
             <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
             <img v-if="p.country"
@@ -231,15 +233,19 @@
                  class="flag" />
           </td>
           <td>
-            <span class="name-gradient">
+            <span :class="['name-gradient','rank-'+p.rank]">
               <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
                 <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
                 <span v-else>{{ seg.char }}</span>
               </template>
             </span>
           </td>
-          <td><span class="text-gradient">{{ p.mmr }}</span></td>
-          <td><span class="text-gradient">{{ displayRank(p.rank) }}</span></td>
+          <td>
+            <span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span>
+          </td>
+          <td>
+            <span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -266,7 +272,7 @@
           pageSize: 50,
           selectedRank: null,
           ranks: [
-            { key:'Iron',   label:'Iron',          range:'-0-100' },
+            { key:'Iron',   label:'Iron',          range:'0-100' },
             { key:'Bronze', label:'Bronze',        range:'101-200' },
             { key:'Silver', label:'Silver',        range:'201-300' },
             { key:'Gold',   label:'Gold',          range:'301-400' },
@@ -335,7 +341,6 @@
           } catch(err) { console.error(err); alert('Error al cargar datos'); }
         },
         flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        rankClass(rank) { return `rank-${rank}`; },
         displayRank(rank) { return rank==='GrandChampion'? 'Grand Champion': rank; },
         splitName(name) {
           const emojiPres = /\p{Emoji_Presentation}/u;
@@ -358,7 +363,6 @@
   </script>
 </body>
 </html>
-
 
 
 
