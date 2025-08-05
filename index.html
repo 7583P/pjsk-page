@@ -223,32 +223,33 @@
           <th>#</th><th>Player</th><th>MMR</th><th>Rango</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="'rank-'+p.rank">
-          <td class="position-cell">
-            <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
-            <img v-if="p.country"
-                 :src="flagUrl(p.country)"
-                 :alt="p.country"
-                 class="flag" />
-          </td>
-          <td>
-            <span :class="['name-gradient','rank-'+p.rank]">
-              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
-                <span v-else>{{ seg.char }}</span>
-              </template>
-            </span>
-          </td>
-          <td>
-            <span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span>
-          </td>
-          <td>
-            <span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <tbody>
+      <tr v-for="p in paginatedPlayers" :key="p.id">
+        <td class="position-cell">
+          <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
+          <img v-if="p.country"
+               :src="flagUrl(p.country)"
+               :alt="p.country"
+               class="flag" />
+        </td>
+        <td>
+          <span :class="['name-gradient','rank-'+p.rank]">
+            <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
+              <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
+              <span v-else>{{ seg.char }}</span>
+            </template>
+          </span>
+        </td>
+        <td>
+          <span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span>
+        </td>
+        <td>
+          <!-- texto siempre blanco -->
+          <span style="color:#fff;">{{ displayRank(p.rank) }}</span>
+        </td>
+      </tr>
+    </tbody>
+ </table>
 
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage<=1">&laquo;</button>
