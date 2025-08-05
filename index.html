@@ -72,7 +72,7 @@
       top: 100%;
       left: 0;
       min-width: 220px;
-      background-color: #595959;       /* fondo solicitado */
+      background-color: #595959;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       border-radius: 4px;
@@ -189,48 +189,35 @@
       <div class="dropdown">
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
-            <span :class="['text-gradient','rank-'+selectedRank]">
-              Filtrar por {{ displayRank(selectedRank) }}
-            </span>
-            <span :class="['text-gradient','rank-'+selectedRank]">
-              ({{ filteredCount }}) ▾
-            </span>
+            <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
+            <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
           </template>
           <template v-else>
             <span class="text-gradient rank-Legend">Rangos ▾</span>
           </template>
         </button>
         <div id="rankList" class="dropdown-content">
-          <a v-for="r in ranks" :key="r.key"
-             href="#"
-             @click.prevent="selectRank(r.key)"
-             :class="['text-gradient','rank-'+r.key]">
+          <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)" :class="['text-gradient','rank-'+r.key]">
             {{ r.label }} ({{ r.range }})
           </a>
         </div>
       </div>
       <!-- ▲ Fin mini pestaña -->
 
-      <button v-if="selectedRank" @click="clearRank"
-              style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
+      <button v-if="selectedRank" @click="clearRank" style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
         Mostrar todos ▾
       </button>
     </div>
 
     <table>
       <thead>
-        <tr>
-          <th>#</th><th>Player</th><th>MMR</th><th>Rango</th>
-        </tr>
+        <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
       </thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id">
           <td class="position-cell">
-            <span class="position-number text-gradient">{{ playerRankMap[p.id] }}</span>
-            <img v-if="p.country"
-                 :src="flagUrl(p.country)"
-                 :alt="p.country"
-                 class="flag" />
+            <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
+            <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
           </td>
           <td>
             <span :class="['name-gradient','rank-'+p.rank]">
@@ -240,13 +227,8 @@
               </template>
             </span>
           </td>
-          <td>
-            <span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span>
-          </td>
-          <td>
-            <!-- texto siempre blanco -->
-            <span style="color:#fff;">{{ displayRank(p.rank) }}</span>
-          </td>
+          <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
+          <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
         </tr>
       </tbody>
     </table>
@@ -273,17 +255,17 @@
           pageSize: 50,
           selectedRank: null,
           ranks: [
-            { key:'Iron',   label:'Iron',          range:'0-100' },
-            { key:'Bronze', label:'Bronze',        range:'101-200' },
-            { key:'Silver', label:'Silver',        range:'201-300' },
-            { key:'Gold',   label:'Gold',          range:'301-400' },
-            { key:'Platinum',label:'Platinum',     range:'401-500' },
-            { key:'Diamond',label:'Diamond',       range:'501-600' },
-            { key:'Crystal',label:'Crystal',       range:'601-700' },
-            { key:'Master', label:'Master',        range:'701-800' },
-            { key:'Champion',label:'Champion',     range:'801-900' },
-            { key:'GrandChampion',label:'Grand Champion',range:'901-999' },
-            { key:'Legend', label:'Legend',        range:'+1000' }
+            { key:'Iron', label:'Iron', range:'0-100' },
+            { key:'Bronze', label:'Bronze', range:'101-200' },
+            { key:'Silver', label:'Silver', range:'201-300' },
+            { key:'Gold', label:'Gold', range:'301-400' },
+            { key:'Platinum', label:'Platinum', range:'401-500' },
+            { key:'Diamond', label:'Diamond', range:'501-600' },
+            { key:'Crystal', label:'Crystal', range:'601-700' },
+            { key:'Master', label:'Master', range:'701-800' },
+            { key:'Champion', label:'Champion', range:'801-900' },
+            { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
+            { key:'Legend', label:'Legend', range:'+1000' }
           ]
         };
       },
@@ -293,8 +275,7 @@
           if (this.selectedRank) {
             list = list.filter(p => p.rank === this.selectedRank);
           } else if (this.filter) {
-            const q = this.filter.toLowerCase();
-            list = list.filter(p => p.name.toLowerCase().includes(q));
+            list = list.filter(p => p.name.toLowerCase().includes(this.filter.toLowerCase()));
           }
           return list;
         },
@@ -334,15 +315,22 @@
         async fetchPlayers() {
           try {
             const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players');
-            const sorted = resp.data.sort((a,b)=>b.mmr-a.mmr);
+            const sorted = resp.data.sort((a,b) => b.mmr - a.mmr);
             this.players = sorted;
             const map = {};
-            sorted.forEach((p,i)=>map[p.id]=i+1);
+            sorted.forEach((p,i) => map[p.id] = i + 1);
             this.playerRankMap = map;
-          } catch(err) { console.error(err); alert('Error al cargar datos'); }
+          } catch(err) {
+            console.error(err);
+            alert('Error al cargar datos');
+          }
         },
-        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        displayRank(rank) { return rank==='GrandChampion'? 'Grand Champion': rank; },
+        flagUrl(cc) {
+          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
+        },
+        displayRank(rank) {
+          return rank === 'GrandChampion' ? 'Grand Champion' : rank;
+        },
         splitName(name) {
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
@@ -354,12 +342,17 @@
       }
     }).mount('#app');
 
-    // Dropdown toggle
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector('.dropbtn');
       const menu = document.getElementById('rankList');
-      btn.addEventListener('click', e => { e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
-      document.addEventListener('click', () => { if (menu.style.display === 'block') menu.style.display = 'none'; });
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      });
+      document.addEventListener('click', () => {
+        if (menu.style.display === 'block')
+          menu.style.display = 'none';
+      });
     });
   </script>
 </body>
