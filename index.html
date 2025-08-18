@@ -3,44 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <title>PJSK LOUNGE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ===== Base ===== */
-    body{font-family:sans-serif;margin:20px;background:#383838;color:#fff}
-    #app{max-width:1000px;margin:0 auto;padding:20px;background:#2a2a2a;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,.5);position:relative}
+    :root{
+      --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
+      --blue:#030050; --chip:#737373; --hover:#595959; --row1:#333; --row2:#2a2a2a;
+    }
+    *{box-sizing:border-box}
+    body{font-family:sans-serif;margin:20px;background:var(--bg);color:var(--text)}
+    #app{max-width:1000px;margin:0 auto;padding:20px;background:var(--panel);
+      border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,.5)}
     h1{font-size:2em;margin-bottom:20px;text-align:center}
-    .controls{margin-bottom:15px;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
-    input[type="text"]{padding:5px;width:80%;max-width:400px;border:none;border-radius:4px;text-align:center;background:#555;color:#fff}
 
-    /* ===== Botones ===== */
-    .btn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
-    .btn:hover{filter:brightness(1.05)}
+    .controls{margin-bottom:15px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    input[type="text"]{padding:6px 10px;min-width:280px;max-width:420px;border:none;border-radius:6px;text-align:center;background:#555;color:#fff}
 
-    /* ===== Dropdown Rangos ===== */
+    .btn{background:var(--chip);border:none;padding:8px 12px;border-radius:6px;color:#fff;cursor:pointer;font-weight:700}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
+    .btn-secondary{background:#555}
+
+    /* Dropdown Rangos (igual que tenías) */
     .dropdown{position:relative;display:inline-block}
-    .dropbtn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
-    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
+    .dropbtn{background:var(--chip);border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
+    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#595959;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
     .dropdown-content a{display:block;padding:8px 12px;text-decoration:none;font-size:14px;white-space:nowrap;color:#fff}
+    .dropdown-content a:hover{background:#505050}
 
-    /* Gradients */
+    /* Gradientes / texto coloreado (como lo tenías) */
     .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .name-gradient .emoji{background:none!important;-webkit-background-clip:initial!important;-webkit-text-fill-color:currentColor!important}
-
-    /* ===== Tabla ===== */
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:10px;text-align:center;color:#fff}
-    th{background:#030050}
-    td{border-bottom:1px solid #555}
-    tbody tr:nth-child(odd){background:#333}
-    tbody tr:nth-child(even){background:#2a2a2a}
-    tbody tr.is-me{outline:2px solid #5ea1ff;outline-offset:-3px}
-
-    /* ===== Posición + bandera + card ===== */
-    .position-cell{position:relative;text-align:center;padding-right:72px}
-    .position-number{display:inline-block}
-    .flag{width:24px;position:absolute;top:50%;right:40px;transform:translateY(-50%);border-radius:2px}
-    .card-thumb{position:absolute;top:50%;right:8px;transform:translateY(-50%);width:20px;height:26px;object-fit:cover;border-radius:2px;border:1px solid rgba(0,0,0,.4);box-shadow:0 1px 2px rgba(0,0,0,.6);background:#222}
-
-    /* ===== Rank gradients ===== */
     .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
     .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
     .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
@@ -53,298 +45,426 @@
     .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
     .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
     .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
+    .name-gradient .emoji{background:none!important;-webkit-background-clip:initial!important;-webkit-text-fill-color:currentColor!important}
+
+    /* ===== Tabla ===== */
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;text-align:center;color:#fff}
+    th{background:var(--blue)}
+    td{border-bottom:1px solid #555}
+    tbody tr:nth-child(odd){background:var(--row1)}
+    tbody tr:nth-child(even){background:var(--row2)}
+    tr.selectable{cursor:pointer}
+    tr.selectable:hover{filter:brightness(1.1)}
+
+    /* Posición + bandera + icono carta */
+    .position-cell{position:relative;text-align:center;padding-right:56px}
+    .position-cell .flag{width:24px;position:absolute;top:50%;right:8px;transform:translateY(-50%)}
+    .position-cell .card-icon{width:24px;height:24px;border-radius:4px;position:absolute;top:50%;right:36px;transform:translateY(-50%);object-fit:cover;background:#111}
+    .position-number{display:inline-block}
 
     /* ===== Paginación ===== */
     .pagination{margin-top:15px;display:flex;justify-content:center;align-items:center;gap:8px}
     .pagination button{padding:4px 8px;border:none;border-radius:4px;background:#555;color:#fff;cursor:pointer}
     .pagination button:disabled{opacity:.4;cursor:default}
-    .pagination input[type="number"]{width:50px;padding:4px;text-align:center;border-radius:4px;border:1px solid #555;background:#2a2a2a;color:#fff}
+    .pagination input[type="number"]{width:60px;padding:4px;text-align:center;border-radius:4px;border:1px solid #555;background:#2a2a2a;color:#fff}
 
-    /* ===== Modal selector de cartas ===== */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:2000}
-    .card-picker{width:min(940px,92vw);max-height:86vh;background:#232323;border:1px solid #444;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:grid;grid-template-rows:auto 1fr auto}
-    .picker-header{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid #3a3a3a}
-    .picker-header h3{margin:0;font-size:18px}
-    .picker-header input{flex:1;padding:8px 10px;border-radius:6px;border:1px solid #555;background:#2c2c2c;color:#fff;outline:none}
-    .picker-grid{padding:12px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
-    .card-item{background:#1f1f1f;border:1px solid #3a3a3a;border-radius:8px;padding:8px 6px;display:grid;justify-items:center;gap:6px;cursor:pointer;transition:transform .05s ease}
-    .card-item:hover{transform:translateY(-2px);border-color:#5a5a5a}
-    .card-img{width:72px;height:96px;object-fit:cover;border-radius:6px;background:#222;border:1px solid rgba(0,0,0,.35);box-shadow:0 1px 2px rgba(0,0,0,.6)}
-    .card-name{width:100%;text-align:center;font-size:11px;color:#e7e7e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .picker-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #3a3a3a;color:#cfcfcf;font-size:12px}
-    .kbd{font:11px/1.2 monospace;background:#111;border:1px solid #555;border-bottom-color:#333;border-radius:4px;padding:2px 5px;color:#ddd}
+    /* ===== Modal de cartas ===== */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:flex-start;justify-content:center;padding:32px;z-index:2000}
+    .modal{width:min(1100px,96vw);max-height:80vh;background:#1e1e1e;border:1px solid #333;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+    .modal-header{display:flex;align-items:center;gap:12px;background:var(--blue);padding:10px 12px}
+    .modal-header h3{margin:0;font-size:16px}
+    .modal-header input{flex:1;min-width:180px;background:#333;border:1px solid #444;color:#fff;border-radius:6px;padding:8px}
+    .modal-body{padding:10px 12px;overflow:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px,1fr));gap:10px}
+    .card-tile{background:#242424;border:1px solid #3a3a3a;border-radius:8px;padding:6px;display:flex;gap:8px;align-items:center}
+    .card-tile:hover{background:#2b2b2b;cursor:pointer}
+    .card-img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:#111;flex:none}
+    .card-meta{display:flex;flex-direction:column;font-size:12px}
+    .help{color:var(--muted);font-size:12px;margin-top:6px}
+
+    /* Login chip */
+    .chip{padding:6px 10px;background:#464646;border-radius:999px;font-size:12px}
   </style>
 </head>
 <body>
-  <div id="app">
-    <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
+<div id="app">
+  <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
 
-    <div class="controls">
-      <input v-if="!selectedRank" type="text" v-model="filter" placeholder="Buscar por nombre…" />
-      <!-- Habilitado SIEMPRE -->
-      <button class="btn" @click="openCardPicker">set pfp (game cards)</button>
+  <div class="controls">
+    <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
 
-      <!-- Rangos -->
-      <div class="dropdown">
-        <button class="dropbtn" @click.stop>
-          <template v-if="selectedRank">
-            <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
-            <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
-          </template>
-          <template v-else>
-            <span class="text-gradient rank-Legend">Rangos ▾</span>
-          </template>
-        </button>
-        <div id="rankList" class="dropdown-content">
-          <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)" :class="['text-gradient','rank-'+r.key]">
-            {{ r.label }} ({{ r.range }})
-          </a>
-        </div>
+    <!-- Botón de cartas (siempre visible; controla permisos al asignar) -->
+    <button class="btn" @click="openCardPicker">set pfp (game cards)</button>
+
+    <!-- Estado de sesión (demo / Discord) -->
+    <span class="chip" v-if="auth.userId">
+      Sesión: {{ auth.username || ('user#'+auth.userId) }}
+    </span>
+    <button class="btn-secondary btn" v-else @click="demoLogin">Iniciar sesión (demo)</button>
+
+    <!-- ▼ Mini pestaña desplegable de Rangos -->
+    <div class="dropdown">
+      <button class="dropbtn" @click.stop>
+        <template v-if="selectedRank">
+          <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
+          <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
+        </template>
+        <template v-else>
+          <span class="text-gradient rank-Legend">Rangos ▾</span>
+        </template>
+      </button>
+      <div id="rankList" class="dropdown-content">
+        <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)" :class="['rank-'+r.key]">
+          <span class="text-gradient rank-Legend">{{ r.label }} ({{ r.range }})</span>
+        </a>
       </div>
-
-      <button v-if="selectedRank" class="btn" @click="clearRank">Mostrar todos ▾</button>
     </div>
 
-    <table>
-      <thead>
-        <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
-      </thead>
-      <tbody>
-        <!-- Ahora el click de la fila aplica la carta si hay una seleccionada (con login = server; sin login = localStorage) -->
-        <tr v-for="p in paginatedPlayers" :key="p.id"
-            :class="{'is-me': isMe(p)}"
-            @click="pendingCard && applyCardTo(p)">
-          <td class="position-cell">
-            <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
-            <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
-            <img v-if="pfpByPlayerId[p.id]" :src="pfpByPlayerId[p.id].image" :alt="pfpByPlayerId[p.id].name"
-                 class="card-thumb" referrerpolicy="no-referrer" loading="lazy"
-                 @error="imgFallback($event, pfpByPlayerId[p.id]?.name)" />
-          </td>
-          <td>
-            <span :class="['name-gradient','rank-'+p.rank]">
-              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
-                <span v-else>{{ seg.char }}</span>
-              </template>
-            </span>
-          </td>
-          <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
-          <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <button v-if="selectedRank" @click="clearRank" class="btn-secondary btn">
+      Mostrar todos ▾
+    </button>
+  </div>
 
-    <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage<=1">&laquo;</button>
-      <input type="number" v-model.number="currentPage" @keyup.enter="goToPage" :min="1" :max="totalPages" />
-      <span>/ {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
-    </div>
+  <table>
+    <thead><tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr></thead>
+    <tbody>
+      <tr v-for="p in paginatedPlayers" :key="p.id" class="selectable" @click="tryAssignToRow(p)">
+        <td class="position-cell">
+          <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
+          <!-- icono carta elegido (pequeño) -->
+          <img v-if="pfpByPlayer[p.id]" class="card-icon"
+               :src="cardIconUrl(pfpByPlayer[p.id])"
+               @error="onCardImgError($event, pfpByPlayer[p.id])"
+               :alt="'card '+pfpByPlayer[p.id]" />
+          <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
+        </td>
+        <td>
+          <span :class="['name-gradient','rank-'+p.rank]">
+            <template v-for="(seg,idx) in splitName(p.name)" :key="idx">
+              <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
+              <span v-else>{{ seg.char }}</span>
+            </template>
+          </span>
+        </td>
+        <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
+        <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
+      </tr>
+    </tbody>
+  </table>
 
-    <!-- Picker de Cartas -->
-    <div class="overlay" v-if="cardPickerOpen" @click.self="closeCardPicker">
-      <div class="card-picker" @click.stop>
-        <div class="picker-header">
-          <h3>Selecciona tu game card</h3>
-          <input ref="cardSearch" v-model="cardQuery" placeholder="Escribe iniciales… (empieza con)" />
-          <button class="btn" @click="closeCardPicker">Cerrar</button>
-        </div>
-        <div class="picker-grid">
-          <div class="card-item" v-for="c in filteredCards" :key="c.id" :title="c.name" @click="pickCard(c)">
-            <img class="card-img" :src="c.image" :alt="c.name" referrerpolicy="no-referrer" loading="lazy" @error="imgFallback($event,c.name)" />
-            <div class="card-name">{{ c.name }}</div>
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage<=1">&laquo;</button>
+    <input type="number" v-model.number="currentPage" @keyup.enter="goToPage" :min="1" :max="totalPages" />
+    <span>/ {{ totalPages }}</span>
+    <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
+  </div>
+
+  <!-- ===== Modal selector de cartas ===== -->
+  <div class="overlay" v-if="ui.cardPickerOpen" @click.self="closeCardPicker">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Selecciona tu <b>game card</b></h3>
+        <input v-model="cardSearch" placeholder="Escribe iniciales… (filtro por empieza con)" />
+        <button class="btn" @click="closeCardPicker">Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid">
+          <div class="card-tile" v-for="c in visibleCards" :key="c.id" @click="chooseCard(c)">
+            <img class="card-img" :src="cardIconUrl(c.id)"
+                 @error="onCardImgError($event, c.id)" :alt="c.label" />
+            <div class="card-meta">
+              <div style="font-weight:700">{{ c.short }}</div>
+              <div style="opacity:.8">{{ c.label }}</div>
+            </div>
           </div>
         </div>
-        <div class="picker-footer">
-          <div>Escribe <span class="kbd">m</span> → cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
-          <div>Click en carta → luego click en una fila para aplicar (si tienes login se guarda en servidor).</div>
+        <div class="help">
+          Consejos: escribe <b>m</b> → muestra cartas que <u>empiezan</u> con “m”. &nbsp;
+          <b>miku s</b> → “Miku S…”. &nbsp; Esc para cerrar. &nbsp;
+          Click en carta → luego click en tu fila para asignar.
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    const { createApp, nextTick } = Vue;
+<!-- Vue 3 + axios -->
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const { createApp } = Vue;
 
-    createApp({
-      data() {
-        return {
-          apiBase: 'https://worker-production-1ad2.up.railway.app',
-          me: null,                 // { id, username } desde /api/me (Discord)
-          players: [],
-          filter: '',
-          playerRankMap: {},
-          currentPage: 1,
-          pageSize: 50,
-          selectedRank: null,
-          ranks: [
-            { key:'Iron', label:'Iron', range:'0-100' },
-            { key:'Bronze', label:'Bronze', range:'101-200' },
-            { key:'Silver', label:'Silver', range:'201-300' },
-            { key:'Gold', label:'Gold', range:'301-400' },
-            { key:'Platinum', label:'Platinum', range:'401-500' },
-            { key:'Diamond', label:'Diamond', range:'501-600' },
-            { key:'Crystal', label:'Crystal', range:'601-700' },
-            { key:'Master', label:'Master', range:'701-800' },
-            { key:'Champion', label:'Champion', range:'801-900' },
-            { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
-            { key:'Legend', label:'Legend', range:'+1000' }
-          ],
-          /* Cards */
-          cardPickerOpen: false,
-          cardQuery: '',
-          cards: [],
-          pendingCard: null,        // carta elegida (aún sin aplicar)
-          pfpByPlayerId: {}         // { [userId]: {id,name,image} }
-        };
-      },
+createApp({
+  data() {
+    return {
+      // ===== estado principal =====
+      players: [],
+      playerRankMap: {},
+      filter: '',
+      currentPage: 1,
+      pageSize: 50,
+      selectedRank: null,
+      ranks: [
+        { key:'Iron', label:'Iron', range:'0-100' },
+        { key:'Bronze', label:'Bronze', range:'101-200' },
+        { key:'Silver', label:'Silver', range:'201-300' },
+        { key:'Gold', label:'Gold', range:'301-400' },
+        { key:'Platinum', label:'Platinum', range:'401-500' },
+        { key:'Diamond', label:'Diamond', range:'501-600' },
+        { key:'Crystal', label:'Crystal', range:'601-700' },
+        { key:'Master', label:'Master', range:'701-800' },
+        { key:'Champion', label:'Champion', range:'801-900' },
+        { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
+        { key:'Legend', label:'Legend', range:'+1000' }
+      ],
 
-      computed:{
-        filteredPlayers(){
-          let list = this.players;
-          if(this.selectedRank) list = list.filter(p=>p.rank===this.selectedRank);
-          else if(this.filter) list = list.filter(p=>p.name.toLowerCase().includes(this.filter.toLowerCase()));
-          return list;
-        },
-        filteredCount(){ return this.players.filter(p=>p.rank===this.selectedRank).length; },
-        totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length/this.pageSize)); },
-        paginatedPlayers(){ const s=(this.currentPage-1)*this.pageSize; return this.filteredPlayers.slice(s, s+this.pageSize); },
-        seasonLabel(){ return 'Beta'; },
-        filteredCards(){
-          const q=this.cardQuery.trim().toLowerCase(); if(!q) return this.cards;
-          return this.cards.filter(c=>c.name.toLowerCase().startsWith(q));
+      // ===== cartas =====
+      cards: [],              // [{id, label, short}]
+      charactersById: {},     // {characterId: {firstName, givenName, ...}}
+      cardSearch: '',
+      chosenCardId: null,
+      ui: { cardPickerOpen: false },
+
+      // ===== sesión (demo o Discord) =====
+      auth: { userId: null, username: null },
+
+      // pfp por jugador { [playerId]: cardId }
+      pfpByPlayer: {},
+
+      // fallback de imágenes por cardId -> índice del próximo host
+      imgFallbackIndex: {}
+    }
+  },
+
+  computed: {
+    seasonLabel(){ return 'Beta' },
+
+    filteredPlayers() {
+      let list = this.players;
+      if (this.selectedRank) list = list.filter(p => p.rank === this.selectedRank);
+      else if (this.filter) list = list.filter(p => p.name.toLowerCase().includes(this.filter.toLowerCase()));
+      return list;
+    },
+    filteredCount(){ return this.players.filter(p => p.rank === this.selectedRank).length; },
+    totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize)); },
+    paginatedPlayers(){
+      const start = (this.currentPage-1)*this.pageSize;
+      return this.filteredPlayers.slice(start, start+this.pageSize);
+    },
+
+    // cartas visibles según búsqueda (empieza con)
+    visibleCards(){
+      const q = this.cardSearch.trim().toLowerCase();
+      if (!q) return this.cards;
+      const parts = q.split(/\s+/); // p.ej. "miku s"
+      return this.cards.filter(c => {
+        const txt = c.searchKey; // "miku smile 4"
+        // Debe empezar por cada trozo en orden
+        let cursor = 0, ok = true;
+        for (const p of parts){
+          const idx = txt.indexOf(p, cursor);
+          if (idx !== cursor){ ok = false; break; }
+          cursor = idx + p.length + 1; // +1 para el espacio
         }
-      },
+        return ok;
+      });
+    }
+  },
 
-      watch:{
-        filter(){ this.currentPage=1; },
-        selectedRank(){ this.currentPage=1; this.filter=''; },
-        currentPage(v){ if(v<1)this.currentPage=1; else if(v>this.totalPages)this.currentPage=this.totalPages; }
-      },
+  watch: {
+    filter(){ this.currentPage = 1; },
+    selectedRank(){ this.currentPage = 1; this.filter = ''; },
+    currentPage(val){ if (val<1) this.currentPage = 1; else if (val>this.totalPages) this.currentPage = this.totalPages; }
+  },
 
-      methods:{
-        /* ===== Imagen: fallback ===== */
-        imgFallback(ev,text='Card'){
-          const el=ev.target, w=el.classList.contains('card-img')?72:20, h=el.classList.contains('card-img')?96:26;
-          const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='#1f2937'/><stop offset='1' stop-color='#0f172a'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='${Math.max(8,w/4)}' fill='#9ca3af' font-family='sans-serif'>${(text||'Card').slice(0,10)}</text></svg>`;
-          el.onerror=null; el.src='data:image/svg+xml;utf8,'+encodeURIComponent(svg);
-        },
+  methods: {
+    /* ====== Auth (demo) ====== */
+    demoLogin(){
+      const id = prompt('Escribe tu Discord ID (demo). Ej: 1234567890');
+      if (!id) return;
+      const name = prompt('Tu nombre (opcional):');
+      this.auth = { userId: String(id), username: name || null };
+      localStorage.setItem('authDemo', JSON.stringify(this.auth));
+    },
 
-        /* ===== Tabla / Rangos ===== */
-        selectRank(r){ this.selectedRank=r; document.getElementById('rankList').style.display='none'; },
-        clearRank(){ this.selectedRank=null; },
-        prevPage(){ if(this.currentPage>1) this.currentPage--; },
-        nextPage(){ if(this.currentPage<this.totalPages) this.currentPage++; },
-        goToPage(){},
-        flagUrl(cc){ return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        displayRank(r){ return r==='GrandChampion'?'Grand Champion':r; },
-        splitName(name){ const re=/\p{Emoji_Presentation}/u; return Array.from(name).map(c=>({char:c,isEmoji:re.test(c)})); },
-        isMe(p){ return this.me && String(p.id)===String(this.me.id); },
-
-        /* ===== Cargas ===== */
-        async fetchPlayers(){
-          try{
-            const url=`${this.apiBase}/api/players`;
-            const resp=await axios.get(url,{withCredentials:false,headers:{Accept:'application/json'}});
-            const sorted=resp.data.sort((a,b)=>b.mmr-a.mmr);
-            this.players=sorted;
-            const map={}; sorted.forEach((p,i)=>map[p.id]=i+1); this.playerRankMap=map;
-            localStorage.setItem('players_cache',JSON.stringify(sorted));
-          }catch(err){
-            console.error('fetchPlayers error:',err?.message,err?.response?.status,err?.response?.data);
-            const cache=localStorage.getItem('players_cache');
-            if(cache){
-              const s=JSON.parse(cache); this.players=s;
-              const map={}; s.forEach((p,i)=>map[p.id]=i+1); this.playerRankMap=map;
-            }
-          }
-        },
-        async fetchMe(){
-          try{
-            const r=await axios.get(`${this.apiBase}/api/me`,{withCredentials:true});
-            this.me=r.data; // { id, username }
-          }catch(e){
-            console.warn('No autenticado /api/me; se usará modo local para PFP.', e);
-            this.me=null;
-          }
-        },
-        async fetchPfps(){
-          try{
-            const r=await axios.get(`${this.apiBase}/api/pfps`,{withCredentials:false});
-            this.pfpByPlayerId = Array.isArray(r.data)?Object.fromEntries(r.data):(r.data||{});
-            localStorage.setItem('pfp_map_backup',JSON.stringify(this.pfpByPlayerId));
-          }catch(e){
-            console.warn('GET /api/pfps falló, usando backup local',e);
-            const raw=localStorage.getItem('pfp_map_backup');
-            if(raw) this.pfpByPlayerId=JSON.parse(raw)||{};
-          }
-        },
-
-        /* ===== Cards ===== */
-        async openCardPicker(){
-          if(!this.cards.length) await this.loadCards();
-          this.cardPickerOpen=true; this.cardQuery=''; this.pendingCard=null;
-          await nextTick(); this.$refs.cardSearch && this.$refs.cardSearch.focus();
-        },
-        closeCardPicker(){ this.cardPickerOpen=false; },
-        pickCard(card){ this.pendingCard=card; this.cardPickerOpen=false; /* ahora espera click en fila */ },
-
-        async applyCardTo(player){
-          if(!this.pendingCard) return;
-          const uid = player.id;
-          const payload = { id:this.pendingCard.id, name:this.pendingCard.name, image:this.pendingCard.image };
-
-          // Actualiza UI y guarda backup local
-          this.pfpByPlayerId = { ...this.pfpByPlayerId, [uid]: payload };
-          localStorage.setItem('pfp_map_backup', JSON.stringify(this.pfpByPlayerId));
-
-          // Solo si el usuario actual es el dueño de esa fila, intenta persistir en servidor
-          if(this.me && String(uid)===String(this.me.id)){
-            try{
-              await axios.put(`${this.apiBase}/api/pfps/${uid}`, { cardId:payload.id, name:payload.name, image:payload.image }, { withCredentials:true });
-            }catch(e){
-              console.warn('PUT /api/pfps falló; queda backup local', e);
-            }
-          }
-          this.pendingCard=null;
-        },
-
-        async loadCards(){
-          // Si tienes endpoint real, descomenta:
-          // try{ const r=await axios.get(`${this.apiBase}/api/cards`); this.cards=r.data; return; }catch(e){ console.warn('api/cards no disponible, usando ejemplos'); }
-          this.cards=[
-            { id:'emu-pop-4',     name:'Emu Pop 4★',     image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Emu_Card_Example.png' },
-            { id:'ichika-rose-3', name:'Ichika Rose 3★', image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Ichika_Card_Example.png' },
-            { id:'kaito-warm-2',  name:'KAITO Warm 2★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Kaito_Card_Example.png' },
-            { id:'len-cool-2',    name:'Len Cool 2★',    image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Len_Card_Example.png' },
-            { id:'meiko-cafe-3',  name:'MEIKO Cafe 3★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Meiko_Card_Example.png' },
-            { id:'miku-casual-3', name:'Miku Casual 3★', image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Card_Example.png' },
-            { id:'miku-smile-4',  name:'Miku Smile 4★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Smile_Example.png' },
-            { id:'nene-spark',    name:'Nene Spark',     image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Nene_Card_Example.png' },
-            { id:'rin-sunny-4',   name:'Rin Sunny 4★',   image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Rin_Card_Example.png' },
-            { id:'tsukasa-star',  name:'Tsukasa Star',   image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Tsukasa_Card_Example.png' }
-          ].map(c=>({...c,name:c.name.replace(/\s+/g,' ').trim()})).sort((a,b)=>a.name.localeCompare(b.name));
+    /* ====== Jugadores ====== */
+    async fetchPlayers(){
+      try{
+        const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players', {timeout: 10000});
+        const sorted = resp.data.sort((a,b) => b.mmr - a.mmr);
+        this.players = sorted;
+        const map = {}; sorted.forEach((p,i)=> map[p.id] = i+1); this.playerRankMap = map;
+      }catch(err){
+        console.error('players error', err);
+        if (!this.players.length){
+          alert('Error al cargar players');
+          // fallback mínimo para que puedas probar el selector
+          this.players = [
+            {id:'111', name:'ashie ^^', mmr:409, rank:'Platinum', country:'US', discordId:'111'},
+            {id:'222', name:'PERU-MaTiaS', mmr:359, rank:'Gold',     country:'PE', discordId:'222'},
+            {id:'333', name:'Aoi (Wanderer\'s Wife)', mmr:353, rank:'Gold', country:'CZ', discordId:'333'},
+          ];
+          const map = {}; this.players.forEach((p,i)=> map[p.id]=i+1); this.playerRankMap = map;
         }
-      },
-
-      async mounted(){
-        await this.fetchMe();        // si falla, modo local
-        await this.fetchPlayers();
-        await this.fetchPfps();
-        setInterval(this.fetchPlayers, 10000);
       }
-    }).mount('#app');
+    },
 
-    /* — Dropdown Rangos — */
-    document.addEventListener('DOMContentLoaded',()=>{
-      const btn=document.querySelector('.dropbtn');
-      const menu=document.getElementById('rankList');
-      btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block';});
-      document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none'; });
-    });
-  </script>
+    /* ====== Cartas (fuente: Sekai-World master db en GitHub) ======
+       Cargamos dinámicamente para que nuevas cartas aparezcan solas. */
+    async loadCards(){
+      try{
+        // datos (en): cards + perfiles de personajes para componer nombres cortos
+        const cardsUrl = 'https://raw.githubusercontent.com/Sekai-World/sekai-master-db-en-diff/main/cards.json';
+        const charsUrl = 'https://raw.githubusercontent.com/Sekai-World/sekai-master-db-en-diff/main/characterProfiles.json';
+        const [cardsRes, charsRes] = await Promise.all([
+          axios.get(cardsUrl, {timeout: 20000}),
+          axios.get(charsUrl, {timeout: 20000})
+        ]);
+        const chars = {}; (charsRes.data || []).forEach(ch => { chars[ch.characterId] = ch; });
+        this.charactersById = chars;
+
+        // Simplificamos para el grid
+        const makeLabel = (row) => {
+          const ch = chars[row.characterId];
+          const who = ch ? (ch.firstName || ch.givenName || ch.name || 'Unknown') : 'Unknown';
+          const rarity = row.cardRarityType ? String(row.cardRarityType).replace(/\D/g,'') : (row.rarity || '');
+          const short = `${who}`;
+          const label = `${who} ${row.prefix || ''} ${rarity?rarity+'★':''}`.trim();
+          const searchKey = `${label}`.toLowerCase() + ' '; // espacio final para el filtro por "empieza con"
+          return {id: row.id, label, short, searchKey};
+        };
+
+        this.cards = (cardsRes.data || []).map(makeLabel).sort((a,b)=>a.id-b.id);
+
+      }catch(err){
+        console.error('loadCards error', err);
+        alert('No se pudo cargar la lista de cartas (revisa la red/CORS).');
+      }
+    },
+
+    /* ====== Modal ====== */
+    openCardPicker(){ this.ui.cardPickerOpen = true; this.cardSearch=''; }
+    ,closeCardPicker(){ this.ui.cardPickerOpen = false; }
+    ,chooseCard(card){
+      this.chosenCardId = card.id;
+      this.ui.cardPickerOpen = false;
+      // Ahora el usuario hace click en su fila para asignar
+    },
+
+    /* ====== Asignación ====== */
+    canEditRow(p){
+      // Regla: el usuario sólo puede editar su propia casilla.
+      // Si tu API devuelve discordId en player, úsalo; si no, usamos p.id como demo.
+      const owner = p.discordId ? String(p.discordId) : String(p.id);
+      return this.auth.userId && String(this.auth.userId) === owner;
+    },
+    async tryAssignToRow(p){
+      if (!this.chosenCardId){
+        // No escogió carta aún → abre el picker
+        this.openCardPicker();
+        return;
+      }
+      if (!this.canEditRow(p)){
+        alert('Solo puedes modificar tu propia casilla.');
+        return;
+      }
+      // Guardado local inmediato (si hay backend, también mandamos)
+      this.pfpByPlayer = {...this.pfpByPlayer, [p.id]: this.chosenCardId};
+      this.persistLocalPfp();
+
+      // Llamada opcional al backend si tienes endpoint (ignorada si falla)
+      try{
+        // Ejemplo de API: POST /api/pfp { playerId, cardId, by }
+        await axios.post('https://worker-production-1ad2.up.railway.app/api/pfp', {
+          playerId: p.id, cardId: this.chosenCardId, by: this.auth.userId
+        }, {timeout: 8000});
+      }catch(e){ console.warn('pfp API (opcional) falló o no existe', e?.message); }
+
+      // Listo
+      this.chosenCardId = null;
+    },
+
+    /* ====== Persistencia local por usuario ====== */
+    persistLocalPfp(){
+      if (!this.auth.userId) return;
+      const key = `pfpMap:${this.auth.userId}`;
+      localStorage.setItem(key, JSON.stringify(this.pfpByPlayer));
+    },
+    restoreLocalPfp(){
+      if (!this.auth.userId) return;
+      const key = `pfpMap:${this.auth.userId}`;
+      try{
+        const raw = localStorage.getItem(key);
+        if (raw) this.pfpByPlayer = JSON.parse(raw)||{};
+      }catch{}
+    },
+
+    /* ====== Utilidades ====== */
+    selectRank(rank){ this.selectedRank = rank; document.getElementById('rankList').style.display='none'; },
+    clearRank(){ this.selectedRank = null; },
+    prevPage(){ if (this.currentPage>1) this.currentPage--; },
+    nextPage(){ if (this.currentPage<this.totalPages) this.currentPage++; },
+    goToPage(){},
+    flagUrl(cc){ return `https://flagcdn.com/24x18/${cc?.toLowerCase?.()||'xx'}.png`; },
+    displayRank(rank){ return rank==='GrandChampion' ? 'Grand Champion' : rank; },
+    splitName(name){
+      const emojiPres = /\p{Emoji_Presentation}/u;
+      return Array.from(name||'').map(c => ({ char:c, isEmoji:emojiPres.test(c) }));
+    },
+
+    /* ====== Construcción del icono ======
+       Intentamos varias CDNs conocidas. Al fallar una, pasamos a la siguiente. */
+    cardIconHosts(cardId){
+      const id = String(cardId);
+      return [
+        // dnaroma (muy usada por la comunidad)
+        `https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/${id}_rip/${id}.png`,
+        `https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/${id}_rip/${id}.webp`,
+        // espejo alterno común
+        `https://storage.sekai.best/sekai-assets/thumbnail/chara_card/${id}_rip/${id}.png`,
+        `https://storage.sekai.best/sekai-assets/thumbnail/chara_card/${id}_rip/${id}.webp`,
+      ];
+    },
+    cardIconUrl(cardId){
+      const i = this.imgFallbackIndex[cardId] || 0;
+      const list = this.cardIconHosts(cardId);
+      return list[Math.min(i, list.length-1)];
+    },
+    onCardImgError(ev, cardId){
+      const i = (this.imgFallbackIndex[cardId] || 0) + 1;
+      const list = this.cardIconHosts(cardId);
+      if (i < list.length){
+        this.imgFallbackIndex[cardId] = i;
+        ev.target.src = list[i];
+      }else{
+        // último recurso: ocultar si todas fallan
+        ev.target.style.display='none';
+      }
+    }
+  },
+
+  async mounted(){
+    // dropdown
+    const btn = document.querySelector('.dropbtn');
+    const menu = document.getElementById('rankList');
+    btn.addEventListener('click', e => { e.stopPropagation(); menu.style.display = menu.style.display==='block'?'none':'block'; });
+    document.addEventListener('click', () => { if(menu.style.display==='block') menu.style.display='none'; });
+
+    // sesión demo restaurar
+    const saved = localStorage.getItem('authDemo');
+    if (saved) this.auth = JSON.parse(saved);
+
+    await Promise.all([ this.fetchPlayers(), this.loadCards() ]);
+
+    // restaurar pfp por usuario
+    this.restoreLocalPfp();
+
+    // refresco periódico de players (no spamear si falla)
+    setInterval(()=> this.fetchPlayers().catch(()=>{}), 10000);
+  }
+}).mount('#app');
+</script>
 </body>
 </html>
+
