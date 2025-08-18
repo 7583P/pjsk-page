@@ -5,11 +5,11 @@
   <title>PJSK LOUNGE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ===== Base (respetando tu paleta) ===== */
     :root{
       --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
-      --chip:#737373; --hover:#595959; --row1:#333; --row2:#2a2a2a;
-      --accent:#6c6cf0; --warn:#f0a66c;
+      --chip:#737373; --hover:#595959; --row1:#2f2f2f; --row2:#262626;
+      --accent:#6c6cf0; --warn:#f0a66c; --head:#00124f; --headTxt:#fff;
+      --mmr:#7b8bff;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,7 +17,6 @@
     a{color:inherit;text-decoration:none}
     #app{min-height:100%}
 
-    /* ===== Layout ===== */
     header.topbar{background:var(--panel);border-bottom:1px solid #0006;position:sticky;top:0;z-index:10}
     .nav{max-width:1000px;margin:0 auto;display:flex;gap:14px;align-items:center;padding:12px}
     .nav a{padding:8px 10px;border-radius:8px}
@@ -26,7 +25,6 @@
     .grow{flex:1}
     .container{max-width:1000px;margin:20px auto;padding:20px;background:var(--panel);border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.45)}
 
-    /* ===== UI ===== */
     .btn{background:#5050ff1f;border:1px solid var(--accent);border-radius:8px;padding:8px 12px;color:#cfd0ff;cursor:pointer}
     .btn:hover{background:#6c6cf02f}
     .btn.ghost{background:transparent;border-color:#777;color:#ddd}
@@ -37,43 +35,42 @@
     .input{background:#1f1f1f;border:1px solid #555;color:#fff;border-radius:8px;padding:8px 10px;width:100%}
     .help{color:var(--muted);font-size:13px}
     .badge{display:inline-grid;place-items:center;border:1px solid #555;color:#bbb;padding:3px 8px;border-radius:999px;font-size:12px}
-    .hero{font-size:30px;margin:0 0 10px}
-    pre.welcome{white-space:pre-wrap;background:#1a1a1a;border:1px solid #333;padding:16px;border-radius:12px}
 
-    /* ===== PFP ===== */
+    .hero{font-size:30px;margin:0 0 10px;text-align:center}
+    .welcome-block{white-space:pre-wrap;background:#1a1a1a;border:1px solid #333;padding:16px;border-radius:12px;font-family:inherit}
+    .center{ text-align:center }
+
+    /* PFP UI */
     .pfp-box{width:220px;height:220px;background:#303030;border:2px dashed #555;border-radius:12px;display:grid;place-items:center;overflow:hidden}
     .pfp-box img{width:100%;height:100%;object-fit:cover}
     .grid.cards{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
     .cardbtn{padding:8px;text-align:center;cursor:pointer}
     .cardbtn.selected{outline:2px solid var(--accent);border-radius:10px}
 
-    /* ===== Tables ===== */
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;border-bottom:1px solid #333;text-align:left}
-    tr:nth-child(odd){background:#252525}
+    /* Leaderboard */
+    .page-title{font-size:34px;margin:0 0 14px;text-align:center;letter-spacing:.3px}
+    .toolbar{display:flex;gap:10px;justify-content:center;margin-bottom:10px}
+    .toolbar .input{max-width:380px}
+    .toolbar select{appearance:none;background:#1f1f1f;border:1px solid #555;color:#fff;border-radius:8px;padding:8px 10px}
+    table.tbl{width:100%;border-collapse:separate;border-spacing:0 0}
+    table.tbl thead th{background:var(--head);color:var(--headTxt);padding:10px;border-top-left-radius:6px;border-top-right-radius:6px}
+    table.tbl tbody td{padding:10px;border-bottom:1px solid #333}
+    table.tbl tbody tr:nth-child(odd){background:var(--row1)}
+    table.tbl tbody tr:nth-child(even){background:var(--row2)}
+    .col-num{width:56px;text-align:center;opacity:.8}
+    .col-mmr{color:var(--mmr);font-weight:600;text-align:right;width:120px}
+    .col-rank{width:150px}
+    .player-cell{display:flex;align-items:center;gap:10px}
+    .player-cell img{width:26px;height:26px;border-radius:6px;object-fit:cover}
+    .rank-chip{font-weight:600}
+    .rank-Diamond{color:#66a3ff}
+    .rank-Platinum{color:#9fa6ff}
+    .rank-Gold{color:#ffb74d}
+    .rank-Silver{color:#cfd8dc}
+    .rank-Bronze{color:#cd7f32}
+    .rank-Iron{color:#9e9e9e}
+    .rank-Placement{color:#ff9b4d}
   </style>
-
-  <!--
-    ⚙️ PASOS:
-    1) Crea un proyecto Firebase y habilita:
-       - Authentication: Email/Password (edita plantillas de correo si deseas).
-       - Firestore Database.
-    2) Copia tu config en el objeto firebaseConfig de abajo.
-    3) (Recomendado) Reglas Firestore:
-       rules_version = '2';
-       service cloud.firestore {
-         match /databases/{database}/documents {
-           match /player_profiles/{uid} {
-             allow read: if true;
-             allow write: if request.auth != null && request.auth.uid == uid;
-           }
-           match /public_players/{uid} {
-             allow read: if true;
-             allow write: if request.auth != null && request.auth.uid == uid;
-           }
-         }
-       }
-  -->
 </head>
 <body>
 <div id="app">
@@ -83,28 +80,28 @@
       <a href="#/edit-profile" data-route>Edit Profile</a>
       <a href="#/pjsk-lounge" data-route>PJSK LOUNGE</a>
       <div class="grow"></div>
-      <div id="authStatus" class="row">
-        <!-- Rellenado por JS: email + Log out o Register/Login -->
-      </div>
+      <div id="authStatus" class="row"></div>
     </nav>
   </header>
 
   <main class="container">
-    <!-- ===== HOME ===== -->
+    <!-- HOME -->
     <section id="route-home" class="grid" style="gap:18px;display:none">
       <div>
         <h1 class="hero">Welcome to PJSK LOUNGE</h1>
-        <pre class="welcome">PJSK LOUNGE, new project of competitive pjsk with a DISCORD BOT and PAGE especially created for this project (11/05/25)
+        <div class="welcome-block">
+PJSK LOUNGE, new project of competitive pjsk with a DISCORD BOT and PAGE especially created for this project (11/05/25)
 How it works?
-first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 5 ROUNDS, the amount of perfect,great,good,bad and miss taps will be counted and if u are placement depending on your amount from great to miss taps will determine your starting rank (there are 11 ranks) after the room in discord is full the bot will launch random songs to be selected on HARD/EXPERT/MASTER/APPEND difficulty according to your rank, once the 5 rounds are finished !submit command will be use to update MMR/RANK/ROLES into DISCORD and into the PAGE there are COMMANDS to join a room, leave a room, check top 10, check your mmr (and mmr/rank from other player), check your x season stats/current seasons stats, etc if you are new into the game or you are a top player dosnt matter, any skill is welcome</pre>
+first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 5 ROUNDS, the amount of perfect,great,good,bad and miss taps will be counted and if u are placement depending on your amount from great to miss taps will determine your starting rank (there are 11 ranks) after the room in discord is full the bot will launch random songs to be selected on HARD/EXPERT/MASTER/APPEND difficulty according to your rank, once the 5 rounds are finished !submit command will be use to update MMR/RANK/ROLES into DISCORD and into the PAGE there are COMMANDS to join a room, leave a room, check top 10, check your mmr (and mmr/rank from other player), check your x season stats/current seasons stats, etc if you are new into the game or you are a top player dosnt matter, any skill is welcome
+        </div>
       </div>
 
       <div class="card">
-        <div id="homeButtons" class="row"><!-- JS: Register/Login/Reset o Log out --></div>
+        <div id="homeButtons" class="row"></div>
         <p id="homeHint" class="help"></p>
       </div>
 
-      <!-- Modales simples embebidos -->
+      <!-- Modales simples -->
       <div id="panel-register" class="card grid" style="gap:10px;display:none">
         <h3>Register</h3>
         <input class="input" id="regEmail" placeholder="Email" type="email">
@@ -140,12 +137,11 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       </div>
     </section>
 
-    <!-- ===== EDIT PROFILE ===== -->
+    <!-- EDIT PROFILE -->
     <section id="route-edit" class="grid" style="gap:18px;display:none">
       <h2>Edit Profile</h2>
       <div id="edit-loading">Cargando…</div>
 
-      <!-- No autenticado -->
       <div id="edit-guest" class="card grid" style="gap:10px;display:none">
         <p class="help">No has iniciado sesión.</p>
         <div class="row">
@@ -155,7 +151,6 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         </div>
       </div>
 
-      <!-- Autenticado, no verificado -->
       <div id="edit-unverified" class="card grid" style="gap:10px;display:none">
         <p><strong>Verifica tu correo para continuar</strong></p>
         <p class="help">Te hemos enviado un email con un botón/enlace de verificación.</p>
@@ -166,7 +161,6 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         <p id="msgEditUnv" class="help"></p>
       </div>
 
-      <!-- Autenticado y verificado -->
       <div id="edit-verified" class="grid" style="gap:14px;display:none">
         <div class="card grid" style="gap:10px">
           <label>Name (read-only)</label>
@@ -178,7 +172,7 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
           <div class="row" style="align-items:flex-start">
             <div class="pfp-box" id="pfpBox"><span class="help">(sin PFP)</span></div>
             <div class="card" style="flex:1">
-              <div id="cardsGrid" class="grid cards"><!-- JS llena --></div>
+              <div id="cardsGrid" class="grid cards"></div>
               <div class="row" style="margin-top:10px">
                 <button class="btn warn" id="btnDeletePfp">Delete pfp</button>
               </div>
@@ -189,15 +183,30 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       </div>
     </section>
 
-    <!-- ===== PJSK LOUNGE ===== -->
+    <!-- PJSK LOUNGE -->
     <section id="route-lounge" class="grid" style="gap:12px;display:none">
-      <h2>PJSK LOUNGE</h2>
-      <p class="help">Página informativa / placeholder para comandos y estadísticas futuras.</p>
+      <h2 class="page-title">PJSK LOUNGE — Season Beta</h2>
+
+      <div class="toolbar">
+        <input id="searchName" class="input" placeholder="Buscar por nombre…">
+        <select id="rankFilter" title="Rangos">
+          <option value="">All Ranges</option>
+          <option>Diamond</option><option>Platinum</option><option>Gold</option>
+          <option>Silver</option><option>Bronze</option><option>Iron</option>
+          <option>Placement</option>
+        </select>
+      </div>
 
       <div class="card">
-        <h3>Public Players (live)</h3>
-        <table>
-          <thead><tr><th>Name</th><th>Rank</th><th>MMR</th><th>PFP</th></tr></thead>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Player</th>
+              <th class="col-mmr">MMR</th>
+              <th class="col-rank">Rango</th>
+            </tr>
+          </thead>
           <tbody id="playersTbody"><tr><td colspan="4" class="help">—</td></tr></tbody>
         </table>
       </div>
@@ -214,43 +223,39 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
     sendPasswordResetEmail, signOut, updateProfile, reload
   } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
   import {
-    getFirestore, doc, getDoc, setDoc, updateDoc, writeBatch, onSnapshot, collection, query
+    getFirestore, doc, getDoc, setDoc, writeBatch, onSnapshot, collection, query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-  // 1) Pega tu config aquí
+  /* ======= TU CONFIG FIREBASE ======= */
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
     projectId: "TU_PROJECT_ID",
-    // (Opcional si usas hosting/storage)
-    // storageBucket: "...",
-    // appId: "...",
   };
 
-  // 2) Init
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  // Persistencia fuerte: mantiene sesión en redeploys mientras el origen sea el mismo
   await setPersistence(auth, browserLocalPersistence);
 
-  // ===== Util =====
-  const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
-  function setActiveRoute() {
+  /* ====== Utils ====== */
+  const $  = s=>document.querySelector(s);
+  const $$ = s=>Array.from(document.querySelectorAll(s));
+  function setActiveRoute(){
     const h = location.hash || "#/";
-    $$('a[data-route]').forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === h);
-    });
+    $$('a[data-route]').forEach(a => a.classList.toggle('active', a.getAttribute('href')===h));
   }
-  function showRoute(id) {
-    $("#route-home").style.display = "none";
-    $("#route-edit").style.display = "none";
-    $("#route-lounge").style.display = "none";
-    id && (id.style.display = "");
+  function showRoute(el){
+    $("#route-home").style.display="none";
+    $("#route-edit").style.display="none";
+    $("#route-lounge").style.display="none";
+    el && (el.style.display="");
     setActiveRoute();
   }
+  const RANKS = ["Diamond","Platinum","Gold","Silver","Bronze","Iron","Placement"];
 
-  // ===== Cards mock (data URLs SVG para que funcione offline) =====
+  /* ====== Cards mock (SVG data URLs) ====== */
   const CARDS = [
     { id:"c1", name:"Miku — Sky Blue", rarity:"SSR", imageUrl: svg("Sky","0,180,255","#7bdfff") },
     { id:"c2", name:"Miku — Neon Heart", rarity:"SR", imageUrl: svg("Neon","255,0,120","#ff79c6") },
@@ -261,326 +266,233 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
     { id:"c7", name:"Emu — Pop Star", rarity:"N", imageUrl: svg("Pop","255,0,200","#ffb3ff") },
     { id:"c8", name:"Nene — Mint", rarity:"N", imageUrl: svg("Mint","0,200,140","#8affd1") },
   ];
-  function svg(label, rgb, chip){
-    const enc = (s)=>encodeURIComponent(s).replace(/%20/g,' ');
-    const grad = `linearGradient`;
-    const raw = `
-      <svg xmlns='http://www.w3.org/2000/svg' width='600' height='800'>
-        <defs>
-          <${grad} id='g' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='rgba(${rgb},1)'/>
-            <stop offset='100%' stop-color='rgba(${rgb},0.6)'/>
-          </${grad}>
-        </defs>
-        <rect width='100%' height='100%' fill='url(#g)'/>
-        <circle cx='520' cy='60' r='34' fill='${chip}' />
-        <text x='24' y='740' font-size='36' font-family='Arial' fill='white'>${label}</text>
-      </svg>`;
+  function svg(label,rgb,chip){
+    const enc = s=>encodeURIComponent(s).replace(/%20/g,' ');
+    const raw = `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800'>
+      <defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'>
+        <stop offset='0%' stop-color='rgba(${rgb},1)'/><stop offset='100%' stop-color='rgba(${rgb},0.6)'/>
+      </linearGradient></defs>
+      <rect width='100%' height='100%' fill='url(#g)'/>
+      <circle cx='520' cy='60' r='34' fill='${chip}' />
+      <text x='24' y='740' font-size='36' font-family='Arial' fill='white'>${label}</text>
+    </svg>`;
     return `data:image/svg+xml;utf8,${enc(raw)}`;
   }
 
-  // ===== Estado Global =====
-  let currentUser = null;      // firebase.User
-  let currentProfile = null;   // player_profiles doc
-  let loungeUnsub = null;      // onSnapshot unsub
+  /* ====== Global State ====== */
+  let currentUser = null;
+  let currentProfile = null;
+  let playersCache = [];   // para búsqueda/filtro
+  let loungeUnsub = null;
 
-  // ===== Router =====
-  function render() {
-    const hash = location.hash || "#/";
-    if (hash.startsWith("#/edit-profile")) {
-      showRoute($("#route-edit"));
-      renderEdit();
-    } else if (hash.startsWith("#/pjsk-lounge")) {
-      showRoute($("#route-lounge"));
-      renderLounge();
-    } else {
-      showRoute($("#route-home"));
-      renderHome();
-    }
+  /* ====== Router ====== */
+  function render(){
+    const h = location.hash || "#/";
+    if (h.startsWith("#/edit-profile")){ showRoute($("#route-edit")); renderEdit(); }
+    else if (h.startsWith("#/pjsk-lounge")){ showRoute($("#route-lounge")); renderLounge(); }
+    else { showRoute($("#route-home")); renderHome(); }
   }
   window.addEventListener("hashchange", render);
 
-  // ===== Header Auth Status =====
-  function updateHeader() {
-    const box = $("#authStatus");
-    box.innerHTML = "";
-    if (currentUser) {
-      const badge = document.createElement("span");
-      badge.className = "badge";
-      badge.textContent = currentUser.email;
-      const btn = document.createElement("button");
-      btn.className = "btn ghost";
-      btn.textContent = "Log out";
-      btn.onclick = async ()=> { await signOut(auth); location.hash = "#/"; };
-      box.appendChild(badge);
-      box.appendChild(btn);
+  /* ====== Header ====== */
+  function updateHeader(){
+    const box = $("#authStatus"); box.innerHTML="";
+    if (currentUser){
+      const badge = document.createElement("span"); badge.className="badge"; badge.textContent=currentUser.email;
+      const b = document.createElement("button"); b.className="btn ghost"; b.textContent="Log out";
+      b.onclick = async()=>{ await signOut(auth); location.hash="#/"; };
+      box.append(badge,b);
     } else {
-      const reg = document.createElement("a");
-      reg.className = "btn ghost"; reg.href = "#/"; reg.textContent = "Register";
-      const log = document.createElement("a");
-      log.className = "btn"; log.href = "#/"; log.textContent = "Login";
-      box.append(reg, log);
+      const reg=aBtn("Register","#/"); const log=aBtn("Login","#/");
+      box.append(reg,log);
     }
+    function aBtn(txt,href){ const a=document.createElement("a"); a.className="btn ghost"; a.href=href; a.textContent=txt; return a; }
   }
 
-  // ===== Home =====
+  /* ====== Home ====== */
   function renderHome(){
-    const hb = $("#homeButtons");
-    const hint = $("#homeHint");
-    $("#panel-register").style.display = "none";
-    $("#panel-login").style.display = "none";
-    $("#panel-reset").style.display = "none";
-    $("#msgRegister").textContent = "";
-    $("#msgLogin").textContent = "";
-    $("#msgReset").textContent = "";
-
-    hb.innerHTML = "";
-    if (!currentUser) {
-      const b1 = btn("Register", ()=>openPanel("panel-register"));
-      const b2 = btn("Login", ()=>openPanel("panel-login"), "ghost");
-      const b3 = btn("Reset password", ()=>openPanel("panel-reset"), "ghost");
-      hb.append(b1,b2,b3);
-      hint.textContent = "También puedes usar Edit Profile para acceder a Register/Login/Reset.";
+    const hb = $("#homeButtons"), hint=$("#homeHint");
+    $("#panel-register").style.display="none";
+    $("#panel-login").style.display="none";
+    $("#panel-reset").style.display="none";
+    $("#msgRegister").textContent=""; $("#msgLogin").textContent=""; $("#msgReset").textContent="";
+    hb.innerHTML="";
+    if (!currentUser){
+      hb.append(btn("Register", ()=>openPanel("panel-register")),
+                btn("Login", ()=>openPanel("panel-login"),"ghost"),
+                btn("Reset password", ()=>openPanel("panel-reset"),"ghost"));
+      hint.textContent="También puedes usar Edit Profile para acceder a Register/Login/Reset.";
     } else {
-      const b4 = btn("Log out", async()=>{ await signOut(auth); }, "warn");
-      hb.append(b4);
-      hint.textContent = "Sigue en Edit Profile para configurar tu PFP.";
+      hb.append(btn("Log out", async()=>{ await signOut(auth); },"warn"));
+      hint.textContent="Sigue en Edit Profile para configurar tu PFP.";
     }
   }
+  function btn(t,fn,v=""){ const b=document.createElement("button"); b.className="btn"+(v?` ${v}`:""); b.textContent=t; b.onclick=fn; return b; }
+  function openPanel(id){ $("#"+id).style.display=""; }
+  $$("#route-home [data-close]").forEach(el=> el.addEventListener("click", ()=> $("#"+el.getAttribute("data-close")).style.display="none"));
 
-  function btn(label, onclick, variant=""){
-    const b = document.createElement("button");
-    b.className = "btn"+(variant?` ${variant}`:"");
-    b.textContent = label;
-    b.onclick = onclick;
-    return b;
-  }
-  function openPanel(id){ $( "#"+id ).style.display=""; }
-  $$("#route-home [data-close]").forEach(el=>{
-    el.addEventListener("click", ()=>{ $("#"+el.getAttribute("data-close")).style.display="none"; });
-  });
-
-  // Eventos Home (register/login/reset)
   $("#btnDoRegister").addEventListener("click", async ()=>{
-    const email = $("#regEmail").value.trim();
-    const pass  = $("#regPass").value;
-    $("#msgRegister").textContent = "";
+    const email=$("#regEmail").value.trim(), pass=$("#regPass").value;
+    $("#msgRegister").textContent="";
     try{
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      const cred = await createUserWithEmailAndPassword(auth,email,pass);
       const displayName = email.split("@")[0];
-      await updateProfile(cred.user, { displayName });
+      await updateProfile(cred.user,{ displayName });
       await sendEmailVerification(cred.user);
-      // Inicializa tablas: player_profiles y public_players
-      const batch = writeBatch(db);
-      const now = new Date().toISOString();
-      batch.set(doc(db,"player_profiles", cred.user.uid), {
-        user_id: cred.user.uid, pfp_card_id: null, mmr: 0, rank: "Placement", updated_at: now
-      });
-      batch.set(doc(db,"public_players", cred.user.uid), {
-        display_name: displayName, mmr: 0, rank: "Placement", pfp_card_id: null, pfp_image: null
-      });
+      const batch = writeBatch(db), now=new Date().toISOString();
+      batch.set(doc(db,"player_profiles", cred.user.uid), { user_id: cred.user.uid, pfp_card_id:null, mmr:0, rank:"Placement", updated_at:now });
+      batch.set(doc(db,"public_players", cred.user.uid), { display_name: displayName, mmr:0, rank:"Placement", pfp_card_id:null, pfp_image:null });
       await batch.commit();
-      $("#msgRegister").textContent = "Cuenta creada. Revisa tu correo para verificar tu cuenta.";
-      $("#panel-register").style.display = "none";
-    }catch(e){ $("#msgRegister").textContent = e.message; }
+      $("#msgRegister").textContent="Cuenta creada. Revisa tu correo para verificar tu cuenta.";
+      $("#panel-register").style.display="none";
+    }catch(e){ $("#msgRegister").textContent=e.message; }
   });
 
   $("#btnDoLogin").addEventListener("click", async ()=>{
-    const email = $("#logEmail").value.trim();
-    const pass  = $("#logPass").value;
-    $("#msgLogin").textContent = "";
+    const email=$("#logEmail").value.trim(), pass=$("#logPass").value;
+    $("#msgLogin").textContent="";
     try{
-      const { user } = await signInWithEmailAndPassword(auth, email, pass);
-      if (!user.emailVerified) {
-        $("#msgLogin").textContent = "Tu correo no está verificado. Usa 'Resend verification' en Edit Profile.";
-      } else {
-        $("#msgLogin").textContent = "Login correcto.";
-        $("#panel-login").style.display = "none";
-        location.hash = "#/edit-profile";
-      }
-    }catch(e){ $("#msgLogin").textContent = e.message; }
+      const { user } = await signInWithEmailAndPassword(auth,email,pass);
+      if(!user.emailVerified){ $("#msgLogin").textContent="Tu correo no está verificado. Usa 'Resend verification' en Edit Profile."; }
+      else { $("#msgLogin").textContent="Login correcto."; $("#panel-login").style.display="none"; location.hash="#/edit-profile"; }
+    }catch(e){ $("#msgLogin").textContent=e.message; }
   });
 
   $("#btnDoReset").addEventListener("click", async ()=>{
-    const email = $("#resetEmail").value.trim();
-    $("#msgReset").textContent = "";
-    try{
-      await sendPasswordResetEmail(auth, email);
-      $("#msgReset").textContent = "Si existe una cuenta, te enviamos instrucciones. Si no, te guiaremos a registrarte.";
-      $("#panel-reset").style.display = "none";
-    }catch(e){ $("#msgReset").textContent = e.message; }
+    const email=$("#resetEmail").value.trim(); $("#msgReset").textContent="";
+    try{ await sendPasswordResetEmail(auth,email);
+      $("#msgReset").textContent="Si existe una cuenta, te enviamos instrucciones. Si no, te guiaremos a registrarte.";
+      $("#panel-reset").style.display="none";
+    }catch(e){ $("#msgReset").textContent=e.message; }
   });
 
-  // ===== Edit Profile =====
+  /* ====== Edit ====== */
   async function renderEdit(){
-    $("#edit-loading").style.display = "";
-    $("#edit-guest").style.display = "none";
-    $("#edit-unverified").style.display = "none";
-    $("#edit-verified").style.display = "none";
-    $("#msgPfp").textContent = "";
-    $("#msgEditUnv").textContent = "";
-
-    if (!currentUser){
-      $("#edit-loading").style.display = "none";
-      $("#edit-guest").style.display = "";
-      return;
-    }
-
-    await reload(currentUser); // estado fresco
+    $("#edit-loading").style.display="";
+    $("#edit-guest").style.display="none"; $("#edit-unverified").style.display="none"; $("#edit-verified").style.display="none";
+    $("#msgPfp").textContent=""; $("#msgEditUnv").textContent="";
+    if(!currentUser){ $("#edit-loading").style.display="none"; $("#edit-guest").style.display=""; return; }
+    await reload(currentUser);
     const isVerified = !!currentUser.emailVerified;
-    $("#edit-loading").style.display = "none";
-
-    if (!isVerified){
-      $("#edit-unverified").style.display = "";
-      return;
-    }
-
-    // Verificado
-    $("#edit-verified").style.display = "";
+    $("#edit-loading").style.display="none";
+    if(!isVerified){ $("#edit-unverified").style.display=""; return; }
+    $("#edit-verified").style.display="";
     $("#displayNameRO").value = currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player");
-
-    // Cargar perfil y pfp
-    await loadCurrentProfileAndPfp();
-
-    // Render grid de cartas
-    const grid = $("#cardsGrid");
-    grid.innerHTML = "";
-    for (const c of CARDS){
-      const b = document.createElement("button");
-      b.className = "card cardbtn";
-      b.innerHTML = `
-        <img alt="card" src="${c.imageUrl}" style="width:100%;height:150px;object-fit:cover;border-radius:8px"/>
-        <div style="margin-top:6px;font-size:13px;color:#ddd">${c.name} — ${c.rarity}</div>`;
-      if (currentProfile?.pfp_card_id === c.id) b.classList.add("selected");
+    await loadProfileAndPfp();
+    const grid=$("#cardsGrid"); grid.innerHTML="";
+    for(const c of CARDS){
+      const b=document.createElement("button"); b.className="card cardbtn";
+      b.innerHTML = `<img alt="card" src="${c.imageUrl}" style="width:100%;height:150px;object-fit:cover;border-radius:8px"/>
+                     <div style="margin-top:6px;font-size:13px;color:#ddd">${c.name} — ${c.rarity}</div>`;
+      if(currentProfile?.pfp_card_id===c.id) b.classList.add("selected");
       b.onclick = ()=> setPfp(c);
       grid.appendChild(b);
     }
   }
-
-  async function loadCurrentProfileAndPfp(){
-    const ref = doc(db,"player_profiles", currentUser.uid);
-    const snap = await getDoc(ref);
-    currentProfile = snap.exists() ? snap.data() : null;
-
-    const pfpBox = $("#pfpBox");
-    pfpBox.innerHTML = "";
-    if (currentProfile?.pfp_card_id){
+  async function loadProfileAndPfp(){
+    const snap = await getDoc(doc(db,"player_profiles", currentUser.uid));
+    currentProfile = snap.exists()? snap.data(): null;
+    const pfpBox=$("#pfpBox"); pfpBox.innerHTML="";
+    if(currentProfile?.pfp_card_id){
       const card = CARDS.find(x=>x.id===currentProfile.pfp_card_id);
-      if (card){
-        const img = new Image();
-        img.src = card.imageUrl;
-        img.alt = "pfp";
-        pfpBox.appendChild(img);
-      } else {
-        pfpBox.innerHTML = `<span class="help">(PFP desconocido)</span>`;
-      }
-    } else {
-      pfpBox.innerHTML = `<span class="help">(sin PFP)</span>`;
-    }
+      if(card){ const img=new Image(); img.src=card.imageUrl; img.alt="pfp"; pfpBox.appendChild(img); }
+      else { pfpBox.innerHTML = `<span class="help">(PFP desconocido)</span>`; }
+    } else { pfpBox.innerHTML=`<span class="help">(sin PFP)</span>`; }
   }
-
   async function setPfp(card){
     try{
-      const batch = writeBatch(db);
-      const now = new Date().toISOString();
+      const batch = writeBatch(db), now=new Date().toISOString();
       batch.set(doc(db,"player_profiles", currentUser.uid), {
-        user_id: currentUser.uid,
-        pfp_card_id: card.id,
-        mmr: currentProfile?.mmr ?? 0,
-        rank: currentProfile?.rank ?? "Placement",
-        updated_at: now
-      }, { merge: true });
+        user_id: currentUser.uid, pfp_card_id: card.id, mmr: currentProfile?.mmr ?? 0, rank: currentProfile?.rank ?? "Placement", updated_at: now
+      }, { merge:true });
       batch.set(doc(db,"public_players", currentUser.uid), {
         display_name: currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player"),
-        mmr: currentProfile?.mmr ?? 0,
-        rank: currentProfile?.rank ?? "Placement",
-        pfp_card_id: card.id,
-        pfp_image: card.imageUrl
-      }, { merge: true });
+        mmr: currentProfile?.mmr ?? 0, rank: currentProfile?.rank ?? "Placement",
+        pfp_card_id: card.id, pfp_image: card.imageUrl
+      }, { merge:true });
       await batch.commit();
-      $("#msgPfp").textContent = "PFP actualizado y sincronizado con la tabla de jugadores.";
-      await loadCurrentProfileAndPfp();
-      // refresca selección visual
-      $$("#cardsGrid .cardbtn").forEach(btn=>btn.classList.remove("selected"));
-      // marca la nueva selección (simplemente recarga renderEdit para asegurar)
-      renderEdit();
-    }catch(e){ $("#msgPfp").textContent = e.message; }
+      $("#msgPfp").textContent="PFP actualizado y sincronizado con la tabla de jugadores.";
+      await loadProfileAndPfp(); renderEdit();
+    }catch(e){ $("#msgPfp").textContent=e.message; }
   }
-
   $("#btnDeletePfp").addEventListener("click", async ()=>{
     try{
-      const batch = writeBatch(db);
-      const now = new Date().toISOString();
-      batch.set(doc(db,"player_profiles", currentUser.uid), {
-        pfp_card_id: null, updated_at: now
-      }, { merge:true });
-      batch.set(doc(db,"public_players", currentUser.uid), {
-        pfp_card_id: null, pfp_image: null
-      }, { merge:true });
-      await batch.commit();
-      $("#msgPfp").textContent = "PFP eliminado. Se actualizó la tabla de jugadores.";
-      await loadCurrentProfileAndPfp();
-      renderEdit();
-    }catch(e){ $("#msgPfp").textContent = e.message; }
+      const batch = writeBatch(db), now=new Date().toISOString();
+      batch.set(doc(db,"player_profiles", currentUser.uid), { pfp_card_id:null, updated_at:now }, { merge:true });
+      batch.set(doc(db,"public_players", currentUser.uid), { pfp_card_id:null, pfp_image:null }, { merge:true });
+      await batch.commit(); $("#msgPfp").textContent="PFP eliminado. Se actualizó la tabla de jugadores.";
+      await loadProfileAndPfp(); renderEdit();
+    }catch(e){ $("#msgPfp").textContent=e.message; }
   });
-
   $("#btnResend").addEventListener("click", async ()=>{
-    if (!currentUser?.email) return;
-    try{
-      await sendEmailVerification(currentUser);
-      $("#msgEditUnv").textContent = "Verificación reenviada. Revisa tu correo.";
-    }catch(e){ $("#msgEditUnv").textContent = e.message; }
+    try{ await sendEmailVerification(currentUser); $("#msgEditUnv").textContent="Verificación reenviada. Revisa tu correo."; }
+    catch(e){ $("#msgEditUnv").textContent=e.message; }
   });
   $("#btnReload").addEventListener("click", async ()=>{
-    try{
-      await reload(currentUser);
-      if (currentUser.emailVerified) render(); // cambia a vista verificada
-      else $("#msgEditUnv").textContent = "Aún sin verificar. Revisa tu correo.";
-    }catch(e){ $("#msgEditUnv").textContent = e.message; }
+    try{ await reload(currentUser); if(currentUser.emailVerified) render(); else $("#msgEditUnv").textContent="Aún sin verificar. Revisa tu correo."; }
+    catch(e){ $("#msgEditUnv").textContent=e.message; }
   });
 
-  // ===== PJSK LOUNGE (tabla pública) =====
+  /* ====== Lounge / Leaderboard ====== */
   function renderLounge(){
-    // suscripción live
-    if (loungeUnsub) { loungeUnsub(); loungeUnsub = null; }
-    const tbody = $("#playersTbody");
+    if(loungeUnsub){ loungeUnsub(); loungeUnsub=null; }
+    const tbody=$("#playersTbody");
     tbody.innerHTML = `<tr><td colspan="4" class="help">Cargando…</td></tr>`;
-    const q = query(collection(db,"public_players"));
+
+    // Ordenado por MMR desc (live)
+    const q = query(collection(db,"public_players"), orderBy("mmr","desc"));
     loungeUnsub = onSnapshot(q, (snap)=>{
-      const rows = [];
-      snap.forEach(docu=>{
-        const p = docu.data();
-        rows.push(`<tr>
-          <td>${escapeHtml(p.display_name ?? "Player")}</td>
-          <td>${escapeHtml(p.rank ?? "Placement")}</td>
-          <td>${Number(p.mmr ?? 0)}</td>
-          <td>${p.pfp_image ? `<img src="${p.pfp_image}" alt="pfp" style="width:50px;height:50px;border-radius:6px;object-fit:cover">` : "<span class='help'>(—)</span>"}</td>
-        </tr>`);
-      });
-      tbody.innerHTML = rows.length ? rows.join("") : `<tr><td colspan="4" class="help">—</td></tr>`;
+      playersCache = [];
+      snap.forEach(d=> playersCache.push({ id:d.id, ...d.data() }));
+      paintLeaderboard();
     });
+
+    $("#searchName").oninput = paintLeaderboard;
+    $("#rankFilter").onchange = paintLeaderboard;
+  }
+
+  function paintLeaderboard(){
+    const tbody=$("#playersTbody");
+    const q = ($("#searchName").value||"").toLowerCase();
+    const rf = $("#rankFilter").value;
+
+    let list = playersCache.slice();
+    if(q){
+      list = list.filter(p => (p.display_name||"").toLowerCase().includes(q));
+    }
+    if(rf){
+      list = list.filter(p => (p.rank||"") === rf);
+    }
+
+    if(!list.length){ tbody.innerHTML = `<tr><td colspan="4" class="help">—</td></tr>`; return; }
+
+    tbody.innerHTML = list.map((p,idx)=>{
+      const rankClass = "rank-"+(p.rank||"Placement");
+      const pfp = p.pfp_image ? `<img src="${p.pfp_image}" alt="pfp">` : "";
+      return `<tr>
+        <td class="col-num">${idx+1}</td>
+        <td><div class="player-cell">${pfp}<span>${escapeHtml(p.display_name||"Player")}</span></div></td>
+        <td class="col-mmr">${Number(p.mmr||0)}</td>
+        <td class="col-rank"><span class="rank-chip ${rankClass}">${escapeHtml(p.rank||"Placement")}</span></td>
+      </tr>`;
+    }).join("");
   }
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])); }
 
-  // ===== Auth listener =====
-  onAuthStateChanged(auth, async (user)=>{
+  /* ====== Auth listener ====== */
+  onAuthStateChanged(auth, (user)=>{
     currentUser = user || null;
     updateHeader();
-    if (location.hash === "" || location.hash === "#") location.hash = "#/";
+    if(location.hash===""||location.hash==="#") location.hash="#/";
     render();
   });
 
-  // ===== Nav init =====
-  setActiveRoute();
-  render();
-
-  // ===== Abrir paneles desde Edit/Guest =====
-  $$("#route-edit [data-open]").forEach(el=>{
-    el.addEventListener("click", ()=> openPanel(el.getAttribute("data-open")));
-  });
-
+  /* ====== Boot ====== */
+  setActiveRoute(); render();
+  $$("#route-edit [data-open]").forEach(el=> el.addEventListener("click", ()=> openPanel(el.getAttribute("data-open"))));
 </script>
 </body>
 </html>
+
 
 
