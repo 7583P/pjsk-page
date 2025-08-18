@@ -9,6 +9,7 @@
       --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
       --hover:#595959; --accent:#6c6cf0; --warn:#f0a66c;
       --head:#030050; --row1:#333; --row2:#2a2a2a;
+      --grid:#555;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -45,7 +46,7 @@
     .cardbtn{padding:8px;text-align:center;cursor:pointer}
     .cardbtn.selected{outline:2px solid var(--accent);border-radius:10px}
 
-    /* ===== Leaderboard (tu layout) ===== */
+    /* ===== Leaderboard ===== */
     .page-title{font-size:34px;margin:0 0 14px;text-align:center;letter-spacing:.3px}
     .controls{margin-bottom:15px;text-align:center}
     .controls input[type="text"]{
@@ -53,18 +54,19 @@
       background:#1f1f1f;color:#fff;text-align:center
     }
 
-    /* Dropdown de rangos como tu captura */
+    /* Dropdown (igual look de tu captura) */
     .dropdown{position:relative;display:inline-block;margin-left:10px}
-    .dropbtn{background:#737373;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;white-space:nowrap}
-    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:10;border-radius:4px;overflow:hidden}
+    .dropbtn{background:#737373;border:none;color:#c9f4ff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;white-space:nowrap}
+    .dropdown-content{position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
     .dropdown-content a{display:block;padding:8px 12px;color:#fff;text-decoration:none;font-size:14px;white-space:nowrap}
     .dropdown-content a:hover .text-gradient{opacity:.9}
 
     /* Tabla */
     table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:10px;text-align:center;color:#fff}
+    th,td{padding:10px;text-align:center;color:#fff;border-bottom:1px solid var(--grid)}
+    /* separadores verticales entre columnas */
+    th+th, td+td{border-left:1px solid var(--grid)}
     thead th{background:var(--head)}
-    tbody td{border-bottom:1px solid #333}
     tbody tr:nth-child(odd){background:var(--row1)}
     tbody tr:nth-child(even){background:var(--row2)}
 
@@ -73,7 +75,7 @@
     .position-number{display:inline-block}
     .flag{width:24px;position:absolute;top:50%;right:8px;transform:translateY(-50%)}
 
-    /* Gradientes por rango (para #, nombre, MMR, Rango) */
+    /* Gradientes por rango */
     .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
     .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
@@ -218,9 +220,9 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         <div class="controls">
           <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
 
-          <!-- ▼ Mini pestaña desplegable de Rangos (igual a tu UI) -->
+          <!-- ▼ Mini pestaña de Rangos -->
           <div class="dropdown">
-            <button class="dropbtn" @click.stop="toggleRanks">
+            <button class="dropbtn" @click.stop.prevent="showRanks = !showRanks">
               <template v-if="selectedRank">
                 <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
                 <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
@@ -230,14 +232,13 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
               </template>
             </button>
 
-            <div class="dropdown-content" v-show="showRanks" id="rankList">
-              <!-- Solo rangos (sin 'All Ranges' aquí, tal como tu código) -->
+            <!-- v-if para montar/desmontar y evitar estilos residuales -->
+            <div class="dropdown-content" v-if="showRanks" id="rankList" @click.stop>
               <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)">
                 <span :class="['text-gradient','rank-'+r.key]">{{ r.label }} ({{ r.range }})</span>
               </a>
             </div>
           </div>
-          <!-- ▲ Fin mini pestaña -->
 
           <button v-if="selectedRank"
                   @click="clearRank"
@@ -453,7 +454,6 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       playerRankMap:{},
       currentPage:1,
       pageSize:50,
-      // misma lista y orden que tu código + etiquetas de rango MMR
       ranks:[
         { key:'Iron',           label:'Iron',           range:'0-100'   },
         { key:'Bronze',         label:'Bronze',         range:'101-200' },
@@ -491,7 +491,6 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       selectedRank(){ this.currentPage=1; this.filter=''; }
     },
     methods:{
-      toggleRanks(){ this.showRanks=!this.showRanks; },
       selectRank(r){ this.selectedRank=r; this.showRanks=false; },
       clearRank(){ this.selectedRank=null; this.showRanks=false; },
       prevPage(){ if(this.currentPage>1) this.currentPage--; },
@@ -541,15 +540,24 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       this.fetchPlayers();
       // Auto refresh cada 10s
       this._timer=setInterval(this.fetchPlayers, 10000);
-      // Cierra el menú al hacer click fuera
-      document.addEventListener('click', ()=>{ if(this.showRanks) this.showRanks=false; });
+
+      // Cierre al hacer click FUERA del dropdown
+      this._outside = (e)=>{
+        const root = this.$el.querySelector('.dropdown');
+        if (this.showRanks && root && !root.contains(e.target)) this.showRanks = false;
+      };
+      document.addEventListener('click', this._outside);
     },
-    beforeUnmount(){ clearInterval(this._timer); }
+    beforeUnmount(){
+      clearInterval(this._timer);
+      document.removeEventListener('click', this._outside);
+    }
   });
 
   loungeApp.mount('#loungeApp');
 </script>
 </body>
 </html>
+
 
 
