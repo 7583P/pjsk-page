@@ -7,9 +7,8 @@
   <style>
     :root{
       --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
-      --chip:#737373; --hover:#595959; --row1:#2f2f2f; --row2:#262626;
-      --accent:#6c6cf0; --warn:#f0a66c; --head:#00124f; --headTxt:#fff;
-      --mmr:#7b8bff;
+      --hover:#595959; --accent:#6c6cf0; --warn:#f0a66c;
+      --head:#030050; --row1:#333; --row2:#2a2a2a;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -38,38 +37,63 @@
 
     .hero{font-size:30px;margin:0 0 10px;text-align:center}
     .welcome-block{white-space:pre-wrap;background:#1a1a1a;border:1px solid #333;padding:16px;border-radius:12px;font-family:inherit}
-    .center{ text-align:center }
 
-    /* PFP UI */
+    /* PFP */
     .pfp-box{width:220px;height:220px;background:#303030;border:2px dashed #555;border-radius:12px;display:grid;place-items:center;overflow:hidden}
     .pfp-box img{width:100%;height:100%;object-fit:cover}
     .grid.cards{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
     .cardbtn{padding:8px;text-align:center;cursor:pointer}
     .cardbtn.selected{outline:2px solid var(--accent);border-radius:10px}
 
-    /* Leaderboard */
+    /* ===== Leaderboard (tu layout) ===== */
     .page-title{font-size:34px;margin:0 0 14px;text-align:center;letter-spacing:.3px}
-    .toolbar{display:flex;gap:10px;justify-content:center;margin-bottom:10px}
-    .toolbar .input{max-width:380px}
-    .toolbar select{appearance:none;background:#1f1f1f;border:1px solid #555;color:#fff;border-radius:8px;padding:8px 10px}
-    table.tbl{width:100%;border-collapse:separate;border-spacing:0 0}
-    table.tbl thead th{background:var(--head);color:var(--headTxt);padding:10px;border-top-left-radius:6px;border-top-right-radius:6px}
-    table.tbl tbody td{padding:10px;border-bottom:1px solid #333}
-    table.tbl tbody tr:nth-child(odd){background:var(--row1)}
-    table.tbl tbody tr:nth-child(even){background:var(--row2)}
-    .col-num{width:56px;text-align:center;opacity:.8}
-    .col-mmr{color:var(--mmr);font-weight:600;text-align:right;width:120px}
-    .col-rank{width:150px}
-    .player-cell{display:flex;align-items:center;gap:10px}
-    .player-cell img{width:26px;height:26px;border-radius:6px;object-fit:cover}
-    .rank-chip{font-weight:600}
-    .rank-Diamond{color:#66a3ff}
-    .rank-Platinum{color:#9fa6ff}
-    .rank-Gold{color:#ffb74d}
-    .rank-Silver{color:#cfd8dc}
-    .rank-Bronze{color:#cd7f32}
-    .rank-Iron{color:#9e9e9e}
-    .rank-Placement{color:#ff9b4d}
+    .controls{margin-bottom:15px;text-align:center}
+    .controls input[type="text"]{
+      padding:10px;width:80%;max-width:420px;border:1px solid #555;border-radius:10px;
+      background:#1f1f1f;color:#fff;text-align:center
+    }
+
+    /* Dropdown de rangos como tu captura */
+    .dropdown{position:relative;display:inline-block;margin-left:10px}
+    .dropbtn{background:#737373;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;white-space:nowrap}
+    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:10;border-radius:4px;overflow:hidden}
+    .dropdown-content a{display:block;padding:8px 12px;color:#fff;text-decoration:none;font-size:14px;white-space:nowrap}
+    .dropdown-content a:hover .text-gradient{opacity:.9}
+
+    /* Tabla */
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;text-align:center;color:#fff}
+    thead th{background:var(--head)}
+    tbody td{border-bottom:1px solid #333}
+    tbody tr:nth-child(odd){background:var(--row1)}
+    tbody tr:nth-child(even){background:var(--row2)}
+
+    /* posición y bandera */
+    .position-cell{position:relative;text-align:center;padding-right:32px}
+    .position-number{display:inline-block}
+    .flag{width:24px;position:absolute;top:50%;right:8px;transform:translateY(-50%)}
+
+    /* Gradientes por rango (para #, nombre, MMR, Rango) */
+    .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
+    .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
+    .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
+    .rank-Silver{background-image:linear-gradient(to left,#b3b3b3,#696969)}
+    .rank-Gold{background-image:linear-gradient(to left,#ffbf60,#c57600)}
+    .rank-Platinum{background-image:linear-gradient(to left,#767ec2,#38429f)}
+    .rank-Diamond{background-image:linear-gradient(to left,#42a2ff,#003e8f)}
+    .rank-Crystal{background-image:linear-gradient(to left,#dca3ff,#883cb4)}
+    .rank-Master{background-image:linear-gradient(to left,#c34efd,#5f009e)}
+    .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
+    .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
+    .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
+    .name-gradient .emoji{background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color:currentColor !important}
+
+    /* Paginación */
+    .pagination{margin-top:15px;display:flex;justify-content:center;align-items:center;gap:8px}
+    .pagination button{padding:6px 10px;border:none;border-radius:6px;background:#555;color:#fff;cursor:pointer}
+    .pagination button:disabled{opacity:.4;cursor:default}
+    .pagination input[type="number"]{width:60px;padding:6px;text-align:center;border-radius:6px;border:1px solid #555;background:#2a2a2a;color:#fff}
   </style>
 </head>
 <body>
@@ -85,7 +109,7 @@
   </header>
 
   <main class="container">
-    <!-- HOME -->
+    <!-- ===== HOME ===== -->
     <section id="route-home" class="grid" style="gap:18px;display:none">
       <div>
         <h1 class="hero">Welcome to PJSK LOUNGE</h1>
@@ -101,7 +125,7 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         <p id="homeHint" class="help"></p>
       </div>
 
-      <!-- Modales simples -->
+      <!-- Modales -->
       <div id="panel-register" class="card grid" style="gap:10px;display:none">
         <h3>Register</h3>
         <input class="input" id="regEmail" placeholder="Email" type="email">
@@ -137,11 +161,12 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       </div>
     </section>
 
-    <!-- EDIT PROFILE -->
+    <!-- ===== EDIT PROFILE ===== -->
     <section id="route-edit" class="grid" style="gap:18px;display:none">
       <h2>Edit Profile</h2>
       <div id="edit-loading">Cargando…</div>
 
+      <!-- No autenticado -->
       <div id="edit-guest" class="card grid" style="gap:10px;display:none">
         <p class="help">No has iniciado sesión.</p>
         <div class="row">
@@ -151,6 +176,7 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         </div>
       </div>
 
+      <!-- Autenticado, no verificado -->
       <div id="edit-unverified" class="card grid" style="gap:10px;display:none">
         <p><strong>Verifica tu correo para continuar</strong></p>
         <p class="help">Te hemos enviado un email con un botón/enlace de verificación.</p>
@@ -161,6 +187,7 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
         <p id="msgEditUnv" class="help"></p>
       </div>
 
+      <!-- Autenticado y verificado -->
       <div id="edit-verified" class="grid" style="gap:14px;display:none">
         <div class="card grid" style="gap:10px">
           <label>Name (read-only)</label>
@@ -183,38 +210,84 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
       </div>
     </section>
 
-    <!-- PJSK LOUNGE -->
-    <section id="route-lounge" class="grid" style="gap:12px;display:none">
-      <h2 class="page-title">PJSK LOUNGE — Season Beta</h2>
+    <!-- ===== PJSK LOUNGE (Leaderboard — Vue) ===== -->
+    <section id="route-lounge" style="display:none">
+      <div id="loungeApp">
+        <h2 class="page-title">PJSK LOUNGE — Season {{ seasonLabel }}</h2>
 
-      <div class="toolbar">
-        <input id="searchName" class="input" placeholder="Buscar por nombre…">
-        <select id="rankFilter" title="Rangos">
-          <option value="">All Ranges</option>
-          <option>Diamond</option><option>Platinum</option><option>Gold</option>
-          <option>Silver</option><option>Bronze</option><option>Iron</option>
-          <option>Placement</option>
-        </select>
-      </div>
+        <div class="controls">
+          <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
 
-      <div class="card">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th class="col-num">#</th>
-              <th>Player</th>
-              <th class="col-mmr">MMR</th>
-              <th class="col-rank">Rango</th>
-            </tr>
-          </thead>
-          <tbody id="playersTbody"><tr><td colspan="4" class="help">—</td></tr></tbody>
-        </table>
+          <!-- ▼ Mini pestaña desplegable de Rangos (igual a tu UI) -->
+          <div class="dropdown">
+            <button class="dropbtn" @click.stop="toggleRanks">
+              <template v-if="selectedRank">
+                <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
+                <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
+              </template>
+              <template v-else>
+                <span class="text-gradient rank-Legend">Rangos ▾</span>
+              </template>
+            </button>
+
+            <div class="dropdown-content" v-show="showRanks" id="rankList">
+              <!-- Solo rangos (sin 'All Ranges' aquí, tal como tu código) -->
+              <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)">
+                <span :class="['text-gradient','rank-'+r.key]">{{ r.label }} ({{ r.range }})</span>
+              </a>
+            </div>
+          </div>
+          <!-- ▲ Fin mini pestaña -->
+
+          <button v-if="selectedRank"
+                  @click="clearRank"
+                  style="margin-left:10px;background:#555;color:#fff;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;">
+            Mostrar todos ▾
+          </button>
+        </div>
+
+        <div class="card">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="loading"><td colspan="4" class="help">Cargando...</td></tr>
+              <tr v-else-if="errorMsg"><td colspan="4" class="help">{{ errorMsg }}</td></tr>
+              <tr v-else-if="!paginatedPlayers.length"><td colspan="4" class="help">—</td></tr>
+
+              <tr v-for="p in paginatedPlayers" :key="p.id">
+                <td class="position-cell">
+                  <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
+                  <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
+                </td>
+                <td>
+                  <span :class="['name-gradient','rank-'+p.rank]">
+                    <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
+                      <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
+                      <span v-else>{{ seg.char }}</span>
+                    </template>
+                  </span>
+                </td>
+                <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
+                <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage<=1">&laquo;</button>
+          <input type="number" v-model.number="currentPage" :min="1" :max="totalPages" />
+          <span>/ {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
+        </div>
       </div>
     </section>
   </main>
 </div>
 
-<!-- Firebase SDK (modular) -->
+<!-- Firebase SDK (auth + firestore) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
   import {
@@ -223,10 +296,10 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
     sendPasswordResetEmail, signOut, updateProfile, reload
   } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
   import {
-    getFirestore, doc, getDoc, setDoc, writeBatch, onSnapshot, collection, query, orderBy
+    getFirestore, doc, getDoc, setDoc, writeBatch
   } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-  /* ======= TU CONFIG FIREBASE ======= */
+  /* === TU CONFIG FIREBASE === */
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
@@ -236,121 +309,63 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  // Persistencia fuerte: mantiene sesión en redeploys mientras el origen sea el mismo
   await setPersistence(auth, browserLocalPersistence);
 
-  /* ====== Utils ====== */
-  const $  = s=>document.querySelector(s);
-  const $$ = s=>Array.from(document.querySelectorAll(s));
-  function setActiveRoute(){
-    const h = location.hash || "#/";
-    $$('a[data-route]').forEach(a => a.classList.toggle('active', a.getAttribute('href')===h));
-  }
-  function showRoute(el){
-    $("#route-home").style.display="none";
-    $("#route-edit").style.display="none";
-    $("#route-lounge").style.display="none";
-    el && (el.style.display="");
-    setActiveRoute();
-  }
-  const RANKS = ["Diamond","Platinum","Gold","Silver","Bronze","Iron","Placement"];
-
-  /* ====== Cards mock (SVG data URLs) ====== */
-  const CARDS = [
-    { id:"c1", name:"Miku — Sky Blue", rarity:"SSR", imageUrl: svg("Sky","0,180,255","#7bdfff") },
-    { id:"c2", name:"Miku — Neon Heart", rarity:"SR", imageUrl: svg("Neon","255,0,120","#ff79c6") },
-    { id:"c3", name:"Ichika — Blossom", rarity:"SR", imageUrl: svg("Blossom","255,100,180","#ffaad4") },
-    { id:"c4", name:"Honami — Ocean", rarity:"R", imageUrl: svg("Ocean","20,90,255","#7aa2ff") },
-    { id:"c5", name:"Shiho — Night Drive", rarity:"R", imageUrl: svg("Night","30,30,60","#9aa0ff") },
-    { id:"c6", name:"Saki — Sunshine", rarity:"R", imageUrl: svg("Sun","255,210,0","#ffe680") },
-    { id:"c7", name:"Emu — Pop Star", rarity:"N", imageUrl: svg("Pop","255,0,200","#ffb3ff") },
-    { id:"c8", name:"Nene — Mint", rarity:"N", imageUrl: svg("Mint","0,200,140","#8affd1") },
-  ];
-  function svg(label,rgb,chip){
-    const enc = s=>encodeURIComponent(s).replace(/%20/g,' ');
-    const raw = `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='800'>
-      <defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'>
-        <stop offset='0%' stop-color='rgba(${rgb},1)'/><stop offset='100%' stop-color='rgba(${rgb},0.6)'/>
-      </linearGradient></defs>
-      <rect width='100%' height='100%' fill='url(#g)'/>
-      <circle cx='520' cy='60' r='34' fill='${chip}' />
-      <text x='24' y='740' font-size='36' font-family='Arial' fill='white'>${label}</text>
-    </svg>`;
-    return `data:image/svg+xml;utf8,${enc(raw)}`;
-  }
-
-  /* ====== Global State ====== */
-  let currentUser = null;
-  let currentProfile = null;
-  let playersCache = [];   // para búsqueda/filtro
-  let loungeUnsub = null;
-
-  /* ====== Router ====== */
-  function render(){
-    const h = location.hash || "#/";
-    if (h.startsWith("#/edit-profile")){ showRoute($("#route-edit")); renderEdit(); }
-    else if (h.startsWith("#/pjsk-lounge")){ showRoute($("#route-lounge")); renderLounge(); }
-    else { showRoute($("#route-home")); renderHome(); }
-  }
+  /* Utils + router */
+  const $ = s=>document.querySelector(s); const $$ = s=>Array.from(document.querySelectorAll(s));
+  function setActiveRoute(){ const h=location.hash||"#/"; $$('a[data-route]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===h)); }
+  function showRoute(el){ $("#route-home").style.display="none"; $("#route-edit").style.display="none"; $("#route-lounge").style.display="none"; el&&(el.style.display=""); setActiveRoute(); }
+  function render(){ const h=location.hash||"#/"; if(h.startsWith("#/edit-profile")){ showRoute($("#route-edit")); renderEdit(); } else if(h.startsWith("#/pjsk-lounge")){ showRoute($("#route-lounge")); } else { showRoute($("#route-home")); renderHome(); } }
   window.addEventListener("hashchange", render);
 
-  /* ====== Header ====== */
+  /* Header */
+  let currentUser=null, currentProfile=null;
   function updateHeader(){
-    const box = $("#authStatus"); box.innerHTML="";
-    if (currentUser){
-      const badge = document.createElement("span"); badge.className="badge"; badge.textContent=currentUser.email;
-      const b = document.createElement("button"); b.className="btn ghost"; b.textContent="Log out";
-      b.onclick = async()=>{ await signOut(auth); location.hash="#/"; };
-      box.append(badge,b);
-    } else {
-      const reg=aBtn("Register","#/"); const log=aBtn("Login","#/");
-      box.append(reg,log);
+    const box=$("#authStatus"); box.innerHTML="";
+    if(currentUser){
+      const badge=document.createElement("span"); badge.className="badge"; badge.textContent=currentUser.email;
+      const btn=document.createElement("button"); btn.className="btn ghost"; btn.textContent="Log out";
+      btn.onclick=async()=>{ await signOut(auth); location.hash="#/"; };
+      box.append(badge,btn);
+    }else{
+      const a1=document.createElement("a"); a1.className="btn ghost"; a1.href="#/"; a1.textContent="Register";
+      const a2=document.createElement("a"); a2.className="btn"; a2.href="#/"; a2.textContent="Login";
+      box.append(a1,a2);
     }
-    function aBtn(txt,href){ const a=document.createElement("a"); a.className="btn ghost"; a.href=href; a.textContent=txt; return a; }
   }
 
-  /* ====== Home ====== */
+  /* Home (register/login/reset) */
   function renderHome(){
-    const hb = $("#homeButtons"), hint=$("#homeHint");
-    $("#panel-register").style.display="none";
-    $("#panel-login").style.display="none";
-    $("#panel-reset").style.display="none";
+    const hb=$("#homeButtons"), hint=$("#homeHint");
+    $("#panel-register").style.display="none"; $("#panel-login").style.display="none"; $("#panel-reset").style.display="none";
     $("#msgRegister").textContent=""; $("#msgLogin").textContent=""; $("#msgReset").textContent="";
     hb.innerHTML="";
-    if (!currentUser){
-      hb.append(btn("Register", ()=>openPanel("panel-register")),
-                btn("Login", ()=>openPanel("panel-login"),"ghost"),
-                btn("Reset password", ()=>openPanel("panel-reset"),"ghost"));
+    if(!currentUser){
+      hb.append(btn("Register",()=>open("panel-register")), btn("Login",()=>open("panel-login"),"ghost"), btn("Reset password",()=>open("panel-reset"),"ghost"));
       hint.textContent="También puedes usar Edit Profile para acceder a Register/Login/Reset.";
-    } else {
-      hb.append(btn("Log out", async()=>{ await signOut(auth); },"warn"));
-      hint.textContent="Sigue en Edit Profile para configurar tu PFP.";
+    }else{
+      hb.append(btn("Log out", async()=>{ await signOut(auth); },"warn")); hint.textContent="Sigue en Edit Profile para configurar tu PFP.";
     }
   }
   function btn(t,fn,v=""){ const b=document.createElement("button"); b.className="btn"+(v?` ${v}`:""); b.textContent=t; b.onclick=fn; return b; }
-  function openPanel(id){ $("#"+id).style.display=""; }
+  function open(id){ $("#"+id).style.display=""; }
   $$("#route-home [data-close]").forEach(el=> el.addEventListener("click", ()=> $("#"+el.getAttribute("data-close")).style.display="none"));
 
   $("#btnDoRegister").addEventListener("click", async ()=>{
-    const email=$("#regEmail").value.trim(), pass=$("#regPass").value;
-    $("#msgRegister").textContent="";
+    const email=$("#regEmail").value.trim(), pass=$("#regPass").value; $("#msgRegister").textContent="";
     try{
       const cred = await createUserWithEmailAndPassword(auth,email,pass);
-      const displayName = email.split("@")[0];
-      await updateProfile(cred.user,{ displayName });
-      await sendEmailVerification(cred.user);
-      const batch = writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", cred.user.uid), { user_id: cred.user.uid, pfp_card_id:null, mmr:0, rank:"Placement", updated_at:now });
-      batch.set(doc(db,"public_players", cred.user.uid), { display_name: displayName, mmr:0, rank:"Placement", pfp_card_id:null, pfp_image:null });
+      const displayName=email.split("@")[0]; await updateProfile(cred.user,{displayName}); await sendEmailVerification(cred.user);
+      const batch=writeBatch(db), now=new Date().toISOString();
+      batch.set(doc(db,"player_profiles", cred.user.uid), {user_id:cred.user.uid,pfp_card_id:null,mmr:0,rank:"Placement",updated_at:now});
+      batch.set(doc(db,"public_players", cred.user.uid), {display_name:displayName,mmr:0,rank:"Placement",pfp_card_id:null,pfp_image:null});
       await batch.commit();
-      $("#msgRegister").textContent="Cuenta creada. Revisa tu correo para verificar tu cuenta.";
-      $("#panel-register").style.display="none";
+      $("#msgRegister").textContent="Cuenta creada. Revisa tu correo para verificar tu cuenta."; $("#panel-register").style.display="none";
     }catch(e){ $("#msgRegister").textContent=e.message; }
   });
 
   $("#btnDoLogin").addEventListener("click", async ()=>{
-    const email=$("#logEmail").value.trim(), pass=$("#logPass").value;
-    $("#msgLogin").textContent="";
+    const email=$("#logEmail").value.trim(), pass=$("#logPass").value; $("#msgLogin").textContent="";
     try{
       const { user } = await signInWithEmailAndPassword(auth,email,pass);
       if(!user.emailVerified){ $("#msgLogin").textContent="Tu correo no está verificado. Usa 'Resend verification' en Edit Profile."; }
@@ -360,139 +375,181 @@ first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 
 
   $("#btnDoReset").addEventListener("click", async ()=>{
     const email=$("#resetEmail").value.trim(); $("#msgReset").textContent="";
-    try{ await sendPasswordResetEmail(auth,email);
-      $("#msgReset").textContent="Si existe una cuenta, te enviamos instrucciones. Si no, te guiaremos a registrarte.";
-      $("#panel-reset").style.display="none";
-    }catch(e){ $("#msgReset").textContent=e.message; }
+    try{ await sendPasswordResetEmail(auth,email); $("#msgReset").textContent="Si existe una cuenta, te enviamos instrucciones. Si no, te guiaremos a registrarte."; $("#panel-reset").style.display="none"; }
+    catch(e){ $("#msgReset").textContent=e.message; }
   });
 
-  /* ====== Edit ====== */
+  /* Edit Profile */
   async function renderEdit(){
-    $("#edit-loading").style.display="";
-    $("#edit-guest").style.display="none"; $("#edit-unverified").style.display="none"; $("#edit-verified").style.display="none";
+    $("#edit-loading").style.display=""; $("#edit-guest").style.display="none"; $("#edit-unverified").style.display="none"; $("#edit-verified").style.display="none";
     $("#msgPfp").textContent=""; $("#msgEditUnv").textContent="";
     if(!currentUser){ $("#edit-loading").style.display="none"; $("#edit-guest").style.display=""; return; }
-    await reload(currentUser);
-    const isVerified = !!currentUser.emailVerified;
-    $("#edit-loading").style.display="none";
-    if(!isVerified){ $("#edit-unverified").style.display=""; return; }
-    $("#edit-verified").style.display="";
-    $("#displayNameRO").value = currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player");
-    await loadProfileAndPfp();
-    const grid=$("#cardsGrid"); grid.innerHTML="";
-    for(const c of CARDS){
-      const b=document.createElement("button"); b.className="card cardbtn";
-      b.innerHTML = `<img alt="card" src="${c.imageUrl}" style="width:100%;height:150px;object-fit:cover;border-radius:8px"/>
-                     <div style="margin-top:6px;font-size:13px;color:#ddd">${c.name} — ${c.rarity}</div>`;
-      if(currentProfile?.pfp_card_id===c.id) b.classList.add("selected");
-      b.onclick = ()=> setPfp(c);
-      grid.appendChild(b);
-    }
+    await reload(currentUser); const verified=!!currentUser.emailVerified; $("#edit-loading").style.display="none";
+    if(!verified){ $("#edit-unverified").style.display=""; return; }
+    $("#edit-verified").style.display=""; $("#displayNameRO").value=currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player");
+    await loadProfileAndPfp(); drawCards();
   }
   async function loadProfileAndPfp(){
     const snap = await getDoc(doc(db,"player_profiles", currentUser.uid));
     currentProfile = snap.exists()? snap.data(): null;
-    const pfpBox=$("#pfpBox"); pfpBox.innerHTML="";
-    if(currentProfile?.pfp_card_id){
-      const card = CARDS.find(x=>x.id===currentProfile.pfp_card_id);
-      if(card){ const img=new Image(); img.src=card.imageUrl; img.alt="pfp"; pfpBox.appendChild(img); }
-      else { pfpBox.innerHTML = `<span class="help">(PFP desconocido)</span>`; }
-    } else { pfpBox.innerHTML=`<span class="help">(sin PFP)</span>`; }
+    const box=$("#pfpBox"); box.innerHTML="";
+    if(currentProfile?.pfp_card_id){ box.innerHTML='<span class="help">(pfp seleccionado)</span>'; } else { box.innerHTML='<span class="help">(sin PFP)</span>'; }
+  }
+  function drawCards(){
+    const CARDS=[{id:"c1",name:"Miku — Sky Blue",imageUrl:""}, {id:"c2",name:"Miku — Neon Heart",imageUrl:""}]; // mock visible
+    const grid=$("#cardsGrid"); grid.innerHTML="";
+    CARDS.forEach(c=>{ const b=document.createElement("button"); b.className="card cardbtn"; b.innerHTML=`<div style="height:150px;border-radius:8px;background:#222;display:grid;place-items:center">${c.name}</div>`; if(currentProfile?.pfp_card_id===c.id) b.classList.add("selected"); b.onclick=()=>setPfp(c); grid.appendChild(b); });
   }
   async function setPfp(card){
     try{
-      const batch = writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", currentUser.uid), {
-        user_id: currentUser.uid, pfp_card_id: card.id, mmr: currentProfile?.mmr ?? 0, rank: currentProfile?.rank ?? "Placement", updated_at: now
-      }, { merge:true });
-      batch.set(doc(db,"public_players", currentUser.uid), {
-        display_name: currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player"),
-        mmr: currentProfile?.mmr ?? 0, rank: currentProfile?.rank ?? "Placement",
-        pfp_card_id: card.id, pfp_image: card.imageUrl
-      }, { merge:true });
-      await batch.commit();
-      $("#msgPfp").textContent="PFP actualizado y sincronizado con la tabla de jugadores.";
-      await loadProfileAndPfp(); renderEdit();
+      const batch=writeBatch(db), now=new Date().toISOString();
+      batch.set(doc(db,"player_profiles", currentUser.uid), {user_id:currentUser.uid,pfp_card_id:card.id,mmr:currentProfile?.mmr??0,rank:currentProfile?.rank??"Placement",updated_at:now},{merge:true});
+      batch.set(doc(db,"public_players", currentUser.uid), {display_name: currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player"), mmr:currentProfile?.mmr??0, rank:currentProfile?.rank??"Placement", pfp_card_id:card.id, pfp_image:null},{merge:true});
+      await batch.commit(); $("#msgPfp").textContent="PFP actualizado."; await loadProfileAndPfp(); drawCards();
     }catch(e){ $("#msgPfp").textContent=e.message; }
   }
   $("#btnDeletePfp").addEventListener("click", async ()=>{
     try{
-      const batch = writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", currentUser.uid), { pfp_card_id:null, updated_at:now }, { merge:true });
-      batch.set(doc(db,"public_players", currentUser.uid), { pfp_card_id:null, pfp_image:null }, { merge:true });
-      await batch.commit(); $("#msgPfp").textContent="PFP eliminado. Se actualizó la tabla de jugadores.";
-      await loadProfileAndPfp(); renderEdit();
+      const batch=writeBatch(db), now=new Date().toISOString();
+      batch.set(doc(db,"player_profiles", currentUser.uid), {pfp_card_id:null,updated_at:now},{merge:true});
+      batch.set(doc(db,"public_players", currentUser.uid), {pfp_card_id:null,pfp_image:null},{merge:true});
+      await batch.commit(); $("#msgPfp").textContent="PFP eliminado."; await loadProfileAndPfp(); drawCards();
     }catch(e){ $("#msgPfp").textContent=e.message; }
   });
-  $("#btnResend").addEventListener("click", async ()=>{
-    try{ await sendEmailVerification(currentUser); $("#msgEditUnv").textContent="Verificación reenviada. Revisa tu correo."; }
-    catch(e){ $("#msgEditUnv").textContent=e.message; }
-  });
-  $("#btnReload").addEventListener("click", async ()=>{
-    try{ await reload(currentUser); if(currentUser.emailVerified) render(); else $("#msgEditUnv").textContent="Aún sin verificar. Revisa tu correo."; }
-    catch(e){ $("#msgEditUnv").textContent=e.message; }
-  });
+  $("#btnResend").addEventListener("click", async ()=>{ try{ await sendEmailVerification(currentUser); $("#msgEditUnv").textContent="Verificación reenviada."; }catch(e){ $("#msgEditUnv").textContent=e.message; } });
+  $("#btnReload").addEventListener("click", async ()=>{ try{ await reload(currentUser); if(currentUser.emailVerified) render(); else $("#msgEditUnv").textContent="Aún sin verificar."; }catch(e){ $("#msgEditUnv").textContent=e.message; } });
 
-  /* ====== Lounge / Leaderboard ====== */
-  function renderLounge(){
-    if(loungeUnsub){ loungeUnsub(); loungeUnsub=null; }
-    const tbody=$("#playersTbody");
-    tbody.innerHTML = `<tr><td colspan="4" class="help">Cargando…</td></tr>`;
-
-    // Ordenado por MMR desc (live)
-    const q = query(collection(db,"public_players"), orderBy("mmr","desc"));
-    loungeUnsub = onSnapshot(q, (snap)=>{
-      playersCache = [];
-      snap.forEach(d=> playersCache.push({ id:d.id, ...d.data() }));
-      paintLeaderboard();
-    });
-
-    $("#searchName").oninput = paintLeaderboard;
-    $("#rankFilter").onchange = paintLeaderboard;
-  }
-
-  function paintLeaderboard(){
-    const tbody=$("#playersTbody");
-    const q = ($("#searchName").value||"").toLowerCase();
-    const rf = $("#rankFilter").value;
-
-    let list = playersCache.slice();
-    if(q){
-      list = list.filter(p => (p.display_name||"").toLowerCase().includes(q));
-    }
-    if(rf){
-      list = list.filter(p => (p.rank||"") === rf);
-    }
-
-    if(!list.length){ tbody.innerHTML = `<tr><td colspan="4" class="help">—</td></tr>`; return; }
-
-    tbody.innerHTML = list.map((p,idx)=>{
-      const rankClass = "rank-"+(p.rank||"Placement");
-      const pfp = p.pfp_image ? `<img src="${p.pfp_image}" alt="pfp">` : "";
-      return `<tr>
-        <td class="col-num">${idx+1}</td>
-        <td><div class="player-cell">${pfp}<span>${escapeHtml(p.display_name||"Player")}</span></div></td>
-        <td class="col-mmr">${Number(p.mmr||0)}</td>
-        <td class="col-rank"><span class="rank-chip ${rankClass}">${escapeHtml(p.rank||"Placement")}</span></td>
-      </tr>`;
-    }).join("");
-  }
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])); }
-
-  /* ====== Auth listener ====== */
-  onAuthStateChanged(auth, (user)=>{
-    currentUser = user || null;
-    updateHeader();
-    if(location.hash===""||location.hash==="#") location.hash="#/";
-    render();
-  });
-
-  /* ====== Boot ====== */
+  /* Auth state */
+  onAuthStateChanged(auth,(u)=>{ currentUser=u||null; updateHeader(); if(location.hash===""||location.hash==="#") location.hash="#/"; render(); });
   setActiveRoute(); render();
-  $$("#route-edit [data-open]").forEach(el=> el.addEventListener("click", ()=> openPanel(el.getAttribute("data-open"))));
+  $$("#route-edit [data-open]").forEach(el=> el.addEventListener("click", ()=> open(el.getAttribute("data-open"))));
+</script>
+
+<!-- Vue + Axios SOLO para el leaderboard -->
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const { createApp } = Vue;
+
+  // Normaliza filas para tolerar cambios de nombres de campo
+  function normalizeRow(row, i){
+    return {
+      id: row.id || row.uid || row.userId || row._id || String(i),
+      name: row.name || row.display_name || row.player || row.Player || 'Player',
+      mmr: Number(row.mmr ?? row.MMR ?? row.rating ?? 0),
+      rank: row.rank || row.Rango || row.tier || 'Placement',
+      country: row.country || row.flag || row.cc || row.Country || null
+    };
+  }
+
+  const loungeApp = createApp({
+    data(){ return {
+      loading:true,
+      errorMsg:'',
+      players:[],
+      filter:'',
+      selectedRank:null,
+      showRanks:false,
+      playerRankMap:{},
+      currentPage:1,
+      pageSize:50,
+      // misma lista y orden que tu código + etiquetas de rango MMR
+      ranks:[
+        { key:'Iron',           label:'Iron',           range:'0-100'   },
+        { key:'Bronze',         label:'Bronze',         range:'101-200' },
+        { key:'Silver',         label:'Silver',         range:'201-300' },
+        { key:'Gold',           label:'Gold',           range:'301-400' },
+        { key:'Platinum',       label:'Platinum',       range:'401-500' },
+        { key:'Diamond',        label:'Diamond',        range:'501-600' },
+        { key:'Crystal',        label:'Crystal',        range:'601-700' },
+        { key:'Master',         label:'Master',         range:'701-800' },
+        { key:'Champion',       label:'Champion',       range:'801-900' },
+        { key:'GrandChampion',  label:'Grand Champion', range:'901-999' },
+        { key:'Legend',         label:'Legend',         range:'+1000'   }
+      ]
+    }},
+    computed:{
+      filteredPlayers(){
+        let list=this.players;
+        if (this.selectedRank) {
+          list = list.filter(p => p.rank === this.selectedRank);
+        } else if (this.filter) {
+          list = list.filter(p => (p.name||'').toLowerCase().includes(this.filter.toLowerCase()));
+        }
+        return list;
+      },
+      filteredCount(){ return this.players.filter(p => p.rank === this.selectedRank).length; },
+      totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize)); },
+      paginatedPlayers(){
+        const start=(this.currentPage-1)*this.pageSize;
+        return this.filteredPlayers.slice(start, start+this.pageSize);
+      },
+      seasonLabel(){ return 'Beta'; }
+    },
+    watch:{
+      filter(){ this.currentPage=1; },
+      selectedRank(){ this.currentPage=1; this.filter=''; }
+    },
+    methods:{
+      toggleRanks(){ this.showRanks=!this.showRanks; },
+      selectRank(r){ this.selectedRank=r; this.showRanks=false; },
+      clearRank(){ this.selectedRank=null; this.showRanks=false; },
+      prevPage(){ if(this.currentPage>1) this.currentPage--; },
+      nextPage(){ if(this.currentPage<this.totalPages) this.currentPage++; },
+
+      async fetchPlayers(){
+        this.loading = true; this.errorMsg='';
+        try{
+          const url = 'https://worker-production-1ad2.up.railway.app/api/players';
+
+          let data;
+          try {
+            const resp = await axios.get(url, { withCredentials:false });
+            data = resp.data;
+          } catch (axErr) {
+            // Fallback por si axios choca con CORS en ciertos hostings
+            const r = await fetch(url, { mode:'cors', credentials:'omit' });
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            data = await r.json();
+          }
+
+          if (!Array.isArray(data)) throw new Error('Respuesta no es un array');
+
+          const normalized = data.map((row,i)=> normalizeRow(row,i));
+          const sorted = normalized.sort((a,b)=> (b.mmr||0) - (a.mmr||0));
+          const map={}; sorted.forEach((p,i)=> map[p.id]=i+1);
+
+          this.players = sorted;
+          this.playerRankMap = map;
+        }catch(e){
+          console.error(e);
+          this.players=[]; this.playerRankMap={};
+          this.errorMsg = (e && e.message) ? `Error al cargar datos: ${e.message}` : 'Error al cargar datos';
+        }finally{
+          this.loading=false;
+        }
+      },
+
+      flagUrl(cc){ return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`; },
+      displayRank(r){ return r==='GrandChampion' ? 'Grand Champion' : r; },
+      splitName(name){
+        const emojiPres=/\p{Emoji_Presentation}/u;
+        return Array.from(String(name||'')).map(c=>({char:c,isEmoji:emojiPres.test(c)}));
+      }
+    },
+    mounted(){
+      this.fetchPlayers();
+      // Auto refresh cada 10s
+      this._timer=setInterval(this.fetchPlayers, 10000);
+      // Cierra el menú al hacer click fuera
+      document.addEventListener('click', ()=>{ if(this.showRanks) this.showRanks=false; });
+    },
+    beforeUnmount(){ clearInterval(this._timer); }
+  });
+
+  loungeApp.mount('#loungeApp');
 </script>
 </body>
 </html>
-
 
 
