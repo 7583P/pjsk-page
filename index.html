@@ -63,12 +63,15 @@
 
     /* Tabla */
     table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:10px;text-align:center;color:#fff;border-bottom:1px solid var(--grid)}
-    /* separadores verticales entre columnas */
-    th+th, td+td{border-left:1px solid var(--grid)}
-    thead th{background:var(--head)}
-    tbody tr:nth-child(odd){background:var(--row1)}
-    tbody tr:nth-child(even){background:var(--row2)}
+    th,td{
+      padding:10px;
+      text-align:center;
+      color:#fff;
+      border-bottom:1px solid var(--grid); /* solo horizontales */
+    }
+    
+    /* sin separadores verticales */
+    th+th, td+td{border-left:0 !important;}
 
     /* posición y bandera */
     .position-cell{position:relative;text-align:center;padding-right:32px}
