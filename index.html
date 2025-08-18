@@ -18,6 +18,7 @@
       background-color: #2a2a2a;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      position: relative;
     }
     h1 {
       font-size: 2em;
@@ -27,6 +28,11 @@
     .controls {
       margin-bottom: 15px;
       text-align: center;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
     input[type="text"] {
       padding: 5px;
@@ -39,14 +45,8 @@
       color: #fff;
     }
 
-    /* ===== Dropdown ===== */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-      margin-left: 10px;
-      font-family: sans-serif;
-    }
-    .dropbtn {
+    /* ===== Botón Set PFP ===== */
+    .btn {
       background: #737373;
       border: none;
       padding: 6px 12px;
@@ -56,16 +56,12 @@
       font-weight: bold;
       white-space: nowrap;
     }
+    .btn:hover { filter: brightness(1.05); }
 
-    /* Base para todos los textos en degradado */
-    .text-gradient,
-    .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
+    /* ===== Dropdown Rangos ===== */
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { composes: btn; }
+    .dropbtn { background: #737373; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; color: #fff; font-weight: bold; white-space: nowrap; }
     .dropdown-content {
       display: none;
       position: absolute;
@@ -84,9 +80,21 @@
       text-decoration: none;
       font-size: 14px;
       white-space: nowrap;
+      color: #fff;
     }
-    .dropdown-content a:hover .text-gradient {
-      opacity: 0.9;
+    .dropdown-content a:hover .text-gradient { opacity: 0.9; }
+
+    /* Base textos en degradado */
+    .text-gradient, .name-gradient {
+      display: inline-block;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .name-gradient .emoji {
+      background: none !important;
+      -webkit-background-clip: initial !important;
+      -webkit-text-fill-color: currentColor !important;
     }
 
     /* ===== Tabla ===== */
@@ -100,30 +108,40 @@
       text-align: center;
       color: #fff;
     }
-    th {
-      background-color: #030050;
-    }
-    td {
-      border-bottom: 1px solid #555;
-    }
+    th { background-color: #030050; }
+    td { border-bottom: 1px solid #555; }
     tbody tr:nth-child(odd)  { background-color: #333; }
     tbody tr:nth-child(even) { background-color: #2a2a2a; }
+    tbody tr.assign-target { outline: 2px dashed #9ad; outline-offset: -4px; cursor: copy; }
 
-    /* ===== Posición + bandera ===== */
+    /* ===== Posición + bandera + card ===== */
     .position-cell {
       position: relative;
       text-align: center;
-      padding-right: 32px;
+      /* espacio para número + bandera + card */
+      padding-right: 72px;
     }
-    .position-cell .position-number {
-      display: inline-block;
-    }
+    .position-cell .position-number { display: inline-block; }
     .position-cell .flag {
       width: 24px;
       position: absolute;
       top: 50%;
-      right: 8px;
+      right: 40px;      /* deja sitio al card a la derecha */
       transform: translateY(-50%);
+      border-radius: 2px;
+    }
+    .position-cell .card-thumb {
+      position: absolute;
+      top: 50%;
+      right: 8px;       /* card al costado derecho de la bandera */
+      transform: translateY(-50%);
+      width: 20px;      /* pequeño estilo “card list” (3:4 aprox) */
+      height: 26px;
+      object-fit: cover;
+      border-radius: 2px;
+      border: 1px solid rgba(0,0,0,.4);
+      box-shadow: 0 1px 2px rgba(0,0,0,.6);
+      background: #222;
     }
 
     /* ===== Degradados (derecha ➞ izquierda) ===== */
@@ -139,13 +157,6 @@
     .rank-Champion    { background-image: linear-gradient(to left, #fe6767, #8f0000); }
     .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
     .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
-
-    /* Emojis sin degradado */
-    .name-gradient .emoji {
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
 
     /* ===== Paginación ===== */
     .pagination {
@@ -163,10 +174,7 @@
       color: #fff;
       cursor: pointer;
     }
-    .pagination button:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
+    .pagination button:disabled { opacity: 0.4; cursor: default; }
     .pagination input[type="number"] {
       width: 50px;
       padding: 4px;
@@ -176,6 +184,96 @@
       background: #2a2a2a;
       color: #fff;
     }
+
+    /* ===== Modal selector de cartas ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .card-picker {
+      width: min(940px, 92vw);
+      max-height: 86vh;
+      background: #232323;
+      border: 1px solid #444;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    .picker-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #3a3a3a;
+    }
+    .picker-header h3 { margin: 0; font-size: 18px; }
+    .picker-header input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #2c2c2c;
+      color: #fff;
+      outline: none;
+    }
+    .picker-grid {
+      padding: 12px;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+      gap: 10px;
+    }
+    .card-item {
+      background: #1f1f1f;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      padding: 8px 6px;
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform .05s ease;
+    }
+    .card-item:hover { transform: translateY(-2px); border-color: #5a5a5a; }
+    .card-img {
+      width: 72px; height: 96px;  /* 3:4 */
+      object-fit: cover;
+      border-radius: 6px;
+      background: #222;
+      border: 1px solid rgba(0,0,0,.35);
+      box-shadow: 0 1px 2px rgba(0,0,0,.6);
+    }
+    .card-name {
+      width: 100%;
+      text-align: center;
+      font-size: 11px;
+      color: #e7e7e7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .picker-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; padding: 10px 12px; border-top: 1px solid #3a3a3a;
+      color: #cfcfcf; font-size: 12px;
+    }
+    .kbd {
+      font: 11px/1.2 monospace;
+      background: #111; border: 1px solid #555; border-bottom-color: #333;
+      border-radius: 4px; padding: 2px 5px; color: #ddd;
+    }
+    .hint {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      background: #1e3a5f; color: #dbeafe; border: 1px solid #334155;
+      padding: 8px 12px; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,.35);
+      z-index: 2100; font-size: 13px;
+    }
   </style>
 </head>
 <body>
@@ -184,6 +282,9 @@
 
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
+
+      <!-- Botón global para seleccionar carta de perfil -->
+      <button class="btn" @click="openCardPicker">set pfp (game cards)</button>
 
       <!-- ▼ Mini pestaña desplegable de Rangos -->
       <div class="dropdown">
@@ -204,7 +305,7 @@
       </div>
       <!-- ▲ Fin mini pestaña -->
 
-      <button v-if="selectedRank" @click="clearRank" style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
+      <button v-if="selectedRank" @click="clearRank" class="btn">
         Mostrar todos ▾
       </button>
     </div>
@@ -214,10 +315,12 @@
         <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id">
+        <tr v-for="p in paginatedPlayers" :key="p.id" :class="{'assign-target': assignMode}" @click="rowClickAssign(p)">
           <td class="position-cell">
             <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
             <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
+            <!-- Mini card al costado derecho de la bandera -->
+            <img v-if="pfpByPlayerId[p.id]" :src="pfpByPlayerId[p.id].image" :alt="pfpByPlayerId[p.id].name" class="card-thumb" />
           </td>
           <td>
             <span :class="['name-gradient','rank-'+p.rank]">
@@ -239,12 +342,39 @@
       <span>/ {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
     </div>
+
+    <!-- ===== Modal / Picker de Cartas ===== -->
+    <div class="overlay" v-if="cardPickerOpen" @click.self="closeCardPicker" @keydown.esc="closeCardPicker" tabindex="-1" ref="overlay">
+      <div class="card-picker" @click.stop>
+        <div class="picker-header">
+          <h3>Selecciona tu game card</h3>
+          <input ref="cardSearch" v-model="cardQuery" placeholder="Escribe iniciales… (filtro por empieza con)" />
+          <button class="btn" @click="closeCardPicker">Cerrar</button>
+        </div>
+        <div class="picker-grid">
+          <div class="card-item" v-for="c in filteredCards" :key="c.id" @click="pickCard(c)" :title="c.name">
+            <img class="card-img" :src="c.image" :alt="c.name" />
+            <div class="card-name">{{ c.name }}</div>
+          </div>
+        </div>
+        <div class="picker-footer">
+          <div>Consejos: escribe <span class="kbd">m</span> → muestra cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
+          <div><span class="kbd">ESC</span> cerrar • Click en carta → luego click en una fila para asignar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hint cuando está en modo asignación -->
+    <div v-if="assignMode" class="hint">
+      Haz clic en la fila del jugador al que deseas asignar esta carta.
+      <span class="kbd">ESC</span> para cancelar.
+    </div>
   </div>
 
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const { createApp } = Vue;
+    const { createApp, nextTick } = Vue;
     createApp({
       data() {
         return {
@@ -266,9 +396,18 @@
             { key:'Champion', label:'Champion', range:'801-900' },
             { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
             { key:'Legend', label:'Legend', range:'+1000' }
-          ]
+          ],
+
+          /* ===== PFP Cards ===== */
+          cardPickerOpen: false,
+          cardQuery: '',
+          cards: [],
+          selectedCard: null,     // la carta elegida en el picker
+          assignMode: false,      // después de elegir carta, el usuario hace clic en una fila
+          pfpByPlayerId: {},      // { [playerId]: {id, name, image} }
         };
       },
+
       computed: {
         filteredPlayers() {
           let list = this.players;
@@ -289,10 +428,17 @@
           const start = (this.currentPage - 1) * this.pageSize;
           return this.filteredPlayers.slice(start, start + this.pageSize);
         },
-        seasonLabel() {
-          return 'Beta';
+        seasonLabel() { return 'Beta'; },
+
+        /* Filtra por prefijo: empieza con lo escrito (insensible a mayúsculas y espacios) */
+        filteredCards() {
+          const q = this.cardQuery.trim().toLowerCase();
+          if (!q) return this.cards;
+          // Soporta "miku s" → coincide con nombre que empiece con "miku s"
+          return this.cards.filter(c => c.name.toLowerCase().startsWith(q));
         }
       },
+
       watch: {
         filter() { this.currentPage = 1; },
         selectedRank() { this.currentPage = 1; this.filter = ''; },
@@ -301,14 +447,14 @@
           else if (val > this.totalPages) this.currentPage = this.totalPages;
         }
       },
+
       methods: {
+        /* ===== UI Rangos / Tabla ===== */
         selectRank(rank) {
           this.selectedRank = rank;
           document.getElementById('rankList').style.display = 'none';
         },
-        clearRank() {
-          this.selectedRank = null;
-        },
+        clearRank() { this.selectedRank = null; },
         prevPage() { if (this.currentPage > 1) this.currentPage--; },
         nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
         goToPage() {},
@@ -325,23 +471,100 @@
             alert('Error al cargar datos');
           }
         },
-        flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`;
-        },
-        displayRank(rank) {
-          return rank === 'GrandChampion' ? 'Grand Champion' : rank;
-        },
+        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
+        displayRank(rank) { return rank === 'GrandChampion' ? 'Grand Champion' : rank; },
         splitName(name) {
           const emojiPres = /\p{Emoji_Presentation}/u;
           return Array.from(name).map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
+        },
+
+        /* ===== Cards: Picker / Asignación ===== */
+        async openCardPicker() {
+          if (!this.cards.length) {
+            await this.loadCards(); // primer uso: carga
+          }
+          this.cardPickerOpen = true;
+          this.cardQuery = '';
+          this.selectedCard = null;
+          await nextTick();
+          // foco al buscador y permitir escribir directo
+          const overlay = this.$refs.overlay;
+          overlay && overlay.focus();
+          this.$refs.cardSearch && this.$refs.cardSearch.focus();
+        },
+        closeCardPicker() {
+          this.cardPickerOpen = false;
+          this.assignMode = false;
+          this.selectedCard = null;
+        },
+        pickCard(card) {
+          this.selectedCard = card;
+          this.assignMode = true;      // ahora espera click en fila
+          this.cardPickerOpen = false; // cerramos el picker (UX tipo “elige y aplica”)
+          // Esc para cancelar
+          const onEsc = (e) => {
+            if (e.key === 'Escape') {
+              this.assignMode = false;
+              window.removeEventListener('keydown', onEsc);
+            }
+          };
+          window.addEventListener('keydown', onEsc);
+        },
+        rowClickAssign(player) {
+          if (!this.assignMode || !this.selectedCard) return;
+          this.pfpByPlayerId = {
+            ...this.pfpByPlayerId,
+            [player.id]: { id: this.selectedCard.id, name: this.selectedCard.name, image: this.selectedCard.image }
+          };
+          this.savePfpMap();
+          this.assignMode = false;
+          this.selectedCard = null;
+        },
+
+        /* Carga (con fallback) de cartas */
+        async loadCards() {
+          // Si tienes un endpoint/archivo local, descomenta la siguiente línea:
+          // try { const r = await axios.get('/cards.json'); this.cards = r.data; return; } catch(e) { console.warn('cards.json no disponible, usando ejemplos'); }
+          // Ejemplos (reemplaza por tus URLs de imágenes reales de Fandom):
+          const defaultCards = [
+            { id: 'miku-smile-4',  name: 'Miku Smile 4★',  image: 'https://via.placeholder.com/288x384?text=Miku%204★' },
+            { id: 'miku-casual-3', name: 'Miku Casual 3★', image: 'https://via.placeholder.com/288x384?text=Miku%203★' },
+            { id: 'rin-sunny-4',   name: 'Rin Sunny 4★',   image: 'https://via.placeholder.com/288x384?text=Rin%204★' },
+            { id: 'len-cool-2',    name: 'Len Cool 2★',    image: 'https://via.placeholder.com/288x384?text=Len%202★' },
+            { id: 'emu-pop-4',     name: 'Emu Pop 4★',     image: 'https://via.placeholder.com/288x384?text=Emu%204★' },
+            { id: 'ichika-rose-3', name: 'Ichika Rose 3★', image: 'https://via.placeholder.com/288x384?text=Ichika%203★' },
+            { id: 'kaito-warm-2',  name: 'KAITO Warm 2★',  image: 'https://via.placeholder.com/288x384?text=KAITO%202★' },
+            { id: 'meiko-cafe-3',  name: 'MEIKO Cafe 3★',  image: 'https://via.placeholder.com/288x384?text=MEIKO%203★' },
+            { id: 'tsukasa-star',  name: 'Tsukasa Star',    image: 'https://via.placeholder.com/288x384?text=Tsukasa' },
+            { id: 'nene-spark',    name: 'Nene Spark',      image: 'https://via.placeholder.com/288x384?text=Nene' }
+          ];
+          // Normaliza nombres para “empieza con”
+          this.cards = defaultCards
+            .map(c => ({...c, name: c.name.replace(/\s+/g, ' ').trim()}))
+            .sort((a,b) => a.name.localeCompare(b.name));
+        },
+
+        /* Persistencia */
+        savePfpMap() {
+          try { localStorage.setItem('pfpByPlayerId', JSON.stringify(this.pfpByPlayerId)); }
+          catch(e){ console.warn('No se pudo guardar pfpByPlayerId', e); }
+        },
+        loadPfpMap() {
+          try {
+            const raw = localStorage.getItem('pfpByPlayerId');
+            if (raw) this.pfpByPlayerId = JSON.parse(raw) || {};
+          } catch(e){ console.warn('No se pudo cargar pfpByPlayerId', e); }
         }
       },
+
       mounted() {
         this.fetchPlayers();
         setInterval(this.fetchPlayers, 10000);
+        this.loadPfpMap();
       }
     }).mount('#app');
 
+    /* ——— Dropdown “Rangos” ——— */
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector('.dropbtn');
       const menu = document.getElementById('rankList');
@@ -350,12 +573,10 @@
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
       });
       document.addEventListener('click', () => {
-        if (menu.style.display === 'block')
-          menu.style.display = 'none';
+        if (menu.style.display === 'block') menu.style.display = 'none';
       });
     });
   </script>
 </body>
 </html>
-
 
