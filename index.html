@@ -1,179 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>PJSK LOUNGE</title>
   <style>
     /* ===== Base ===== */
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      background-color: #383838;
-      color: #ffffff;
-    }
-    #app {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      position: relative;
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .controls {
-      margin-bottom: 15px;
-      text-align: center;
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    input[type="text"] {
-      padding: 5px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 4px;
-      text-align: center;
-      background: #555;
-      color: #fff;
-    }
+    body{font-family:sans-serif;margin:20px;background:#383838;color:#fff}
+    #app{max-width:1000px;margin:0 auto;padding:20px;background:#2a2a2a;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,.5);position:relative}
+    h1{font-size:2em;margin-bottom:20px;text-align:center}
+    .controls{margin-bottom:15px;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
+    input[type="text"]{padding:5px;width:80%;max-width:400px;border:none;border-radius:4px;text-align:center;background:#555;color:#fff}
 
     /* ===== Botones ===== */
-    .btn {
-      background: #737373;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      color: #fff;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-    .btn:hover { filter: brightness(1.05); }
-    .btn[disabled] { opacity: .55; cursor: default; }
+    .btn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
+    .btn:hover{filter:brightness(1.05)}
+    .btn[disabled]{opacity:.55;cursor:default}
 
     /* ===== Dropdown Rangos ===== */
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: #737373; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; color: #fff; font-weight: bold; white-space: nowrap; }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 220px;
-      background-color: #595959;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      z-index: 1000;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .dropdown-content a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      font-size: 14px;
-      white-space: nowrap;
-      color: #fff;
-    }
-    .dropdown-content a:hover .text-gradient { opacity: 0.9; }
+    .dropdown{position:relative;display:inline-block}
+    .dropbtn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
+    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
+    .dropdown-content a{display:block;padding:8px 12px;text-decoration:none;font-size:14px;white-space:nowrap;color:#fff}
 
-    /* Base degradados */
-    .text-gradient, .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .name-gradient .emoji {
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
+    /* Gradients */
+    .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .name-gradient .emoji{background:none!important;-webkit-background-clip:initial!important;-webkit-text-fill-color:currentColor!important}
 
     /* ===== Tabla ===== */
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; text-align: center; color: #fff; }
-    th { background-color: #030050; }
-    td { border-bottom: 1px solid #555; }
-    tbody tr:nth-child(odd)  { background-color: #333; }
-    tbody tr:nth-child(even) { background-color: #2a2a2a; }
-    tbody tr.is-me { outline: 2px solid #5ea1ff; outline-offset: -3px; }
-    tbody tr.me-assign { cursor: pointer; }
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;text-align:center;color:#fff}
+    th{background:#030050}
+    td{border-bottom:1px solid #555}
+    tbody tr:nth-child(odd){background:#333}
+    tbody tr:nth-child(even){background:#2a2a2a}
+    tbody tr.is-me{outline:2px solid #5ea1ff;outline-offset:-3px}
 
     /* ===== Posición + bandera + card ===== */
-    .position-cell {
-      position: relative;
-      text-align: center;
-      padding-right: 72px; /* espacio p/ bandera + mini card */
-    }
-    .position-cell .position-number { display: inline-block; }
-    .position-cell .flag {
-      width: 24px;
-      position: absolute;
-      top: 50%;
-      right: 40px;
-      transform: translateY(-50%);
-      border-radius: 2px;
-    }
-    .position-cell .card-thumb {
-      position: absolute;
-      top: 50%;
-      right: 8px;
-      transform: translateY(-50%);
-      width: 20px; height: 26px; /* 3:4 pequeño */
-      object-fit: cover;
-      border-radius: 2px;
-      border: 1px solid rgba(0,0,0,.4);
-      box-shadow: 0 1px 2px rgba(0,0,0,.6);
-      background: #222;
-    }
+    .position-cell{position:relative;text-align:center;padding-right:72px}
+    .position-number{display:inline-block}
+    .flag{width:24px;position:absolute;top:50%;right:40px;transform:translateY(-50%);border-radius:2px}
+    .card-thumb{position:absolute;top:50%;right:8px;transform:translateY(-50%);width:20px;height:26px;object-fit:cover;border-radius:2px;border:1px solid rgba(0,0,0,.4);box-shadow:0 1px 2px rgba(0,0,0,.6);background:#222}
 
-    /* ===== Degradados (derecha ➞ izquierda) ===== */
-    .rank-Placement   { background-image: linear-gradient(to left, #ff7000, #ff4600); }
-    .rank-Iron        { background-image: linear-gradient(to left, #616161, #2e2e2e); }
-    .rank-Bronze      { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
-    .rank-Silver      { background-image: linear-gradient(to left, #b3b3b3, #696969); }
-    .rank-Gold        { background-image: linear-gradient(to left, #ffbf60, #c57600); }
-    .rank-Platinum    { background-image: linear-gradient(to left, #767ec2, #38429f); }
-    .rank-Diamond     { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
-    .rank-Crystal     { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
-    .rank-Master      { background-image: linear-gradient(to left, #c34efd, #5f009e); }
-    .rank-Champion    { background-image: linear-gradient(to left, #fe6767, #8f0000); }
-    .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
-    .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
+    /* ===== Rank gradients ===== */
+    .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
+    .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
+    .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
+    .rank-Silver{background-image:linear-gradient(to left,#b3b3b3,#696969)}
+    .rank-Gold{background-image:linear-gradient(to left,#ffbf60,#c57600)}
+    .rank-Platinum{background-image:linear-gradient(to left,#767ec2,#38429f)}
+    .rank-Diamond{background-image:linear-gradient(to left,#42a2ff,#003e8f)}
+    .rank-Crystal{background-image:linear-gradient(to left,#dca3ff,#883cb4)}
+    .rank-Master{background-image:linear-gradient(to left,#c34efd,#5f009e)}
+    .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
+    .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
+    .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
 
     /* ===== Paginación ===== */
-    .pagination {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-    .pagination button { padding: 4px 8px; border: none; border-radius: 4px; background: #555; color: #fff; cursor: pointer; }
-    .pagination button:disabled { opacity: 0.4; cursor: default; }
-    .pagination input[type="number"] { width: 50px; padding: 4px; text-align: center; border-radius: 4px; border: 1px solid #555; background: #2a2a2a; color: #fff; }
+    .pagination{margin-top:15px;display:flex;justify-content:center;align-items:center;gap:8px}
+    .pagination button{padding:4px 8px;border:none;border-radius:4px;background:#555;color:#fff;cursor:pointer}
+    .pagination button:disabled{opacity:.4;cursor:default}
+    .pagination input[type="number"]{width:50px;padding:4px;text-align:center;border-radius:4px;border:1px solid #555;background:#2a2a2a;color:#fff}
 
     /* ===== Modal selector de cartas ===== */
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-    .card-picker { width: min(940px, 92vw); max-height: 86vh; background: #232323; border: 1px solid #444; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.5); display: grid; grid-template-rows: auto 1fr auto; }
-    .picker-header { display: flex; gap: 10px; align-items: center; padding: 12px; border-bottom: 1px solid #3a3a3a; }
-    .picker-header h3 { margin: 0; font-size: 18px; }
-    .picker-header input { flex: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #555; background: #2c2c2c; color: #fff; outline: none; }
-    .picker-grid { padding: 12px; overflow: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; }
-    .card-item { background: #1f1f1f; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 6px; display: grid; justify-items: center; gap: 6px; cursor: pointer; transition: transform .05s ease; }
-    .card-item:hover { transform: translateY(-2px); border-color: #5a5a5a; }
-    .card-img { width: 72px; height: 96px; object-fit: cover; border-radius: 6px; background: #222; border: 1px solid rgba(0,0,0,.35); box-shadow: 0 1px 2px rgba(0,0,0,.6); }
-    .card-name { width: 100%; text-align: center; font-size: 11px; color: #e7e7e7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .picker-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; border-top: 1px solid #3a3a3a; color: #cfcfcf; font-size: 12px; }
-    .kbd { font: 11px/1.2 monospace; background: #111; border: 1px solid #555; border-bottom-color: #333; border-radius: 4px; padding: 2px 5px; color: #ddd; }
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:2000}
+    .card-picker{width:min(940px,92vw);max-height:86vh;background:#232323;border:1px solid #444;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:grid;grid-template-rows:auto 1fr auto}
+    .picker-header{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid #3a3a3a}
+    .picker-header h3{margin:0;font-size:18px}
+    .picker-header input{flex:1;padding:8px 10px;border-radius:6px;border:1px solid #555;background:#2c2c2c;color:#fff;outline:none}
+    .picker-grid{padding:12px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
+    .card-item{background:#1f1f1f;border:1px solid #3a3a3a;border-radius:8px;padding:8px 6px;display:grid;justify-items:center;gap:6px;cursor:pointer;transition:transform .05s ease}
+    .card-item:hover{transform:translateY(-2px);border-color:#5a5a5a}
+    .card-img{width:72px;height:96px;object-fit:cover;border-radius:6px;background:#222;border:1px solid rgba(0,0,0,.35);box-shadow:0 1px 2px rgba(0,0,0,.6)}
+    .card-name{width:100%;text-align:center;font-size:11px;color:#e7e7e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .picker-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #3a3a3a;color:#cfcfcf;font-size:12px}
+    .kbd{font:11px/1.2 monospace;background:#111;border:1px solid #555;border-bottom-color:#333;border-radius:4px;padding:2px 5px;color:#ddd}
   </style>
 </head>
 <body>
@@ -181,12 +81,10 @@
     <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
 
     <div class="controls">
-      <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
-
-      <!-- Botón: set pfp (solo para MI usuario) -->
+      <input v-if="!selectedRank" type="text" v-model="filter" placeholder="Buscar por nombre…" />
       <button class="btn" @click="openCardPicker" :disabled="!me">set pfp (game cards)</button>
 
-      <!-- ▼ Rangos -->
+      <!-- Rangos -->
       <div class="dropdown">
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
@@ -204,7 +102,7 @@
         </div>
       </div>
 
-      <button v-if="selectedRank" @click="clearRank" class="btn">Mostrar todos ▾</button>
+      <button v-if="selectedRank" class="btn" @click="clearRank">Mostrar todos ▾</button>
     </div>
 
     <table>
@@ -212,25 +110,13 @@
         <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
       </thead>
       <tbody>
-        <tr
-          v-for="p in paginatedPlayers" :key="p.id"
-          :class="[{ 'is-me': isMe(p), 'me-assign': isMe(p) }]"
-          @click="isMe(p) && selectedCard ? saveMyCardFor(p) : null"
-          :title="isMe(p) ? 'Esta es tu fila: clic para aplicar la carta seleccionada' : ''"
-        >
+        <tr v-for="p in paginatedPlayers" :key="p.id" :class="{'is-me': isMe(p)}" @click="isMe(p) && pendingCard ? applyCardToMe() : null">
           <td class="position-cell">
             <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
             <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
-            <!-- Mini card del usuario al costado de la bandera -->
-            <img
-              v-if="pfpByPlayerId[p.id]"
-              :src="pfpByPlayerId[p.id].image"
-              :alt="pfpByPlayerId[p.id].name"
-              class="card-thumb"
-              referrerpolicy="no-referrer"
-              loading="lazy"
-              @error="imgFallback($event, pfpByPlayerId[p.id]?.name)"
-            />
+            <img v-if="pfpByPlayerId[p.id]" :src="pfpByPlayerId[p.id].image" :alt="pfpByPlayerId[p.id].name"
+                 class="card-thumb" referrerpolicy="no-referrer" loading="lazy"
+                 @error="imgFallback($event, pfpByPlayerId[p.id]?.name)" />
           </td>
           <td>
             <span :class="['name-gradient','rank-'+p.rank]">
@@ -253,23 +139,23 @@
       <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
     </div>
 
-    <!-- ===== Modal / Picker de Cartas ===== -->
+    <!-- Picker de Cartas -->
     <div class="overlay" v-if="cardPickerOpen" @click.self="closeCardPicker">
       <div class="card-picker" @click.stop>
         <div class="picker-header">
           <h3>Selecciona tu game card</h3>
-          <input ref="cardSearch" v-model="cardQuery" placeholder="Escribe iniciales… (filtro por empieza con)" />
+          <input ref="cardSearch" v-model="cardQuery" placeholder="Escribe iniciales… (empieza con)" />
           <button class="btn" @click="closeCardPicker">Cerrar</button>
         </div>
         <div class="picker-grid">
-          <div class="card-item" v-for="c in filteredCards" :key="c.id" @click="pickCard(c)" :title="c.name">
+          <div class="card-item" v-for="c in filteredCards" :key="c.id" :title="c.name" @click="pickCard(c)">
             <img class="card-img" :src="c.image" :alt="c.name" referrerpolicy="no-referrer" loading="lazy" @error="imgFallback($event,c.name)" />
             <div class="card-name">{{ c.name }}</div>
           </div>
         </div>
         <div class="picker-footer">
-          <div>Consejo: escribe <span class="kbd">m</span> → cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
-          <div>Click en carta → luego click en <b>tu fila</b> para aplicarla.</div>
+          <div>Escribe <span class="kbd">m</span> → muestra cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
+          <div>Click en carta → se aplica a <b>tu fila</b> (si estás logueado).</div>
         </div>
       </div>
     </div>
@@ -284,7 +170,7 @@
       data() {
         return {
           apiBase: 'https://worker-production-1ad2.up.railway.app',
-          me: null,                 // { id, username } → /api/me
+          me: null,                 // { id, username } desde /api/me (Discord)
           players: [],
           filter: '',
           playerRankMap: {},
@@ -304,189 +190,156 @@
             { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
             { key:'Legend', label:'Legend', range:'+1000' }
           ],
-
-          /* ===== Cards ===== */
+          /* Cards */
           cardPickerOpen: false,
           cardQuery: '',
           cards: [],
-          selectedCard: null,     // carta elegida en el picker (temporal)
-          pfpByPlayerId: {},      // mapa global (servidor) { [userId]: {id,name,image} }
+          pendingCard: null,        // carta elegida
+          pfpByPlayerId: {}         // { [userId]: {id,name,image} }
         };
       },
 
-      computed: {
-        filteredPlayers() {
+      computed:{
+        filteredPlayers(){
           let list = this.players;
-          if (this.selectedRank) list = list.filter(p => p.rank === this.selectedRank);
-          else if (this.filter) list = list.filter(p => p.name.toLowerCase().includes(this.filter.toLowerCase()));
+          if(this.selectedRank) list = list.filter(p=>p.rank===this.selectedRank);
+          else if(this.filter) list = list.filter(p=>p.name.toLowerCase().includes(this.filter.toLowerCase()));
           return list;
         },
-        filteredCount() { return this.players.filter(p => p.rank === this.selectedRank).length; },
-        totalPages() { return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize)); },
-        paginatedPlayers() { const s=(this.currentPage-1)*this.pageSize; return this.filteredPlayers.slice(s, s+this.pageSize); },
-        seasonLabel() { return 'Beta'; },
-
-        /* Filtra por prefijo */
-        filteredCards() {
-          const q = this.cardQuery.trim().toLowerCase();
-          if (!q) return this.cards;
-          return this.cards.filter(c => c.name.toLowerCase().startsWith(q));
+        filteredCount(){ return this.players.filter(p=>p.rank===this.selectedRank).length; },
+        totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length/this.pageSize)); },
+        paginatedPlayers(){ const s=(this.currentPage-1)*this.pageSize; return this.filteredPlayers.slice(s, s+this.pageSize); },
+        seasonLabel(){ return 'Beta'; },
+        filteredCards(){
+          const q=this.cardQuery.trim().toLowerCase(); if(!q) return this.cards;
+          return this.cards.filter(c=>c.name.toLowerCase().startsWith(q));
         }
       },
 
-      watch: {
-        filter() { this.currentPage = 1; },
-        selectedRank() { this.currentPage = 1; this.filter = ''; },
-        currentPage(v) { if (v<1) this.currentPage=1; else if (v>this.totalPages) this.currentPage=this.totalPages; }
+      watch:{
+        filter(){ this.currentPage=1; },
+        selectedRank(){ this.currentPage=1; this.filter=''; },
+        currentPage(v){ if(v<1)this.currentPage=1; else if(v>this.totalPages)this.currentPage=this.totalPages; }
       },
 
-      methods: {
-        /* ===== Aux imágenes: fallback si la URL falla ===== */
-        imgFallback(ev, text='Card') {
-          const w = ev.target.classList.contains('card-img') ? 72 : 20;
-          const h = ev.target.classList.contains('card-img') ? 96 : 26;
-          const svg = this.svgPh(text, w, h);
-          ev.target.onerror = null;
-          ev.target.src = svg;
-        },
-        svgPh(text, w, h) {
-          const t = (text || 'Card').slice(0, 10);
-          const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'>
-            <defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
-              <stop offset='0' stop-color='#1f2937'/><stop offset='1' stop-color='#0f172a'/>
-            </linearGradient></defs>
-            <rect width='100%' height='100%' fill='url(#g)'/>
-            <text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle'
-              font-size='${Math.max(8, w/4)}' fill='#9ca3af' font-family='sans-serif'>${t}</text>
-          </svg>`;
-          return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+      methods:{
+        /* ===== Imagen: fallback ===== */
+        imgFallback(ev,text='Card'){
+          const el=ev.target, w=el.classList.contains('card-img')?72:20, h=el.classList.contains('card-img')?96:26;
+          const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='#1f2937'/><stop offset='1' stop-color='#0f172a'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-size='${Math.max(8,w/4)}' fill='#9ca3af' font-family='sans-serif'>${(text||'Card').slice(0,10)}</text></svg>`;
+          el.onerror=null; el.src='data:image/svg+xml;utf8,'+encodeURIComponent(svg);
         },
 
-        /* ===== Rangos / Tabla ===== */
-        selectRank(rank) { this.selectedRank = rank; document.getElementById('rankList').style.display = 'none'; },
-        clearRank() { this.selectedRank = null; },
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() {},
-        flagUrl(cc) { return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
-        displayRank(rank) { return rank === 'GrandChampion' ? 'Grand Champion' : rank; },
-        splitName(name) {
-          const emojiPres = /\p{Emoji_Presentation}/u;
-          return Array.from(name).map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
-        },
-        isMe(p) { return this.me && String(p.id) === String(this.me.id); },
+        /* ===== Tabla / Rangos ===== */
+        selectRank(r){ this.selectedRank=r; document.getElementById('rankList').style.display='none'; },
+        clearRank(){ this.selectedRank=null; },
+        prevPage(){ if(this.currentPage>1) this.currentPage--; },
+        nextPage(){ if(this.currentPage<this.totalPages) this.currentPage++; },
+        goToPage(){},
+        flagUrl(cc){ return `https://flagcdn.com/24x18/${cc.toLowerCase()}.png`; },
+        displayRank(r){ return r==='GrandChampion'?'Grand Champion':r; },
+        splitName(name){ const re=/\p{Emoji_Presentation}/u; return Array.from(name).map(c=>({char:c,isEmoji:re.test(c)})); },
+        isMe(p){ return this.me && String(p.id)===String(this.me.id); },
 
-        /* ===== Players / Me / PFPs ===== */
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get(`${this.apiBase}/api/players`, { withCredentials: true });
-            const sorted = resp.data.sort((a,b) => b.mmr - a.mmr);
-            this.players = sorted;
-            const map = {}; sorted.forEach((p,i) => map[p.id]=i+1); this.playerRankMap = map;
-          } catch (err) {
-            console.error(err); alert('Error al cargar players');
+        /* ===== Cargas ===== */
+        async fetchPlayers(){
+          try{
+            const url=`${this.apiBase}/api/players`;
+            const resp=await axios.get(url,{withCredentials:false,headers:{Accept:'application/json'}});
+            const sorted=resp.data.sort((a,b)=>b.mmr-a.mmr);
+            this.players=sorted;
+            const map={}; sorted.forEach((p,i)=>map[p.id]=i+1); this.playerRankMap=map;
+            localStorage.setItem('players_cache',JSON.stringify(sorted));
+          }catch(err){
+            console.error('fetchPlayers error:',err?.message,err?.response?.status,err?.response?.data);
+            const cache=localStorage.getItem('players_cache');
+            if(cache){
+              const s=JSON.parse(cache); this.players=s;
+              const map={}; s.forEach((p,i)=>map[p.id]=i+1); this.playerRankMap=map;
+            }
           }
         },
-        async fetchMe() {
-          try {
-            const r = await axios.get(`${this.apiBase}/api/me`, { withCredentials: true });
-            this.me = r.data; // { id, username }
-          } catch (e) {
-            console.warn('No autenticado /api/me. El botón set pfp quedará deshabilitado.', e);
-            this.me = null;
+        async fetchMe(){
+          try{
+            const r=await axios.get(`${this.apiBase}/api/me`,{withCredentials:true});
+            this.me=r.data; // { id, username }
+          }catch(e){
+            console.warn('No autenticado /api/me; el botón set pfp se deshabilita.', e);
+            this.me=null;
           }
         },
-        async fetchPfps() {
-          try {
-            const r = await axios.get(`${this.apiBase}/api/pfps`, { withCredentials: true });
-            // admite array o mapa
-            this.pfpByPlayerId = Array.isArray(r.data) ? Object.fromEntries(r.data) : (r.data || {});
-            this.saveLocalBackup();
-          } catch (e) {
-            console.warn('Fallo /api/pfps, usando backup local', e);
-            this.loadLocalBackup();
+        async fetchPfps(){
+          try{
+            const r=await axios.get(`${this.apiBase}/api/pfps`,{withCredentials:false});
+            this.pfpByPlayerId = Array.isArray(r.data)?Object.fromEntries(r.data):(r.data||{});
+            localStorage.setItem('pfp_map_backup',JSON.stringify(this.pfpByPlayerId));
+          }catch(e){
+            console.warn('GET /api/pfps falló, usando backup local',e);
+            const raw=localStorage.getItem('pfp_map_backup');
+            if(raw) this.pfpByPlayerId=JSON.parse(raw)||{};
           }
-        },
-        saveLocalBackup() {
-          try { localStorage.setItem('pfpByPlayerId_backup', JSON.stringify(this.pfpByPlayerId)); } catch {}
-        },
-        loadLocalBackup() {
-          try {
-            const raw = localStorage.getItem('pfpByPlayerId_backup');
-            if (raw) this.pfpByPlayerId = JSON.parse(raw) || {};
-          } catch {}
         },
 
-        /* ===== Cards: picker y guardar para MI usuario ===== */
-        async openCardPicker() {
-          if (!this.me) return;
-          if (!this.cards.length) await this.loadCards();
-          this.cardPickerOpen = true; this.cardQuery=''; this.selectedCard=null;
-          await nextTick(); const input = this.$refs.cardSearch; input && input.focus();
+        /* ===== Cards ===== */
+        async openCardPicker(){
+          if(!this.me) return;
+          if(!this.cards.length) await this.loadCards();
+          this.cardPickerOpen=true; this.cardQuery=''; this.pendingCard=null;
+          await nextTick(); this.$refs.cardSearch && this.$refs.cardSearch.focus();
         },
-        closeCardPicker() { this.cardPickerOpen = false; },
-        pickCard(card) { this.selectedCard = card; this.closeCardPicker(); },
-        async saveMyCardFor(player) {
-          if (!this.isMe(player) || !this.selectedCard) return;
-          const userId = player.id;
-          const payload = { cardId: this.selectedCard.id, name: this.selectedCard.name, image: this.selectedCard.image };
-          // Actualiza inmediato en UI
-          this.pfpByPlayerId = { ...this.pfpByPlayerId, [userId]: payload };
-          this.saveLocalBackup();
-          // Intenta persistir en el servidor
-          try {
-            await axios.put(`${this.apiBase}/api/pfps/${userId}`, payload, { withCredentials: true });
-          } catch (e) {
-            console.warn('PUT /api/pfps fallo, quedó en local backup', e);
-            alert('No se pudo guardar en el servidor. Se guardó localmente en este navegador.');
+        closeCardPicker(){ this.cardPickerOpen=false; },
+        pickCard(card){ this.pendingCard=card; this.cardPickerOpen=false; this.applyCardToMe(); },
+        async applyCardToMe(){
+          if(!this.me || !this.pendingCard) return;
+          const uid=this.me.id, payload={id:this.pendingCard.id,name:this.pendingCard.name,image:this.pendingCard.image};
+
+          // UI inmediata
+          this.pfpByPlayerId={...this.pfpByPlayerId,[uid]:payload};
+          localStorage.setItem('pfp_map_backup',JSON.stringify(this.pfpByPlayerId));
+
+          // Persistencia en servidor (si está disponible)
+          try{
+            await axios.put(`${this.apiBase}/api/pfps/${uid}`,{cardId:payload.id,name:payload.name,image:payload.image},{withCredentials:true});
+          }catch(e){
+            console.warn('PUT /api/pfps fallo, queda backup local',e);
           }
-          this.selectedCard = null;
+          this.pendingCard=null;
         },
 
-        /* Carga de cartas: sustituye por tu catálogo real */
-        async loadCards() {
-          // Si tienes tu propio catálogo:
-          // try { const r = await axios.get(`${this.apiBase}/api/cards`); this.cards = r.data; return; } catch(e) {}
-          // Ejemplos (reemplaza por URLs reales de Fandom/Wiki y añade todas las cartas):
-          this.cards = [
-            { id: 'emu-pop-4',     name: 'Emu Pop 4★',     image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Emu_Card_Example.png' },
-            { id: 'ichika-rose-3', name: 'Ichika Rose 3★', image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Ichika_Card_Example.png' },
-            { id: 'kaito-warm-2',  name: 'KAITO Warm 2★',  image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Kaito_Card_Example.png' },
-            { id: 'len-cool-2',    name: 'Len Cool 2★',    image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Len_Card_Example.png' },
-            { id: 'meiko-cafe-3',  name: 'MEIKO Cafe 3★',  image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Meiko_Card_Example.png' },
-            { id: 'miku-casual-3', name: 'Miku Casual 3★', image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Card_Example.png' },
-            { id: 'miku-smile-4',  name: 'Miku Smile 4★',  image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Smile_Example.png' },
-            { id: 'nene-spark',    name: 'Nene Spark',     image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Nene_Card_Example.png' },
-            { id: 'rin-sunny-4',   name: 'Rin Sunny 4★',   image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Rin_Card_Example.png' },
-            { id: 'tsukasa-star',  name: 'Tsukasa Star',   image: 'https://static.wikia.nocookie.net/projectsekai/images/8/88/Tsukasa_Card_Example.png' }
-          ]
-          .map(c => ({...c, name: c.name.replace(/\s+/g,' ').trim()}))
-          .sort((a,b) => a.name.localeCompare(b.name));
+        async loadCards(){
+          // Si tienes endpoint real, descomenta:
+          // try{ const r=await axios.get(`${this.apiBase}/api/cards`); this.cards=r.data; return; }catch(e){ console.warn('api/cards no disponible, usando ejemplos'); }
+          this.cards=[
+            { id:'emu-pop-4',     name:'Emu Pop 4★',     image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Emu_Card_Example.png' },
+            { id:'ichika-rose-3', name:'Ichika Rose 3★', image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Ichika_Card_Example.png' },
+            { id:'kaito-warm-2',  name:'KAITO Warm 2★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Kaito_Card_Example.png' },
+            { id:'len-cool-2',    name:'Len Cool 2★',    image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Len_Card_Example.png' },
+            { id:'meiko-cafe-3',  name:'MEIKO Cafe 3★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Meiko_Card_Example.png' },
+            { id:'miku-casual-3', name:'Miku Casual 3★', image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Card_Example.png' },
+            { id:'miku-smile-4',  name:'Miku Smile 4★',  image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Miku_Smile_Example.png' },
+            { id:'nene-spark',    name:'Nene Spark',     image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Nene_Card_Example.png' },
+            { id:'rin-sunny-4',   name:'Rin Sunny 4★',   image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Rin_Card_Example.png' },
+            { id:'tsukasa-star',  name:'Tsukasa Star',   image:'https://static.wikia.nocookie.net/projectsekai/images/8/88/Tsukasa_Card_Example.png' }
+          ].map(c=>({...c,name:c.name.replace(/\s+/g,' ').trim()})).sort((a,b)=>a.name.localeCompare(b.name));
         }
       },
 
-      async mounted() {
-        await this.fetchMe();         // identifica al usuario (Discord)
-        await this.fetchPlayers();    // lista
-        await this.fetchPfps();       // mapa global pfp
+      async mounted(){
+        await this.fetchMe();        // identifica usuario (Discord)
+        await this.fetchPlayers();   // lista
+        await this.fetchPfps();      // pfp por usuario
         setInterval(this.fetchPlayers, 10000);
       }
     }).mount('#app');
 
-    /* ——— Dropdown “Rangos” ——— */
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.querySelector('.dropbtn');
-      const menu = document.getElementById('rankList');
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-      });
-      document.addEventListener('click', () => {
-        if (menu.style.display === 'block') menu.style.display = 'none';
-      });
+    /* — Dropdown Rangos — */
+    document.addEventListener('DOMContentLoaded',()=>{
+      const btn=document.querySelector('.dropbtn');
+      const menu=document.getElementById('rankList');
+      btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block';});
+      document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none'; });
     });
   </script>
 </body>
 </html>
-
 
