@@ -14,7 +14,6 @@
     /* ===== Botones ===== */
     .btn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
     .btn:hover{filter:brightness(1.05)}
-    .btn[disabled]{opacity:.55;cursor:default}
 
     /* ===== Dropdown Rangos ===== */
     .dropdown{position:relative;display:inline-block}
@@ -82,7 +81,8 @@
 
     <div class="controls">
       <input v-if="!selectedRank" type="text" v-model="filter" placeholder="Buscar por nombre…" />
-      <button class="btn" @click="openCardPicker" :disabled="!me">set pfp (game cards)</button>
+      <!-- Habilitado SIEMPRE -->
+      <button class="btn" @click="openCardPicker">set pfp (game cards)</button>
 
       <!-- Rangos -->
       <div class="dropdown">
@@ -110,7 +110,10 @@
         <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
       </thead>
       <tbody>
-        <tr v-for="p in paginatedPlayers" :key="p.id" :class="{'is-me': isMe(p)}" @click="isMe(p) && pendingCard ? applyCardToMe() : null">
+        <!-- Ahora el click de la fila aplica la carta si hay una seleccionada (con login = server; sin login = localStorage) -->
+        <tr v-for="p in paginatedPlayers" :key="p.id"
+            :class="{'is-me': isMe(p)}"
+            @click="pendingCard && applyCardTo(p)">
           <td class="position-cell">
             <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
             <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
@@ -154,8 +157,8 @@
           </div>
         </div>
         <div class="picker-footer">
-          <div>Escribe <span class="kbd">m</span> → muestra cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
-          <div>Click en carta → se aplica a <b>tu fila</b> (si estás logueado).</div>
+          <div>Escribe <span class="kbd">m</span> → cartas que <b>empiezan</b> con “m”. “<span class="kbd">miku s</span>” → “Miku S…”.</div>
+          <div>Click en carta → luego click en una fila para aplicar (si tienes login se guarda en servidor).</div>
         </div>
       </div>
     </div>
@@ -194,7 +197,7 @@
           cardPickerOpen: false,
           cardQuery: '',
           cards: [],
-          pendingCard: null,        // carta elegida
+          pendingCard: null,        // carta elegida (aún sin aplicar)
           pfpByPlayerId: {}         // { [userId]: {id,name,image} }
         };
       },
@@ -264,7 +267,7 @@
             const r=await axios.get(`${this.apiBase}/api/me`,{withCredentials:true});
             this.me=r.data; // { id, username }
           }catch(e){
-            console.warn('No autenticado /api/me; el botón set pfp se deshabilita.', e);
+            console.warn('No autenticado /api/me; se usará modo local para PFP.', e);
             this.me=null;
           }
         },
@@ -282,26 +285,29 @@
 
         /* ===== Cards ===== */
         async openCardPicker(){
-          if(!this.me) return;
           if(!this.cards.length) await this.loadCards();
           this.cardPickerOpen=true; this.cardQuery=''; this.pendingCard=null;
           await nextTick(); this.$refs.cardSearch && this.$refs.cardSearch.focus();
         },
         closeCardPicker(){ this.cardPickerOpen=false; },
-        pickCard(card){ this.pendingCard=card; this.cardPickerOpen=false; this.applyCardToMe(); },
-        async applyCardToMe(){
-          if(!this.me || !this.pendingCard) return;
-          const uid=this.me.id, payload={id:this.pendingCard.id,name:this.pendingCard.name,image:this.pendingCard.image};
+        pickCard(card){ this.pendingCard=card; this.cardPickerOpen=false; /* ahora espera click en fila */ },
 
-          // UI inmediata
-          this.pfpByPlayerId={...this.pfpByPlayerId,[uid]:payload};
-          localStorage.setItem('pfp_map_backup',JSON.stringify(this.pfpByPlayerId));
+        async applyCardTo(player){
+          if(!this.pendingCard) return;
+          const uid = player.id;
+          const payload = { id:this.pendingCard.id, name:this.pendingCard.name, image:this.pendingCard.image };
 
-          // Persistencia en servidor (si está disponible)
-          try{
-            await axios.put(`${this.apiBase}/api/pfps/${uid}`,{cardId:payload.id,name:payload.name,image:payload.image},{withCredentials:true});
-          }catch(e){
-            console.warn('PUT /api/pfps fallo, queda backup local',e);
+          // Actualiza UI y guarda backup local
+          this.pfpByPlayerId = { ...this.pfpByPlayerId, [uid]: payload };
+          localStorage.setItem('pfp_map_backup', JSON.stringify(this.pfpByPlayerId));
+
+          // Solo si el usuario actual es el dueño de esa fila, intenta persistir en servidor
+          if(this.me && String(uid)===String(this.me.id)){
+            try{
+              await axios.put(`${this.apiBase}/api/pfps/${uid}`, { cardId:payload.id, name:payload.name, image:payload.image }, { withCredentials:true });
+            }catch(e){
+              console.warn('PUT /api/pfps falló; queda backup local', e);
+            }
           }
           this.pendingCard=null;
         },
@@ -325,9 +331,9 @@
       },
 
       async mounted(){
-        await this.fetchMe();        // identifica usuario (Discord)
-        await this.fetchPlayers();   // lista
-        await this.fetchPfps();      // pfp por usuario
+        await this.fetchMe();        // si falla, modo local
+        await this.fetchPlayers();
+        await this.fetchPfps();
         setInterval(this.fetchPlayers, 10000);
       }
     }).mount('#app');
@@ -342,4 +348,3 @@
   </script>
 </body>
 </html>
-
