@@ -8,7 +8,8 @@
     :root{
       --bg:#383838; --panel:#2a2a2a; --panel2:#242424; --ink:#fff; --muted:#bfbfbf;
       --brand:#6c6cf0; --warn:#f0a66c; --ok:#58d68d; --err:#ff6b6b; --line:#0006;
-      --row1:#333; --row2:#2a2a2a; --hover:#595959;
+      --row1:#333; --row2:#2a2a2a; --hover:#595959; --chip:#444;
+      --rowh:64px; /* altura de cada fila del leaderboard */
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -18,16 +19,12 @@
 
     /* Top bar */
     header.topbar{
-      position:sticky;top:0;z-index:5;
-      background:var(--panel);border-bottom:1px solid var(--line)
+      position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)
     }
-    .topbar .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 16px}
+    .topwrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 16px}
     .brand{font-weight:700;letter-spacing:.5px}
     nav.tabs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-    .tabbtn{
-      padding:8px 12px;border-radius:8px;background:#0000;border:1px solid #0000;color:var(--ink);
-      cursor:pointer;transition:.15s background;
-    }
+    .tabbtn{padding:8px 12px;border-radius:8px;background:#0000;border:1px solid #0000;color:var(--ink);cursor:pointer;transition:.15s background}
     .tabbtn:hover{background:var(--hover)}
     .tabbtn.active{background:var(--brand);border-color:#0000}
 
@@ -36,33 +33,25 @@
     .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 0 14px rgba(0,0,0,.35);padding:18px}
     .grid{display:grid;gap:16px}
     .grid.cols-2{grid-template-columns:1fr 1fr}
-    @media (max-width:900px){ .grid.cols-2{grid-template-columns:1fr} }
+    .grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:980px){ .grid.cols-2,.grid.cols-3{grid-template-columns:1fr} }
 
     /* Home hero */
-    .hero{
-      text-align:center;padding:28px;border-radius:12px;background:linear-gradient(135deg,#2a2a2a 0%, #242424 100%);
-      border:1px solid var(--line);margin-bottom:16px
-    }
+    .hero{text-align:center;padding:28px;border-radius:12px;background:linear-gradient(135deg,#2a2a2a 0%, #242424 100%);border:1px solid var(--line);margin-bottom:16px}
     .hero h1{font-size:clamp(28px,5vw,48px);margin:0 0 6px}
     .hero p{margin:0;color:var(--muted)}
 
-    /* Forms */
+    /* Forms + msgs */
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
     label{font-size:.92rem;color:var(--muted)}
-    input{
-      padding:10px 12px;border-radius:10px;border:1px solid #0008;background:var(--panel2);color:var(--ink);
-      outline:none
+    input, select{
+      padding:10px 12px;border-radius:10px;border:1px solid #0008;background:var(--panel2);color:var(--ink);outline:none
     }
-    input:focus{border-color:var(--brand)}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:10px 14px;border-radius:10px;border:1px solid #0000;background:var(--brand);color:#fff;
-      cursor:pointer;font-weight:600
-    }
+    input:focus, select:focus{border-color:var(--brand)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid #0000;background:var(--brand);color:#fff;cursor:pointer;font-weight:600}
     .btn.ghost{background:#0000;border-color:#00000055}
     .btn.warn{background:var(--warn);color:#000}
     .btn.full{width:100%}
-
     .help{font-size:.9rem;color:var(--muted)}
     .msg{padding:10px 12px;border-radius:10px;margin:10px 0;font-size:.95rem}
     .msg.ok{background:#1e3b2e;color:#d6ffe7;border:1px solid #2a6c4b}
@@ -74,23 +63,47 @@
     section.active{display:block}
 
     /* Leaderboard */
-    table{width:100%;border-collapse:collapse;border-spacing:0}
-    thead th{font-weight:700;text-align:left;padding:12px;border-bottom:1px solid #444}
+    .lb-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .rank-chip{padding:6px 10px;border-radius:999px;background:var(--chip);cursor:pointer;border:1px solid #0006}
+    .rank-chip.active{background:var(--brand)}
+    .discord-fail{color:var(--err);font-weight:700}
+    .lb-tablewrap{overflow:auto;border-radius:10px;border:1px solid #0006}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    thead th{font-weight:700;text-align:left;padding:12px;border-bottom:1px solid #444;background:#2b2b2b;position:sticky;top:0;z-index:1}
     tbody tr:nth-child(odd){background:var(--row1)}
     tbody tr:nth-child(even){background:var(--row2)}
-    tbody td{padding:10px 12px;border-bottom:1px solid #444}
-    .discord-fail{color:var(--err);font-weight:700}
-    .rank-chip{
-      display:inline-block;padding:4px 8px;border-radius:999px;font-size:.8rem;background:#444;color:#fff
+    tbody td{padding:0 12px;border-bottom:1px solid #444;height:var(--rowh);vertical-align:middle}
+    .pfpWrap{display:flex;align-items:center;gap:8px;height:100%}
+    .flag{font-size:22px;line-height:1}
+    .pfp{
+      height:calc(var(--rowh) - 12px);
+      width:calc(var(--rowh) - 12px);
+      object-fit:cover;border-radius:8px;border:1px solid #0007;background:#111;
     }
+    .pfp.placeholder{display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#aaa}
+    .lb-pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
+    .lb-pager .btn{padding:8px 12px}
+    .name-muted{color:#cfcfcf}
 
-    .banner{margin:12px 0}
+    /* PFP Picker */
+    .pfp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .pfp-grid{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px}
+    @media (max-width:1100px){ .pfp-grid{grid-template-columns:repeat(5,1fr)} }
+    @media (max-width:900px){ .pfp-grid{grid-template-columns:repeat(4,1fr)} }
+    @media (max-width:680px){ .pfp-grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:480px){ .pfp-grid{grid-template-columns:repeat(2,1fr)} }
+    .card-tile{background:#1f1f1f;border:1px solid #0008;border-radius:10px;overflow:hidden;cursor:pointer;transition:.15s transform}
+    .card-tile:hover{transform:translateY(-2px)}
+    .tile-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#111}
+    .tile-meta{padding:8px;font-size:.85rem;color:#ddd;display:flex;justify-content:space-between;gap:8px}
+    .badge{padding:2px 6px;border-radius:999px;background:#3a3a3a}
+    .selected-note{margin-top:8px}
   </style>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
-    <div class="wrap">
+    <div class="topwrap">
       <div class="brand">PJSK LOUNGE</div>
       <nav class="tabs">
         <button class="tabbtn active" data-tab="home">Home</button>
@@ -114,7 +127,7 @@
           <h2 style="margin:0 0 10px">Iniciar sesión</h2>
           <div class="field">
             <label for="loginEmail">Email</label>
-            <input id="loginEmail" type="email" placeholder="tu@email.com" autocomplete="username" />
+            <input id="loginEmail" type="email" placeholder="usuario123@email.com" autocomplete="username" />
           </div>
           <div class="field">
             <label for="loginPass">Contraseña</label>
@@ -133,11 +146,11 @@
           <h2 style="margin:0 0 10px">Crear cuenta</h2>
           <div class="field">
             <label for="regDisplay">Nombre a mostrar (opcional)</label>
-            <input id="regDisplay" type="text" placeholder="Tu nickname" />
+            <input id="regDisplay" type="text" placeholder="usuario123" />
           </div>
           <div class="field">
             <label for="regEmail">Email</label>
-            <input id="regEmail" type="email" placeholder="tu@email.com" autocomplete="email" />
+            <input id="regEmail" type="email" placeholder="usuario123@email.com" autocomplete="email" />
           </div>
           <div class="field">
             <label for="regPass">Contraseña</label>
@@ -149,7 +162,7 @@
       </div>
 
       <div id="welcomeArea" class="card" style="display:none">
-        <h2 style="margin:0 0 6px">¡Hola, <span id="welcomeName">Usuario</span>!</h2>
+        <h2 style="margin:0 0 6px">¡Hola, <span id="welcomeName">usuario123</span>!</h2>
         <p class="help" style="margin:0 0 12px">Ya iniciaste sesión.</p>
         <div id="verifyBanner" class="banner" style="display:none"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -163,54 +176,89 @@
     <!-- LEADERBOARD -->
     <section id="leaderboard">
       <div class="card">
-        <h2 style="margin:0 0 10px">Leaderboard</h2>
-        <p class="help" style="margin:0 0 10px">Ordenado por puntaje. Si el nombre de Discord no está verificado o es inválido, se mostrará <span class="discord-fail">“failed to verificate”</span>.</p>
+        <h2 style="margin:0 0 12px">Leaderboard</h2>
+
+        <div class="lb-controls">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span class="help">Rangos:</span>
+            <span class="rank-chip active" data-rank="All">All</span>
+            <span class="rank-chip" data-rank="Diamond">Diamond</span>
+            <span class="rank-chip" data-rank="Gold">Gold</span>
+            <span class="rank-chip" data-rank="Bronze">Bronze</span>
+            <span class="rank-chip" data-rank="Unranked">Unranked</span>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+            <label class="help" for="pageSize">Filas</label>
+            <select id="pageSize">
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="help" style="margin:-4px 0 10px">Si el nombre de Discord no está verificado o es inválido, se mostrará <span class="discord-fail">“failed to verificate”</span>.</p>
         <div id="lbMsg" class="msg info" style="display:none"></div>
-        <div style="overflow:auto;border-radius:10px;border:1px solid #0006">
-          <table id="lbTable">
+
+        <div class="lb-tablewrap">
+          <table>
             <thead>
               <tr>
                 <th style="width:70px">#</th>
-                <th>Jugador</th>
+                <th style="width:120px">Bandera / PFP</th>
+                <th>Jugador (Discord)</th>
                 <th style="width:140px">Rango</th>
                 <th style="width:120px">Puntaje</th>
               </tr>
             </thead>
             <tbody id="lbBody">
-              <tr><td colspan="4" style="text-align:center;padding:16px">Cargando…</td></tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <div class="pfpWrap">
+                    <span class="flag">🏳️</span>
+                    <div class="pfp placeholder">pfp</div>
+                  </div>
+                </td>
+                <td class="name-muted">usuario123</td>
+                <td><span class="rank-chip">Unranked</span></td>
+                <td>0</td>
+              </tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="lb-pager">
+          <button id="btnPrev" class="btn ghost" disabled>← Anterior</button>
+          <span class="help" id="pageInfo">Página 1 / 1</span>
+          <button id="btnNext" class="btn ghost" disabled>Siguiente →</button>
         </div>
       </div>
     </section>
 
-    <!-- PROFILE -->
+    <!-- PROFILE: Set PFP -->
     <section id="profile">
       <div class="card">
-        <h2 style="margin:0 0 10px">Editar perfil</h2>
-        <p class="help" style="margin:0 0 14px">Actualiza tu nombre a mostrar y tu nombre de usuario de Discord.</p>
-        <div class="grid cols-2">
-          <div>
-            <div class="field">
-              <label for="pfDisplay">Nombre a mostrar</label>
-              <input id="pfDisplay" type="text" placeholder="Tu nickname" />
-            </div>
-            <div class="field">
-              <label for="pfDiscord">Discord username</label>
-              <input id="pfDiscord" type="text" placeholder="ej. diego.carbajal o diego#1234" />
-            </div>
-            <button id="btnSaveProfile" class="btn">Guardar</button>
-            <div id="pfMsg"></div>
-          </div>
-          <div>
-            <div class="msg info">
-              <strong>Verificación de Discord:</strong><br/>
-              Marcamos tu Discord como <em>verificado</em> si pasa una validación básica de formato (usuario nuevo sin # o formato antiguo <code>name#1234</code>).<br/>
-              Si no pasa, en el leaderboard verás <span class="discord-fail">failed to verificate</span>.
-            </div>
-            <div id="emailState" class="msg" style="display:none"></div>
-          </div>
+        <h2 style="margin:0 0 10px">Set PFP</h2>
+        <p class="help" style="margin:0 0 12px">
+          Busca y selecciona cualquier carta (no entrenada / entrenada). Al hacer click, tu PFP se guarda y se verá en el leaderboard
+          <em>al costado derecho de la bandera</em>.
+        </p>
+
+        <div class="pfp-toolbar">
+          <input id="pfpSearch" type="text" placeholder="Buscar por nombre, id, personaje..." style="min-width:260px">
+          <select id="pfpVersion">
+            <option value="both">Mostrar: ambas versiones</option>
+            <option value="normal">Solo no entrenada</option>
+            <option value="trained">Solo entrenada</option>
+          </select>
+          <button id="btnClearPfp" class="btn warn">Eliminar PFP</button>
         </div>
+
+        <div id="pfpInfo" class="msg info" style="display:none"></div>
+        <div id="pfpGrid" class="pfp-grid"></div>
+        <div id="pfpSelected" class="selected-note help"></div>
       </div>
     </section>
   </main>
@@ -226,7 +274,7 @@
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
     getFirestore, doc, setDoc, updateDoc, getDoc, getDocs, collection, serverTimestamp,
-    query, orderBy, limit
+    query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   // ==== CONFIGURA TUS CREDENCIALES ====
@@ -242,283 +290,390 @@
   // ==== INIT ====
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db   = getFirestore(app);
 
-  // ==== UI helpers ====
-  const $ = (sel) => document.querySelector(sel);
+  // ==== Helpers UI ====
+  const $  = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-  const setActiveTab = (name) => {
-    $$(".tabbtn").forEach(b => b.classList.toggle("active", b.dataset.tab===name));
-    $$("main section").forEach(s => s.classList.toggle("active", s.id===name));
-  };
+  const show = (el, on=true)=> el && (el.style.display = on ? "" : "none");
+  function showMsg(el, text, type){ el.className = "msg " + (type||"info"); el.textContent = text; el.style.display = text ? "block" : "none"; }
+  function escapeHtml(s){ return String(s??"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]); }
+  function setActiveTab(name){ $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name)); $$("main section").forEach(s=>s.classList.toggle("active", s.id===name)); }
   $$(".tabbtn").forEach(b => b.addEventListener("click", ()=> setActiveTab(b.dataset.tab)));
 
-  function showMsg(el, text, type){
-    el.className = "msg " + (type||"info");
-    el.textContent = text;
-    el.style.display = text ? "block" : "none";
-  }
-  function escapeHtml(s){
-    return String(s??"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  // Discord: acepta nuevo formato (sin #) y legacy con #1234
+  // ==== Discord validation ====
   function validateDiscordUsername(u){
     if(!u) return false;
-    u = u.trim();
-    if(u.startsWith("@")) u = u.slice(1);
-    const legacy = /^[^\s@#]{2,32}#[0-9]{4}$/;               // name#1234
-    const modern = /^[a-zA-Z0-9._]{2,32}$/;                  // nuevo formato
+    u = u.trim().replace(/^@/,'');
+    const legacy = /^[^\s@#]{2,32}#[0-9]{4}$/;
+    const modern = /^[a-zA-Z0-9._]{2,32}$/;
     return legacy.test(u) || modern.test(u);
   }
 
-  // ==== AUTH: REGISTER ====
+  // ==== Flag emoji from country code (e.g. "PE" -> 🇵🇪) ====
+  function flagEmojiFromCC(cc){
+    if(!cc || typeof cc!=="string" || cc.length<2) return "🏳️";
+    const up = cc.trim().slice(0,2).toUpperCase();
+    const A = 0x1F1E6; // Regional Indicator Symbol Letter A
+    return String.fromCodePoint(...[...up].map(ch => A + (ch.charCodeAt(0)-65)));
+  }
+
+  // ==== AUTH: Register / Login / Verify / Reset ====
   $("#btnRegister").addEventListener("click", async ()=>{
     const email = $("#regEmail").value.trim();
     const pass  = $("#regPass").value.trim();
     const display = $("#regDisplay").value.trim();
-    const el = $("#regMsg");
-    showMsg(el, "", "info");
-
-    if(!email || !pass){
-      showMsg(el, "Completa email y contraseña.", "err"); return;
-    }
+    const el = $("#regMsg"); showMsg(el,"","info");
+    if(!email || !pass){ showMsg(el,"Completa email y contraseña.","err"); return; }
     try{
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      if(display){
-        await updateProfile(cred.user, { displayName: display });
-      }
-      // Crear doc base del usuario en Firestore
-      await setDoc(doc(db, "users", cred.user.uid), {
-        uid: cred.user.uid,
-        email,
-        displayName: display || "",
-        discord: "",
-        discordVerified: false,
-        score: 0,
-        rank: "Unranked",
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      }, { merge:true });
-
-      // Enviar verificación inmediatamente (arregla “no enviaba”)
+      if(display){ await updateProfile(cred.user, { displayName: display }); }
+      await setDoc(doc(db,"users",cred.user.uid), {
+        uid: cred.user.uid, email, displayName: display||"", discord:"", discordVerified:false,
+        score:0, rank:"Unranked", countryCode:"", pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+      }, {merge:true});
       await sendEmailVerification(cred.user);
-      showMsg(el, "Te enviamos un correo de verificación. Revisa tu bandeja y spam.", "ok");
-
-      // Limpieza
-      $("#regPass").value = "";
+      showMsg(el,"Te enviamos un correo de verificación. Revisa tu bandeja y spam.","ok");
+      $("#regPass").value="";
     }catch(err){
-      const map = {
-        "auth/email-already-in-use": "Ese email ya está registrado.",
-        "auth/invalid-email": "Email inválido.",
-        "auth/weak-password": "La contraseña es muy débil (mínimo 6)."
-      };
-      showMsg(el, map[err.code] || ("Error al registrar: " + err.message), "err");
+      const map={"auth/email-already-in-use":"Ese email ya está registrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"La contraseña es muy débil (mínimo 6)."};
+      showMsg(el, map[err.code] || ("Error al registrar: "+err.message), "err");
     }
   });
 
-  // ==== AUTH: LOGIN ====
   $("#btnLogin").addEventListener("click", async ()=>{
     const email = $("#loginEmail").value.trim();
     const pass  = $("#loginPass").value.trim();
-    const el = $("#loginMsg");
-    showMsg(el, "", "info");
-    if(!email || !pass){ showMsg(el, "Completa email y contraseña.", "err"); return; }
-
+    const el = $("#loginMsg"); showMsg(el,"","info");
+    if(!email || !pass){ showMsg(el,"Completa email y contraseña.","err"); return; }
     try{
       const cred = await signInWithEmailAndPassword(auth, email, pass);
       if(!cred.user.emailVerified){
-        showMsg(el, "Login exitoso, pero tu correo no está verificado. Puedes reenviar el correo de verificación.", "info");
-      }else{
-        showMsg(el, "", "info");
-      }
+        showMsg(el,"Login exitoso, pero tu correo no está verificado. Puedes reenviar la verificación.","info");
+      }else{ showMsg(el,"","info"); }
     }catch(err){
-      const map = {
-        "auth/invalid-email": "Email inválido.",
-        "auth/user-disabled": "Usuario deshabilitado.",
-        "auth/user-not-found": "No existe una cuenta con ese email.",
-        "auth/wrong-password": "Contraseña incorrecta."
-      };
-      showMsg(el, map[err.code] || ("Error al iniciar sesión: " + err.message), "err");
+      const map={"auth/invalid-email":"Email inválido.","auth/user-disabled":"Usuario deshabilitado.","auth/user-not-found":"No existe cuenta con ese email.","auth/wrong-password":"Contraseña incorrecta."};
+      showMsg(el, map[err.code] || ("Error al iniciar sesión: "+err.message), "err");
     }
   });
 
-  // Reset password
   $("#btnReset").addEventListener("click", async ()=>{
     const email = $("#loginEmail").value.trim() || prompt("Escribe tu email para enviar el reset:");
     if(!email) return;
-    try{
-      await sendPasswordResetEmail(auth, email);
-      showMsg($("#loginMsg"), "Te enviamos un correo para resetear tu contraseña.", "ok");
-    }catch(err){
-      showMsg($("#loginMsg"), "No pudimos enviar el reset: " + err.message, "err");
-    }
+    try{ await sendPasswordResetEmail(auth,email); showMsg($("#loginMsg"),"Te enviamos un correo para resetear tu contraseña.","ok"); }
+    catch(err){ showMsg($("#loginMsg"),"No pudimos enviar el reset: "+err.message,"err"); }
   });
 
-  // Reenviar verificación (desde login)
   $("#btnResendFromLogin").addEventListener("click", async (e)=>{
     e.preventDefault();
-    if(!auth.currentUser){ showMsg($("#loginMsg"), "Primero inicia sesión para reenviar verificación.", "err"); return; }
-    try{
-      await sendEmailVerification(auth.currentUser);
-      showMsg($("#loginMsg"), "Correo de verificación reenviado.", "ok");
-    }catch(err){
-      showMsg($("#loginMsg"), "No se pudo reenviar: " + err.message, "err");
-    }
+    if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión para reenviar verificación.","err"); return; }
+    try{ await sendEmailVerification(auth.currentUser); showMsg($("#loginMsg"),"Correo de verificación reenviado.","ok"); }
+    catch(err){ showMsg($("#loginMsg"),"No se pudo reenviar: "+err.message,"err"); }
   });
 
-  // ==== AUTH STATE ====
   onAuthStateChanged(auth, async (user)=>{
-    const authArea = $("#authArea");
-    const welcomeArea = $("#welcomeArea");
+    const authArea = $("#authArea"), welcomeArea=$("#welcomeArea");
     if(user){
-      // UI de bienvenida
-      authArea.style.display = "none";
-      welcomeArea.style.display = "block";
-      $("#welcomeName").textContent = user.displayName || (user.email?.split("@")[0]) || "Usuario";
-      // Banner de verificación
-      const vb = $("#verifyBanner");
-      const btnResend = $("#btnResendVerify");
-      if(user.emailVerified){
-        vb.style.display = "none";
-        btnResend.style.display = "none";
-      }else{
-        vb.style.display = "block";
-        vb.className = "msg info banner";
-        vb.innerHTML = "Tu correo aún no está verificado. Revisa tu bandeja o <strong>reenvía la verificación</strong>.";
-        btnResend.style.display = "inline-flex";
+      show(authArea,false); show(welcomeArea,true);
+      $("#welcomeName").textContent = user.displayName || (user.email?.split("@")[0]) || "usuario123";
+      const vb = $("#verifyBanner"), btnResend = $("#btnResendVerify");
+      if(user.emailVerified){ show(vb,false); show(btnResend,false); } else {
+        show(vb,true); vb.className = "msg info"; vb.innerHTML="Tu correo aún no está verificado. Revisa tu bandeja o <strong>reenvía la verificación</strong>.";
+        show(btnResend,true);
       }
-      // Rellena perfil
-      await hydrateProfileForm(user.uid);
-      // Actualiza emailState en perfil
-      updateEmailState(user);
+      await ensureUserDoc(user);
+      await hydratePfpSelection(user.uid);
     }else{
-      welcomeArea.style.display = "none";
-      authArea.style.display = "grid";
-      updateEmailState(null);
+      show(welcomeArea,false); show(authArea,true);
     }
-    // Siempre refresca el leaderboard al cambiar el estado (por si score o discord)
-    renderLeaderboard();
+    await loadLeaderboard(); // refresca
   });
 
   $("#btnResendVerify").addEventListener("click", async ()=>{
     if(!auth.currentUser) return;
-    try{
-      await sendEmailVerification(auth.currentUser);
-      showMsg($("#verifyBanner"), "Correo de verificación reenviado.", "ok");
-    }catch(err){
-      showMsg($("#verifyBanner"), "No se pudo reenviar: " + err.message, "err");
-    }
+    try{ await sendEmailVerification(auth.currentUser); showMsg($("#verifyBanner"),"Correo de verificación reenviado.","ok"); }
+    catch(err){ showMsg($("#verifyBanner"),"No se pudo reenviar: "+err.message,"err"); }
   });
-
-  $("#btnLogout").addEventListener("click", async ()=>{
-    await signOut(auth);
-  });
+  $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); });
   $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
 
-  // ==== PROFILE ====
-  async function hydrateProfileForm(uid){
-    try{
-      const snap = await getDoc(doc(db, "users", uid));
-      if(snap.exists()){
-        const d = snap.data();
-        $("#pfDisplay").value = d.displayName || "";
-        $("#pfDiscord").value = d.discord || "";
-      }
-    }catch{ /* ignore */ }
-  }
-
-  function updateEmailState(user){
-    const el = $("#emailState");
-    if(!user){ el.style.display = "none"; return; }
-    el.style.display = "block";
-    if(user.emailVerified){
-      el.className = "msg ok";
-      el.textContent = "Tu correo está verificado ✅";
-    }else{
-      el.className = "msg info";
-      el.textContent = "Tu correo NO está verificado. Algunas funciones pueden estar limitadas.";
-    }
-  }
-
-  $("#btnSaveProfile").addEventListener("click", async ()=>{
-    const u = auth.currentUser;
-    const el = $("#pfMsg");
-    if(!u){ showMsg(el, "Inicia sesión para guardar.", "err"); return; }
-
-    const display = $("#pfDisplay").value.trim();
-    const discord  = $("#pfDiscord").value.trim();
-    const discordVerified = validateDiscordUsername(discord);
-
-    try{
-      if(display && display !== (u.displayName||"")){
-        await updateProfile(u, { displayName: display });
-      }
-      await updateDoc(doc(db, "users", u.uid), {
-        displayName: display,
-        discord,
-        discordVerified,
-        updatedAt: serverTimestamp()
+  async function ensureUserDoc(user){
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{
+        uid:user.uid, email:user.email, displayName:user.displayName||"", discord:"", discordVerified:false,
+        score:0, rank:"Unranked", countryCode:"", pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
       });
-      showMsg(el, "Perfil actualizado.", "ok");
-      renderLeaderboard();
-    }catch(err){
-      // Si no existe el doc aún (usuario antiguo), lo creamos
-      if(err.code === "not-found"){
-        try{
-          await setDoc(doc(db,"users",u.uid), {
-            uid: u.uid, email: u.email, displayName: display, discord, discordVerified,
-            score: 0, rank: "Unranked", createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-          });
-          showMsg(el, "Perfil creado.", "ok");
-          renderLeaderboard();
-        }catch(e2){
-          showMsg(el, "No se pudo guardar: " + e2.message, "err");
-        }
-      }else{
-        showMsg(el, "No se pudo guardar: " + err.message, "err");
-      }
     }
+  }
+
+  // ===== LEADERBOARD (filtro + paginación) =====
+  const stateLB = {
+    allUsers: [], // cache
+    filtered: [],
+    pageSize: 10,
+    page: 1,
+    rank: "All"
+  };
+
+  // UI controls
+  $("#pageSize").addEventListener("change", ()=>{
+    stateLB.pageSize = parseInt($("#pageSize").value,10);
+    stateLB.page = 1; renderLeaderboard();
+  });
+  $$(".rank-chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      $$(".rank-chip").forEach(x=>x.classList.remove("active"));
+      ch.classList.add("active");
+      stateLB.rank = ch.dataset.rank;
+      stateLB.page = 1; renderLeaderboard();
+    });
+  });
+  $("#btnPrev").addEventListener("click", ()=>{ if(stateLB.page>1){ stateLB.page--; renderLeaderboard(); }});
+  $("#btnNext").addEventListener("click", ()=>{
+    const totalPages = Math.max(1, Math.ceil(stateLB.filtered.length / stateLB.pageSize));
+    if(stateLB.page<totalPages){ stateLB.page++; renderLeaderboard(); }
   });
 
-  // ==== LEADERBOARD ====
-  async function renderLeaderboard(){
-    const body = $("#lbBody");
-    body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:16px">Cargando…</td></tr>`;
+  async function loadLeaderboard(){
+    const body = $("#lbBody"); body.innerHTML = `<tr><td colspan="5" style="text-align:center">Cargando…</td></tr>`;
     try{
-      // Si no tienes muchos usuarios, puedes quitar limit(100)
-      const qy = query(collection(db,"users"), orderBy("score","desc"), limit(100));
+      // Trae hasta 500 usuarios ordenados por score
+      const qy = query(collection(db,"users"), orderBy("score","desc"));
       const snap = await getDocs(qy);
-      let idx = 0;
-      let rows = "";
+      const arr = [];
       snap.forEach(docu=>{
         const d = docu.data();
-        idx++;
-        const rank = d.rank || "Unranked";
-        const score = Number(d.score||0);
-        const discord = (d.discord||"").trim();
-        const verifiedFlag = !!d.discordVerified;
-        const validByFormat = validateDiscordUsername(discord);
-        const showFail = !(verifiedFlag && validByFormat);
-        const playerCell = showFail ? `<span class="discord-fail">failed to verificate</span>`
-                                    : `<span>${escapeHtml(discord)}</span>`;
-        rows += `
-          <tr>
-            <td>${idx}</td>
-            <td>${playerCell}</td>
-            <td><span class="rank-chip">${escapeHtml(rank)}</span></td>
-            <td>${score}</td>
-          </tr>`;
+        arr.push({
+          uid: d.uid || "", score: Number(d.score||0), rank: d.rank || "Unranked",
+          discord: (d.discord||"").trim(), discordVerified: !!d.discordVerified,
+          countryCode: (d.countryCode||"").trim(), pfpUrl: (d.pfpUrl||"").trim()
+        });
       });
-      body.innerHTML = rows || `<tr><td colspan="4" style="text-align:center;padding:16px">Sin datos</td></tr>`;
-      $("#lbMsg").style.display = "none";
+      // Si no hay datos, usa ejemplos
+      if(arr.length===0){
+        for(let i=0;i<12;i++){
+          arr.push({ uid:"demo"+i, score: (1200 - i*10), rank: i%3===0?"Diamond":(i%3===1?"Gold":"Bronze"),
+            discord: i%2===0? "usuario"+(100+i) : "bad name##000", discordVerified: i%2===0,
+            countryCode: i%2===0?"PE":"", pfpUrl:""
+          });
+        }
+      }
+      stateLB.allUsers = arr;
+      renderLeaderboard();
     }catch(err){
-      body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:16px">No se pudo cargar el leaderboard.</td></tr>`;
-      showMsg($("#lbMsg"), "Error al cargar leaderboard: " + err.message, "err");
+      showMsg($("#lbMsg"),"Error al cargar leaderboard: "+err.message,"err");
+      body.innerHTML = `<tr><td colspan="5" style="text-align:center">No se pudo cargar</td></tr>`;
     }
   }
 
-  // Primera carga por si el usuario ya está autenticado (onAuthStateChanged disparará de todos modos)
-  renderLeaderboard();
+  function renderLeaderboard(){
+    const rowsEl = $("#lbBody");
+    // filtrar por rango
+    stateLB.filtered = stateLB.allUsers.filter(u => stateLB.rank==="All" ? true : (u.rank===stateLB.rank));
+    // paginación
+    const totalPages = Math.max(1, Math.ceil(stateLB.filtered.length / stateLB.pageSize));
+    stateLB.page = Math.min(stateLB.page, totalPages);
+    const start = (stateLB.page-1)*stateLB.pageSize;
+    const pageData = stateLB.filtered.slice(start, start + stateLB.pageSize);
+
+    // render
+    let html = "";
+    for(let i=0;i<pageData.length;i++){
+      const u = pageData[i];
+      const absoluteIndex = start + i + 1;
+      const validByFormat = validateDiscordUsername(u.discord);
+      const showFail = !(u.discordVerified && validByFormat);
+      const playerCell = showFail ? `<span class="discord-fail">failed to verificate</span>` : `<span>${escapeHtml(u.discord)}</span>`;
+      const flag = flagEmojiFromCC(u.countryCode);
+      const pfpImg = u.pfpUrl ? `<img class="pfp" src="${escapeHtml(u.pfpUrl)}" alt="pfp">` : `<div class="pfp placeholder">pfp</div>`;
+
+      html += `
+        <tr>
+          <td>${absoluteIndex}</td>
+          <td>
+            <div class="pfpWrap">
+              <span class="flag" title="${u.countryCode || '—'}">${flag}</span>
+              ${pfpImg}
+            </div>
+          </td>
+          <td>${playerCell}</td>
+          <td><span class="rank-chip">${escapeHtml(u.rank||"Unranked")}</span></td>
+          <td>${u.score}</td>
+        </tr>`;
+    }
+    rowsEl.innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:16px">Sin datos</td></tr>`;
+    // pager
+    $("#pageInfo").textContent = `Página ${stateLB.page} / ${totalPages}`;
+    $("#btnPrev").disabled = (stateLB.page<=1);
+    $("#btnNext").disabled = (stateLB.page>=totalPages);
+  }
+
+  // ===== PFP PICKER (sekai.best) =====
+  const CARD_APIS = [
+    // Intentos típicos (uno o más suelen funcionar)
+    "https://sekai.best/api/v2/cards.json",
+    "https://sekai.best/api/cards.json",
+    "https://sekai.best/api/cards",
+  ];
+  // Patrón público conocido para thumbnails:
+  // - normal:  .../thumbnail/chara_card/{assetbundleName}_normal.png
+  // - trained: .../thumbnail/chara_card/{assetbundleName}_after_training.png
+  const IMAGE_BASES = [
+    "https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/",
+    "https://storage.sekai.best/sekai-assets/thumbnail/chara_card/",
+  ];
+
+  const statePFP = {
+    cards: [],
+    filtered: [],
+    version: "both",
+    search: "",
+    selectedUrl: ""
+  };
+
+  $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
+  $("#pfpSearch").addEventListener("input", ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
+  $("#btnClearPfp").addEventListener("click", async ()=>{
+    const u = auth.currentUser; if(!u) return;
+    try{
+      await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
+      statePFP.selectedUrl = "";
+      $("#pfpSelected").textContent = "PFP eliminado.";
+      await loadLeaderboard();
+    }catch(err){ showMsg($("#pfpInfo"), "No se pudo eliminar el PFP: "+err.message, "err"); }
+  });
+
+  async function hydratePfpSelection(uid){
+    try{
+      const snap = await getDoc(doc(db,"users",uid));
+      if(snap.exists()){
+        const d=snap.data();
+        statePFP.selectedUrl = d.pfpUrl || "";
+        if(statePFP.selectedUrl){
+          $("#pfpSelected").textContent = "PFP actual guardado.";
+        } else {
+          $("#pfpSelected").textContent = "";
+        }
+      }
+    }catch{}
+  }
+
+  function cardImageUrls(assetbundleName){
+    const fileNormal  = `${assetbundleName}_normal.png`;
+    const fileTrained = `${assetbundleName}_after_training.png`;
+    const urls = [];
+    for(const base of IMAGE_BASES){ urls.push({ normal: base + fileNormal, trained: base + fileTrained }); }
+    // usa el primer base por defecto
+    return urls[0];
+  }
+
+  function normalizeCard(c){
+    // Intentamos mapear diferentes posibles formatos
+    const id = c.id || c.cardId || c.resourceId || c.seq || c.card_id || c.assetBundleId || c.assetbundleId || c.assetbundleid || c.assetbundle_id || c.assetbundle || c.assetbundleName || c.assetBundleName;
+    const asset = c.assetbundleName || c.assetBundleName || c.assetbundleName || c.assetbundle || c.assetBundle;
+    const name = c.name || c.title || c.cardName || "";
+    const char = c.character || c.characterId || c.charaId || "";
+    const rarity = c.rarity || c.rarityId || c.starRank || c.stars || "";
+    if(!asset) return null;
+    const urls = cardImageUrls(asset);
+    return {
+      id: id ?? asset,
+      assetbundleName: asset,
+      name: name,
+      characterId: String(char||""),
+      rarity: String(rarity||""),
+      imgNormal: urls.normal,
+      imgTrained: urls.trained
+    };
+  }
+
+  async function fetchCards(){
+    const info = $("#pfpInfo");
+    showMsg(info,"Cargando cartas…","info");
+    let ok = false, raw=null;
+    for(const api of CARD_APIS){
+      try{
+        const res = await fetch(api, { credentials:"omit" });
+        if(res.ok){
+          raw = await res.json();
+          ok = true; break;
+        }
+      }catch{ /* intenta siguiente */ }
+    }
+    if(!ok){
+      showMsg(info,"No pudimos leer la lista de cartas desde sekai.best. Aún puedes pegar manualmente una URL de imagen si lo necesitas.","err");
+      statePFP.cards = []; statePFP.filtered = []; renderCardGrid(); return;
+    }
+
+    // algunas APIs devuelven objeto con 'data' o lista directa
+    const list = Array.isArray(raw) ? raw : (raw.data || raw.cards || raw.result || []);
+    const mapped = [];
+    for(const item of list){
+      const m = normalizeCard(item);
+      if(m) mapped.push(m);
+    }
+    statePFP.cards = mapped;
+    filterCards();
+    renderCardGrid();
+    showMsg(info,`Cartas cargadas: ${mapped.length}. Usa el buscador para filtrar.`, "ok");
+  }
+
+  function filterCards(){
+    const q = statePFP.search;
+    const ver = statePFP.version; // both | normal | trained
+    statePFP.filtered = statePFP.cards.filter(c=>{
+      const hay = (c.name||"").toLowerCase().includes(q) || String(c.id).toLowerCase().includes(q) || String(c.characterId).toLowerCase().includes(q) || c.assetbundleName.toLowerCase().includes(q);
+      return hay;
+    }).map(c=>{
+      // expandimos en dos entradas si 'both'
+      if(ver==="normal") return [{...c, show:"normal"}];
+      if(ver==="trained") return [{...c, show:"trained"}];
+      return [{...c, show:"normal"}, {...c, show:"trained"}];
+    }).flat();
+  }
+
+  function renderCardGrid(){
+    const grid = $("#pfpGrid");
+    if(statePFP.filtered.length===0){
+      grid.innerHTML = `<div class="help">Sin resultados. Prueba con otro término (ej: "miku", "kanade", "1003").</div>`;
+      return;
+    }
+    grid.innerHTML = statePFP.filtered.map(c=>{
+      const img = c.show==="trained" ? c.imgTrained : c.imgNormal;
+      const labelVer = c.show==="trained" ? "Trained" : "Normal";
+      const title = escapeHtml((c.name||"") + (c.name?" ":"") + `#${c.id}`);
+      return `
+        <div class="card-tile" data-url="${img}" title="${title}">
+          <img class="tile-img" loading="lazy" src="${img}" alt="${title}">
+          <div class="tile-meta">
+            <span class="badge">${labelVer}</span>
+            <span>#${escapeHtml(c.id)}</span>
+          </div>
+        </div>`;
+    }).join("");
+
+    $$(".card-tile").forEach(tile=>{
+      tile.addEventListener("click", async ()=>{
+        const url = tile.dataset.url;
+        const u = auth.currentUser;
+        if(!u){ setActiveTab("home"); alert("Inicia sesión para guardar tu PFP."); return; }
+        try{
+          await updateDoc(doc(db,"users",u.uid), { pfpUrl: url, updatedAt: serverTimestamp() });
+          statePFP.selectedUrl = url;
+          $("#pfpSelected").textContent = "PFP actualizado ✔";
+          await loadLeaderboard();
+        }catch(err){
+          showMsg($("#pfpInfo"), "No se pudo guardar el PFP: "+err.message, "err");
+        }
+      });
+    });
+  }
+
+  // ===== Inicializaciones =====
+  fetchCards(); // cargar cartas para el picker
+  loadLeaderboard(); // primera carga del ranking
 </script>
 </body>
 </html>
