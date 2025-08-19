@@ -1,201 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>PJSK LOUNGE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ===== Base ===== */
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      background-color: #383838;
-      color: #ffffff;
+    :root {
+      --bg:#383838; --panel:#2a2a2a; --panel2:#242424; --ink:#fff; --muted:#bfbfbf;
+      --brand:#6c6cf0; --line:#0006; --btn:#555;
     }
-    #app {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .controls {
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    input[type="text"] {
-      padding: 5px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 4px;
-      text-align: center;
-      background: #555;
-      color: #fff;
-    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    #app{max-width:1100px;margin:0 auto}
+    h1{margin:0 0 18px;text-align:center}
+    .cardish{background:var(--panel);border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,.4);border:1px solid var(--line)}
 
-    /* ===== Dropdown ===== */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-      margin-left: 10px;
-      font-family: sans-serif;
-    }
-    .dropbtn {
-      background: #737373;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      color: #fff;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 220px;
-      background-color: #595959;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      z-index: 1000;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .dropdown-content a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      font-size: 14px;
-      white-space: nowrap;
-    }
+    /* ===== Tabs (arriba) ===== */
+    .tabs{display:flex;gap:8px;margin:0 auto 14px;position:sticky;top:8px;z-index:5}
+    .tab{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);cursor:pointer;font-weight:700}
+    .tab.active{outline:2px solid var(--brand);background:#31314a}
+    .tab span{opacity:.9}
+    .wrap{padding:18px}
 
-    /* Base para todos los textos en degradado */
-    .text-gradient,
-    .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .dropdown-content a:hover .text-gradient { opacity: 0.9; }
+    /* ===== Controles ===== */
+    .controls{text-align:center;margin-bottom:12px}
+    .controls input[type="text"]{padding:8px 10px;width:min(440px,90%);border-radius:8px;border:1px solid #0000;background:#555;color:#fff;text-align:center}
+
+    /* ===== Dropdown Rangos ===== */
+    .dropdown{display:inline-block;position:relative;margin-left:8px}
+    .dropbtn{background:#737373;border:none;padding:8px 12px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer}
+    .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:240px;background:#595959;border-radius:8px;overflow:hidden;z-index:10;border:1px solid var(--line)}
+    .dropdown-content a{display:block;padding:8px 12px;text-decoration:none;color:#fff}
+    .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .name-gradient .emoji{background:none!important;-webkit-text-fill-color:currentColor!important}
 
     /* ===== Tabla ===== */
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; text-align: center; color: #fff; }
-    th { background-color: #030050; }
-    td { border-bottom: 1px solid #555; }
-    tbody tr:nth-child(odd)  { background-color: #333; }
-    tbody tr:nth-child(even) { background-color: #2a2a2a; }
-    tr.you { outline: 1px solid #6c6cf0; background: rgba(108,108,240,0.1); }
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:10px;text-align:center}
+    th{background:#030050}
+    td{border-bottom:1px solid #555}
+    tbody tr:nth-child(odd){background:#333}
+    tbody tr:nth-child(even){background:#2a2a2a}
+    tr.you{outline:1px solid var(--brand);background:rgba(108,108,240,.10)}
 
-    /* ===== Posición + bandera + pfp (en la 1ra columna) ===== */
-    .position-cell {
-      position: relative;
-      text-align: center;
-      padding-right: 58px; /* espacio para bandera + pfp */
-    }
-    .position-cell .position-number { display: inline-block; }
-    .position-cell .flag {
-      width: 24px; height: 18px; object-fit: cover; border: 1px solid #0006; border-radius: 3px;
-      position: absolute; top: 50%; right: 32px; transform: translateY(-50%);
-      background:#222;
-    }
-    .position-cell .pfp {
-      width: 24px; height: 24px; border-radius: 999px; border: 2px solid #0006; object-fit: cover;
-      position: absolute; top: 50%; right: 4px; transform: translateY(-50%);
-      background:#222;
-    }
+    /* ===== Posición + bandera + pfp ===== */
+    .position-cell{position:relative;text-align:center;padding-right:64px}
+    .position-cell .position-number{display:inline-block}
+    .flag{width:24px;height:18px;object-fit:cover;border-radius:4px;border:1px solid var(--line);background:#222;position:absolute;top:50%;right:36px;transform:translateY(-50%)}
+    /* PFP cuadrado (con esquinas suaves como el ejemplo) */
+    .pfp{width:24px;height:24px;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:#222;position:absolute;top:50%;right:6px;transform:translateY(-50%)}
 
-    /* ===== Degradados (derecha ➞ izquierda) ===== */
-    .rank-Placement   { background-image: linear-gradient(to left, #ff7000, #ff4600); }
-    .rank-Iron        { background-image: linear-gradient(to left, #616161, #2e2e2e); }
-    .rank-Bronze      { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
-    .rank-Silver      { background-image: linear-gradient(to left, #b3b3b3, #696969); }
-    .rank-Gold        { background-image: linear-gradient(to left, #ffbf60, #c57600); }
-    .rank-Platinum    { background-image: linear-gradient(to left, #767ec2, #38429f); }
-    .rank-Diamond     { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
-    .rank-Crystal     { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
-    .rank-Master      { background-image: linear-gradient(to left, #c34efd, #5f009e); }
-    .rank-Champion    { background-image: linear-gradient(to left, #fe6767, #8f0000); }
-    .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
-    .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
-
-    /* Emojis sin degradado */
-    .name-gradient .emoji {
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      -webkit-text-fill-color: currentColor !important;
-    }
+    /* ===== Degradados Rangos ===== */
+    .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
+    .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
+    .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
+    .rank-Silver{background-image:linear-gradient(to left,#b3b3b3,#696969)}
+    .rank-Gold{background-image:linear-gradient(to left,#ffbf60,#c57600)}
+    .rank-Platinum{background-image:linear-gradient(to left,#767ec2,#38429f)}
+    .rank-Diamond{background-image:linear-gradient(to left,#42a2ff,#003e8f)}
+    .rank-Crystal{background-image:linear-gradient(to left,#dca3ff,#883cb4)}
+    .rank-Master{background-image:linear-gradient(to left,#c34efd,#5f009e)}
+    .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
+    .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
+    .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
 
     /* ===== Paginación ===== */
-    .pagination {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-    .pagination button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      background: #555;
-      color: #fff;
-      cursor: pointer;
-    }
-    .pagination button:disabled { opacity: 0.4; cursor: default; }
-    .pagination input[type="number"] {
-      width: 50px; padding: 4px; text-align: center; border-radius: 4px;
-      border: 1px solid #555; background: #2a2a2a; color: #fff;
-    }
+    .pagination{margin-top:12px;display:flex;justify-content:center;align-items:center;gap:8px}
+    .pagination button{padding:6px 10px;border:none;border-radius:8px;background:var(--btn);color:#fff;cursor:pointer}
+    .pagination button:disabled{opacity:.4;cursor:default}
+    .pagination input[type="number"]{width:56px;padding:6px;text-align:center;border-radius:8px;border:1px solid #555;background:#2a2a2a;color:#fff}
 
-    /* ===== Edit Profile (siempre visible) ===== */
-    .panel { margin-top: 22px; padding: 14px; border: 1px solid #0006; border-radius: 8px; background:#242424; }
-    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .btn { background:#6c6cf0; color:#fff; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:700; }
-    .btn.ghost { background:transparent; border:1px solid #555; }
-    .btn.warn { background:#f0a66c; }
-    .btn.danger { background:#e26b6b; }
-    .help { color:#bfbfbf; font-size:.9rem; }
-    .pfp-big {
-      width:84px; height:84px; border-radius:999px; border:2px solid #0006;
-      background:#1f1f1f; background-size:cover; background-position:center; cursor:pointer;
-    }
-    .notice { background:#0006; border:1px dashed #777; border-radius:8px; padding:10px; color:#eee; }
+    /* ===== Panel Perfil ===== */
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid #555}
+    .btn.warn{background:#f0a66c}
+    .btn.danger{background:#e26b6b}
+    .help{color:var(--muted);font-size:.92rem}
+    .notice{background:#0006;border:1px dashed #777;border-radius:10px;padding:10px;color:#eee}
+    /* PFP grande (cuadrado) */
+    .pfp-big{width:88px;height:88px;border-radius:14px;border:2px solid var(--line);background:#1f1f1f;background-size:cover;background-position:center;cursor:pointer}
 
-    /* Cartas */
-    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:10px; }
-    .card { background:#1f1f1f; border:1px solid #0006; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px; }
-    .card img { width:100%; height:150px; object-fit:cover; border-radius:8px; }
-    .card h4 { margin:0; font-size:.95rem; }
-    .card .rarity { font-size:.75rem; color:#bfbfbf; }
-    .card .set { margin-top:6px; }
+    /* ===== Cartas ===== */
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
+    .card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px}
+    .card img{width:100%;height:120px;object-fit:cover;border-radius:10px}
+    .card h4{margin:0;font-size:.92rem}
+    .card .rarity{font-size:.78rem;color:var(--muted)}
+    .card .set{margin-top:6px}
   </style>
 </head>
 <body>
-  <div id="app">
-    <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
+<div id="app">
+  <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
 
+  <!-- ===== TABS (arriba) ===== -->
+  <div class="tabs">
+    <div class="tab cardish" :class="{active:activeTab==='leaderboard'}" @click="activeTab='leaderboard'">
+      <span>Leaderboard</span>
+    </div>
+    <div class="tab cardish" :class="{active:activeTab==='profile'}" @click="activeTab='profile'">
+      <span>Edit Profile</span>
+    </div>
+  </div>
+
+  <!-- ===== LEADERBOARD ===== -->
+  <section v-show="activeTab==='leaderboard'" class="cardish wrap">
     <div class="controls">
-      <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
-
-      <!-- ▼ Mini pestaña desplegable de Rangos -->
+      <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank" />
       <div class="dropdown">
         <button class="dropbtn" @click.stop>
           <template v-if="selectedRank">
             <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
             <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
           </template>
-          <template v-else>
-            <span class="text-gradient rank-Legend">Rangos ▾</span>
-          </template>
+          <template v-else><span class="text-gradient rank-Legend">Rangos ▾</span></template>
         </button>
         <div id="rankList" class="dropdown-content">
           <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)" :class="['text-gradient','rank-'+r.key]">
@@ -203,18 +123,11 @@
           </a>
         </div>
       </div>
-      <!-- ▲ Fin mini pestaña -->
-
-      <button v-if="selectedRank" @click="clearRank" style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
-        Mostrar todos ▾
-      </button>
+      <button v-if="selectedRank" @click="clearRank" class="btn ghost" style="margin-left:10px">Mostrar todos ▾</button>
     </div>
 
-    <!-- ===== Leaderboard ===== -->
     <table>
-      <thead>
-        <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
-      </thead>
+      <thead><tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr></thead>
       <tbody>
         <tr v-for="p in paginatedPlayers" :key="p.id" :class="{you:isYou(p)}">
           <td class="position-cell">
@@ -243,425 +156,358 @@
       <span>/ {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
     </div>
+  </section>
 
-    <!-- ===== Edit Profile (siempre visible) ===== -->
-    <div class="panel">
-      <h2>Edit Profile</h2>
+  <!-- ===== EDIT PROFILE ===== -->
+  <section v-show="activeTab==='profile'" class="cardish wrap">
+    <h2 style="margin-top:0">Edit Profile</h2>
 
-      <!-- Estado NO autenticado -->
-      <div v-if="!authUser">
-        <div class="notice"><b>You need to register or login to set a pfp</b></div>
-        <div class="row" style="margin-top:10px">
-          <!-- Login -->
-          <form @submit.prevent="login" style="display:grid;gap:8px;min-width:260px">
-            <input v-model.trim="loginEmail" type="email" placeholder="Email" required />
-            <input v-model="loginPass" type="password" placeholder="Contraseña" required />
-            <button class="btn" type="submit">Login</button>
-            <button class="btn warn" type="button" @click="showReset = !showReset">Reset password</button>
-            <div v-show="showReset" style="display:grid;gap:8px">
-              <input v-model.trim="resetEmail" type="email" placeholder="Email" />
-              <button class="btn" type="button" @click="resetPassword">Enviar reset</button>
-            </div>
-          </form>
-
-          <!-- Register -->
-          <form @submit.prevent="register" style="display:grid;gap:8px;min-width:260px">
-            <input v-model.trim="regEmail" type="email" placeholder="Email" required />
-            <input v-model="regPass" type="password" placeholder="Contraseña" required />
-            <input v-model.trim="regUsername" placeholder="Tu username de Discord (exacto)" />
-            <button class="btn" type="submit">Registrar y verificar</button>
-            <div class="help">Si das tu username, intentaré vincular tu casilla automáticamente.</div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Estado AUTENTICADO -->
-      <div v-else>
-        <div class="row">
-          <div :style="{backgroundImage: profilePfp ? `url(${profilePfp})` : 'none'}" class="pfp-big" title="Click para elegir carta" @click="ensureLinkedThenOpenCards"></div>
-          <div>
-            <div><b>{{ authUser.email }}</b></div>
-            <div class="help" v-if="!authUser.emailVerified">Correo no verificado</div>
-            <div class="help" v-else>Correo verificado</div>
-            <div class="help" v-if="linkedMember">
-              Vinculado a: <b>{{ linkedMember.showname || linkedMember.nickname || linkedMember.username }}</b>
-              <span class="help"> (discordId: {{ linkedMember.discordId || linkedMember.id }})</span>
-            </div>
-            <div class="help" v-else>No vinculado.</div>
-            <div class="row" style="margin-top:8px">
-              <button class="btn" @click="promptLink">Vincular con Discord</button>
-              <button class="btn warn" @click="resendVerify">Reenviar verificación</button>
-              <button class="btn danger" @click="logout">Logout</button>
-            </div>
+    <!-- No autenticado -->
+    <div v-if="!authUser">
+      <div class="notice"><b>You need to register or login to set a pfp</b></div>
+      <div class="row" style="margin-top:10px">
+        <!-- Login -->
+        <form @submit.prevent="login" style="display:grid;gap:8px;min-width:260px">
+          <input v-model.trim="loginEmail" type="email" placeholder="Email" required />
+          <input v-model="loginPass" type="password" placeholder="Contraseña" required />
+          <button class="btn" type="submit">Login</button>
+          <button class="btn warn" type="button" @click="showReset=!showReset">Reset password</button>
+          <div v-show="showReset" style="display:grid;gap:8px">
+            <input v-model.trim="resetEmail" type="email" placeholder="Email" />
+            <button class="btn" type="button" @click="resetPassword">Enviar reset</button>
           </div>
-        </div>
+        </form>
 
-        <div class="notice" v-if="!linkedMember" style="margin-top:10px">
-          Debes <b>vincular tu casilla</b> para que el PFP se refleje en el leaderboard.
-        </div>
-
-        <h3 style="margin-top:14px">Cartas (en vivo)</h3>
-        <div class="cards">
-          <div v-for="c in cards" :key="c.id" class="card">
-            <img :src="c.imageUrl || ''" :alt="c.name || 'card'">
-            <h4>{{ c.name || 'Card' }}</h4>
-            <div class="rarity">{{ c.rarity || '—' }}</div>
-            <button class="btn set" @click="selectCard(c)">Set as Profile</button>
-          </div>
-        </div>
+        <!-- Register -->
+        <form @submit.prevent="register" style="display:grid;gap:8px;min-width:260px">
+          <input v-model.trim="regEmail" type="email" placeholder="Email" required />
+          <input v-model="regPass" type="password" placeholder="Contraseña" required />
+          <input v-model.trim="regUsername" placeholder="Tu username de Discord (exacto)" />
+          <button class="btn" type="submit">Registrar y verificar</button>
+          <div class="help">Si das tu username, intentaré vincular tu casilla automáticamente.</div>
+        </form>
       </div>
     </div>
-  </div>
 
-  <!-- Dependencias globales -->
-  <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Autenticado -->
+    <div v-else>
+      <div class="row">
+        <div :style="{backgroundImage: profilePfp ? `url(${profilePfp})` : 'none'}" class="pfp-big" title="Click para elegir carta" @click="ensureLinkedThenOpenCards"></div>
+        <div>
+          <div><b>{{ authUser.email }}</b></div>
+          <div class="help" v-if="!authUser.emailVerified">Correo no verificado</div>
+          <div class="help" v-else>Correo verificado</div>
+          <div class="help" v-if="linkedMember">
+            Vinculado a: <b>{{ linkedMember.showname || linkedMember.nickname || linkedMember.username }}</b>
+            <span class="help"> (discordId: {{ linkedMember.discordId || linkedMember.id }})</span>
+          </div>
+          <div class="help" v-else>No vinculado.</div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn" @click="promptLink">Vincular con Discord</button>
+            <button class="btn warn" @click="resendVerify">Reenviar verificación</button>
+            <button class="btn danger" @click="logout">Logout</button>
+          </div>
+        </div>
+      </div>
 
-  <!-- App + Firebase (modular) -->
-  <script type="module">
-    // ===== Firebase =====
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import {
-      getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      sendPasswordResetEmail, sendEmailVerification, signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import {
-      getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp,
-      collection, query, where, orderBy, onSnapshot, getDocs, limit
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+      <div class="notice" v-if="!linkedMember" style="margin-top:10px">
+        Debes <b>vincular tu casilla</b> para que el PFP se refleje en el leaderboard.
+      </div>
 
-    // ===== Configura aquí =====
-    const firebaseConfig = {
-      apiKey: "TU_API_KEY",
-      authDomain: "TU_AUTH_DOMAIN",
-      projectId: "TU_PROJECT_ID",
-      storageBucket: "TU_BUCKET",
-      messagingSenderId: "TU_SENDER_ID",
-      appId: "TU_APP_ID"
-    };
-    const PLAYERS_READ_ENDPOINT  = "https://worker-production-1ad2.up.railway.app/api/players";
-    // Si tienes un endpoint para guardar el pfp, colócalo (ej: PATCH /api/players/{discordId}/pfp)
-    const PLAYERS_WRITE_ENDPOINT = ""; // deja vacío si no tienes
+      <h3 style="margin:14px 0 6px">Cartas (en vivo)</h3>
+      <div class="cards">
+        <div v-for="c in cards" :key="c.id" class="card">
+          <img :src="cardIcon(c)" :alt="c.name || ('card '+c.id)" />
+          <h4>{{ c.name || ('Card #'+c.id) }}</h4>
+          <div class="rarity">★ {{ c.rarity || '-' }}</div>
+          <button class="btn set" @click="selectCard(c)">Set as Profile</button>
+        </div>
+      </div>
+      <div class="help" style="margin-top:6px">
+        Fuente de cartas: sekai.best / sekai-master-db (cargadas automáticamente).
+      </div>
+    </div>
+  </section>
+</div>
 
-    const appFB = initializeApp(firebaseConfig);
-    const auth  = getAuth(appFB);
-    const db    = getFirestore(appFB);
+<!-- Vue + Axios -->
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    // ===== Vue app =====
-    const { createApp } = window.Vue;
-    const axios = window.axios;
+<!-- Firebase (modular) + App -->
+<script type="module">
+  /* ===== Firebase ===== */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,
+    sendPasswordResetEmail,sendEmailVerification,signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import {
+    getFirestore,doc,getDoc,setDoc,updateDoc,serverTimestamp,
+    collection,query,where,orderBy,onSnapshot,getDocs,limit
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-    createApp({
-      data() {
-        return {
-          // leaderboard
-          players: [],
-          pfpMap: {},           // discordId -> pfpUrl (merge local/Firestore)
-          filter: '',
-          playerRankMap: {},
-          currentPage: 1,
-          pageSize: 50,
-          selectedRank: null,
-          ranks: [
-            { key:'Iron', label:'Iron', range:'0-100' },
-            { key:'Bronze', label:'Bronze', range:'101-200' },
-            { key:'Silver', label:'Silver', range:'201-300' },
-            { key:'Gold', label:'Gold', range:'301-400' },
-            { key:'Platinum', label:'Platinum', range:'401-500' },
-            { key:'Diamond', label:'Diamond', range:'501-600' },
-            { key:'Crystal', label:'Crystal', range:'601-700' },
-            { key:'Master', label:'Master', range:'701-800' },
-            { key:'Champion', label:'Champion', range:'801-900' },
-            { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
-            { key:'Legend', label:'Legend', range:'+1000' }
-          ],
+  /* ===== CONFIG (edita esto) ===== */
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_AUTH_DOMAIN",
+    projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_BUCKET",
+    messagingSenderId: "TU_SENDER_ID",
+    appId: "TU_APP_ID",
+  };
+  const PLAYERS_READ_ENDPOINT  = "https://worker-production-1ad2.up.railway.app/api/players";
+  const PLAYERS_WRITE_ENDPOINT = ""; // opcional (PATCH para guardar pfp en tu backend)
 
-          // auth + profile
-          authUser: null,
-          profile: null,
-          linkedMember: null,
-          // forms
-          loginEmail:'', loginPass:'', showReset:false, resetEmail:'',
-          regEmail:'', regPass:'', regUsername:'',
+  /* Cartas (fuente pública) */
+  // cards.json del master DB en inglés (CORS ok al raw de GitHub)
+  const CARDS_JSON = "https://raw.githubusercontent.com/Sekai-World/sekai-master-db-en-diff/main/cards.json";
+  // CDN con assets del juego (usado por la comunidad)
+  const CARD_CDN   = "https://sekai-res.dnaroma.eu/file/sekai-assets/character/member";
 
-          // cards
-          cards: [],
-          stopCardsUnsub: null
-        };
+  const fbApp = initializeApp(firebaseConfig);
+  const auth  = getAuth(fbApp);
+  const db    = getFirestore(fbApp);
+  const { createApp } = window.Vue;
+  const axios = window.axios;
+
+  createApp({
+    data(){return{
+      /* tabs */
+      activeTab:'leaderboard',
+
+      /* leaderboard */
+      players:[], pfpMap:{},
+      filter:'', playerRankMap:{}, currentPage:1, pageSize:50,
+      selectedRank:null,
+      ranks:[
+        { key:'Iron', label:'Iron', range:'0-100' },
+        { key:'Bronze', label:'Bronze', range:'101-200' },
+        { key:'Silver', label:'Silver', range:'201-300' },
+        { key:'Gold', label:'Gold', range:'301-400' },
+        { key:'Platinum', label:'Platinum', range:'401-500' },
+        { key:'Diamond', label:'Diamond', range:'501-600' },
+        { key:'Crystal', label:'Crystal', range:'601-700' },
+        { key:'Master', label:'Master', range:'701-800' },
+        { key:'Champion', label:'Champion', range:'801-900' },
+        { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
+        { key:'Legend', label:'Legend', range:'+1000' }
+      ],
+
+      /* auth/profile */
+      authUser:null, profile:null, linkedMember:null,
+      loginEmail:'',loginPass:'',showReset:false,resetEmail:'',
+      regEmail:'',regPass:'',regUsername:'',
+
+      /* cards */
+      cards:[], stopCardsUnsub:null
+    }},
+    computed:{
+      seasonLabel(){return 'Beta'},
+      filteredPlayers(){
+        let list=this.players;
+        if(this.selectedRank) list=list.filter(p=>p.rank===this.selectedRank);
+        else if(this.filter) list=list.filter(p=>(p.name||'').toLowerCase().includes(this.filter.toLowerCase()));
+        return list;
       },
-      computed: {
-        filteredPlayers() {
-          let list = this.players;
-          if (this.selectedRank) {
-            list = list.filter(p => p.rank === this.selectedRank);
-          } else if (this.filter) {
-            list = list.filter(p => (p.name || '').toLowerCase().includes(this.filter.toLowerCase()));
-          }
-          return list;
-        },
-        filteredCount() {
-          return this.players.filter(p => p.rank === this.selectedRank).length;
-        },
-        totalPages() {
-          return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
-        },
-        paginatedPlayers() {
-          const start = (this.currentPage - 1) * this.pageSize;
-          return this.filteredPlayers.slice(start, start + this.pageSize);
-        },
-        seasonLabel() { return 'Beta'; },
-        profilePfp() {
-          return (this.profile && this.profile.pfpUrl) ||
-                 (this.linkedMember && (this.linkedMember.pfpUrl)) || '';
+      filteredCount(){return this.players.filter(p=>p.rank===this.selectedRank).length},
+      totalPages(){return Math.max(1, Math.ceil(this.filteredPlayers.length/this.pageSize))},
+      paginatedPlayers(){const s=(this.currentPage-1)*this.pageSize;return this.filteredPlayers.slice(s,s+this.pageSize)},
+      profilePfp(){return (this.profile && this.profile.pfpUrl)||(this.linkedMember && this.linkedMember.pfpUrl)||''}
+    },
+    watch:{
+      filter(){this.currentPage=1},
+      selectedRank(){this.currentPage=1;this.filter=''},
+      currentPage(v){if(v<1)this.currentPage=1;else if(v>this.totalPages)this.currentPage=this.totalPages}
+    },
+    methods:{
+      /* ===== Leaderboard ===== */
+      async fetchPlayers(){
+        try{
+          const {data} = await axios.get(PLAYERS_READ_ENDPOINT);
+          const sorted = data.sort((a,b)=>(b.mmr||0)-(a.mmr||0));
+          const merged = sorted.map(p=>{
+            const did=this.getDiscordId(p);
+            const pfp=p.pfpUrl||p.pfp||this.pfpMap[did]||null;
+            return {...p,pfpUrl:pfp};
+          });
+          this.players=merged;
+          const map={}; merged.forEach((p,i)=>map[p.id]=i+1); this.playerRankMap=map;
+        }catch(e){ console.error(e); alert('Error al cargar datos'); }
+      },
+      getDiscordId(p){return p.discordId||p.discord_id||p.id},
+      getPfp(p){return p.pfpUrl||this.pfpMap[this.getDiscordId(p)]||null},
+      flagUrl(cc){return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`},
+      displayRank(r){return r==='GrandChampion'?'Grand Champion':r},
+      splitName(name){const re=/\p{Emoji_Presentation}/u;return Array.from(name||'').map(c=>({char:c,isEmoji:re.test(c)}));},
+      selectRank(r){this.selectedRank=r;document.getElementById('rankList').style.display='none'},
+      clearRank(){this.selectedRank=null},
+      prevPage(){if(this.currentPage>1)this.currentPage--},
+      nextPage(){if(this.currentPage<this.totalPages)this.currentPage++},
+      goToPage(){},
+      isYou(p){
+        if(!this.authUser||!this.linkedMember) return false;
+        const did=this.getDiscordId(p), my=(this.linkedMember.discordId||this.linkedMember.id);
+        return did && my && String(did)===String(my);
+      },
+
+      /* ===== Auth ===== */
+      async register(){
+        const cred = await createUserWithEmailAndPassword(auth,this.regEmail,this.regPass);
+        await sendEmailVerification(cred.user);
+        await setDoc(doc(db,'profiles',cred.user.uid),{
+          email:this.regEmail, username:this.regUsername||null, pfpUrl:null,
+          emailVerified:cred.user.emailVerified, createdAt:serverTimestamp()
+        });
+        if(this.regUsername){ try{ await this.linkByUsername(cred.user.uid,this.regUsername); }catch{} }
+        alert('Registro completado. Revisa tu correo.');
+      },
+      async login(){ await signInWithEmailAndPassword(auth,this.loginEmail,this.loginPass); },
+      async logout(){ await signOut(auth); },
+      async resetPassword(){ if(!this.resetEmail)return alert('Ingresa tu email'); await sendPasswordResetEmail(auth,this.resetEmail); alert('Reset enviado (si existe).'); },
+      async resendVerify(){ if(this.authUser){ await sendEmailVerification(this.authUser); alert('Verificación reenviada.'); } },
+
+      /* ===== Link Discord row ===== */
+      async promptLink(){
+        if(!this.authUser) return alert('Inicia sesión primero');
+        const v = prompt('Escribe tu username de Discord EXACTO o pega tu discordId:');
+        if(!v) return;
+        try{
+          const linked = /^\d{16,20}$/.test(v)
+            ? await this.linkByDiscordId(this.authUser.uid, v)
+            : await this.linkByUsername(this.authUser.uid, v);
+          if(linked){
+            this.linkedMember = linked;
+            if(this.profilePfp) this.applyPfpLocally(linked.discordId||linked.id,this.profilePfp);
+            alert('¡Vinculado correctamente!');
+          }else alert('No se encontró esa casilla o ya fue reclamada.');
+        }catch(e){ alert(e.message||'No se pudo vincular.'); }
+      },
+      async findMemberByUid(uid){
+        const qRef=query(collection(db,'members'),where('uid','==',uid),limit(1));
+        const snap=await getDocs(qRef); if(!snap.empty){const d=snap.docs[0];return {id:d.id,...d.data()};}
+        return null;
+      },
+      async linkByUsername(uid,username){
+        const unameLower=String(username).trim().toLowerCase();
+        const qRef=query(collection(db,'members'),where('usernameLower','==',unameLower),limit(1));
+        const snap=await getDocs(qRef); if(snap.empty) return null;
+        const d=snap.docs[0], data=d.data(); if(data.uid && data.uid!==uid) throw new Error('Casilla ya reclamada.');
+        await updateDoc(doc(db,'members',d.id),{uid});
+        await updateDoc(doc(db,'profiles',uid),{username:data.username,discordId:data.discordId||d.id});
+        return {id:d.id,...data,uid};
+      },
+      async linkByDiscordId(uid,discordId){
+        const ref=doc(db,'members',discordId), s=await getDoc(ref); if(!s.exists()) return null;
+        const data=s.data(); if(data.uid && data.uid!==uid) throw new Error('Casilla ya reclamada.');
+        await updateDoc(ref,{uid});
+        await updateDoc(doc(db,'profiles',uid),{username:data.username,discordId:data.discordId||discordId});
+        return {id:discordId,...data,uid};
+      },
+
+      /* ===== Cartas ===== */
+      async fetchCards(){
+        try{
+          const r = await fetch(CARDS_JSON,{cache:'no-store'});
+          const arr = await r.json(); // enorme (todas las cartas)
+          // Normalizamos nombre, rareza y assetbundleName:
+          this.cards = arr.map(c=>({
+            id: c.id,
+            rarity: c.rarity || c.cardRarityType || c.cardRarity || c.cardRarityId || '',
+            name: c.prefix || c.cardTitle || '',
+            assetbundleName: c.assetbundleName || c.assetbundle_name || c.assetBundleName || ''
+          })).filter(c=>c.assetbundleName);
+        }catch(e){
+          console.warn('No se pudieron cargar cartas', e);
+          this.cards = [];
         }
       },
-      watch: {
-        filter() { this.currentPage = 1; },
-        selectedRank() { this.currentPage = 1; this.filter = ''; },
-        currentPage(val) {
-          if (val < 1) this.currentPage = 1;
-          else if (val > this.totalPages) this.currentPage = this.totalPages;
-        }
+      cardIcon(c){
+        // Formato cuadrado; usamos el arte "card_normal.png" (sin entrenar).
+        // Si quieres el entrenado, cambia a "card_after_training.png".
+        return `${CARD_CDN}/${c.assetbundleName}_rip/card_normal.png`;
       },
-      methods: {
-        // ===== Leaderboard =====
-        async fetchPlayers() {
-          try {
-            const resp = await axios.get(PLAYERS_READ_ENDPOINT);
-            // Se asume que cada item tiene: id, name, mmr, rank, country
-            const sorted = resp.data.sort((a,b) => (b.mmr||0) - (a.mmr||0));
-            // Mezcla PFP desde pfpMap/Firestore si no viene en API
-            const merged = sorted.map(p => {
-              const did = this.getDiscordId(p);
-              const pfp = p.pfpUrl || p.pfp || this.pfpMap[did] || null;
-              return { ...p, pfpUrl: pfp };
-            });
-            this.players = merged;
-            const map = {};
-            merged.forEach((p,i) => map[p.id] = i + 1);
-            this.playerRankMap = map;
-          } catch(err) {
-            console.error(err);
-            alert('Error al cargar datos');
-          }
-        },
-        getDiscordId(p){
-          // intenta detectar el campo correcto
-          return p.discordId || p.discord_id || p.id;
-        },
-        getPfp(p){
-          return p.pfpUrl || this.pfpMap[this.getDiscordId(p)] || null;
-        },
-        flagUrl(cc) {
-          return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`;
-        },
-        displayRank(rank) {
-          return rank === 'GrandChampion' ? 'Grand Champion' : rank;
-        },
-        splitName(name) {
-          const emojiPres = /\p{Emoji_Presentation}/u;
-          return Array.from(name||'').map(c => ({ char: c, isEmoji: emojiPres.test(c) }));
-        },
-        selectRank(rank) {
-          this.selectedRank = rank;
-          document.getElementById('rankList').style.display = 'none';
-        },
-        clearRank() { this.selectedRank = null; },
-        prevPage() { if (this.currentPage > 1) this.currentPage--; },
-        nextPage() { if (this.currentPage < this.totalPages) this.currentPage++; },
-        goToPage() {},
-        isYou(p){
-          if(!this.authUser || !this.linkedMember) return false;
-          const did = this.getDiscordId(p);
-          const myDid = this.linkedMember.discordId || this.linkedMember.id;
-          return did && myDid && String(did) === String(myDid);
-        },
-
-        // ===== Auth =====
-        async register(){
-          const { regEmail:email, regPass:pass, regUsername:discU } = this;
-          const cred = await createUserWithEmailAndPassword(auth,email,pass);
-          await sendEmailVerification(cred.user);
-          await setDoc(doc(db,"profiles", cred.user.uid),{
-            email, username: discU || null, pfpUrl: null,
-            emailVerified: cred.user.emailVerified, createdAt: serverTimestamp()
-          });
-          if(discU){ try{ await this.linkByUsername(cred.user.uid, discU); }catch(e){ console.warn(e);} }
-          alert("Registro completado. Revisa tu correo para verificar.");
-        },
-        async login(){
-          await signInWithEmailAndPassword(auth, this.loginEmail, this.loginPass);
-        },
-        async logout(){ await signOut(auth); },
-        async resetPassword(){
-          if(!this.resetEmail) return alert("Ingresa tu email");
-          await sendPasswordResetEmail(auth, this.resetEmail);
-          alert("Si el correo existe, se envió el reset.");
-        },
-        async resendVerify(){
-          if(this.authUser){ await sendEmailVerification(this.authUser); alert("Verificación reenviada."); }
-        },
-
-        // ===== Link Discord row =====
-        async promptLink(){
-          if(!this.authUser) return alert("Inicia sesión primero");
-          const modo = prompt("Escribe tu username de Discord EXACTO o pega tu discordId:");
-          if(!modo) return;
-          try{
-            const linked = /^\d{16,20}$/.test(modo)
-              ? await this.linkByDiscordId(this.authUser.uid, modo)
-              : await this.linkByUsername(this.authUser.uid, modo);
-            if(linked){
-              this.linkedMember = linked;
-              if(this.profilePfp) this.applyPfpLocally(linked.discordId || linked.id, this.profilePfp);
-              alert("¡Vinculado correctamente!");
-            } else {
-              alert("No se encontró esa casilla o ya fue reclamada.");
-            }
-          }catch(e){ alert(e.message || "No se pudo vincular."); }
-        },
-        async findMemberByUid(uid){
-          const qRef = query(collection(db,"members"), where("uid","==",uid), limit(1));
-          const snap = await getDocs(qRef);
-          if(!snap.empty){ const d = snap.docs[0]; return { id:d.id, ...d.data() }; }
-          return null;
-        },
-        async linkByUsername(uid, username){
-          const unameLower = String(username).trim().toLowerCase();
-          const qRef = query(collection(db,"members"), where("usernameLower","==",unameLower), limit(1));
-          const snap = await getDocs(qRef);
-          if(snap.empty) return null;
-          const d = snap.docs[0], data = d.data();
-          if(data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
-          await updateDoc(doc(db,"members", d.id), { uid });
-          await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || d.id });
-          return { id:d.id, ...data, uid };
-        },
-        async linkByDiscordId(uid, discordId){
-          const ref = doc(db,"members", discordId);
-          const s = await getDoc(ref);
-          if(!s.exists()) return null;
-          const data = s.data();
-          if(data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
-          await updateDoc(ref, { uid });
-          await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || discordId });
-          return { id:discordId, ...data, uid };
-        },
-
-        // ===== Cards + Set PFP =====
-        startCardsStream(){
-          if(this.stopCardsUnsub) return;
-          const qCards = query(collection(db,"cards"), orderBy("sort"));
-          this.stopCardsUnsub = onSnapshot(qCards, (snap)=>{
-            const cs=[]; snap.forEach(d=> cs.push({ id:d.id, ...d.data() }));
-            this.cards = cs;
-          });
-        },
-        stopCardsStream(){ if(this.stopCardsUnsub){ this.stopCardsUnsub(); this.stopCardsUnsub=null; } },
-        ensureLinkedThenOpenCards(){
-          if(!this.authUser) return alert("Inicia sesión primero.");
-          if(!this.linkedMember) return alert("Vincula tu casilla de Discord antes de elegir PFP.");
-          this.startCardsStream();
-          alert("Desplázate abajo para ver las cartas y elegir una.");
-        },
-        async selectCard(card){
-          if(!this.authUser) return alert("Inicia sesión primero.");
-          if(!this.linkedMember) return alert("Vincula tu casilla de Discord antes de elegir PFP.");
-          const uid = this.authUser.uid;
-          const discordId = this.linkedMember.discordId || this.linkedMember.id;
-
-          // 1) Actualiza perfil
-          await updateDoc(doc(db,"profiles", uid), { pfpUrl: card.imageUrl });
-
-          // 2) Actualiza members (para reflejar en leaderboard)
-          await updateDoc(doc(db,"members", discordId), { pfpUrl: card.imageUrl });
-
-          // 3) Si tienes endpoint para DB propia:
-          if(PLAYERS_WRITE_ENDPOINT){
-            try{
-              await axios.patch(`${PLAYERS_WRITE_ENDPOINT}/${discordId}/pfp`, { pfpUrl: card.imageUrl });
-            }catch(e){ console.warn("PATCH pfp API opcional falló:", e); }
-          }
-
-          // 4) Refresca UI local (inmediato)
-          this.applyPfpLocally(discordId, card.imageUrl);
-          alert("PFP actualizado.");
-        },
-        applyPfpLocally(discordId, url){
-          // actualiza círculo grande
-          if(this.profile){
-            this.profile.pfpUrl = url;
-          }
-          // actualiza mapa local para fusionar con players
-          this.pfpMap[discordId] = url;
-          // refresca filas actuales
-          this.players = this.players.map(p=>{
-            const did = this.getDiscordId(p);
-            if(String(did) === String(discordId)) return { ...p, pfpUrl: url };
-            return p;
-          });
-        }
+      ensureLinkedThenOpenCards(){
+        if(!this.authUser) return alert('Inicia sesión primero.');
+        if(!this.linkedMember) return alert('Vincula tu casilla de Discord antes de elegir PFP.');
+        // Cargar cartas si aún no están
+        if(!this.cards.length) this.fetchCards();
+        alert('Desplázate abajo para ver las cartas y elegir una.');
       },
-      async mounted(){
-        // Dropdown Rangos (fuera de Vue)
-        const btn = document.querySelector('.dropbtn');
-        const menu = document.getElementById('rankList');
-        btn.addEventListener('click', e => { e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
-        document.addEventListener('click', () => { if (menu.style.display === 'block') menu.style.display = 'none'; });
+      async selectCard(card){
+        if(!this.authUser) return alert('Inicia sesión primero.');
+        if(!this.linkedMember) return alert('Vincula tu casilla de Discord antes de elegir PFP.');
+        const uid = this.authUser.uid;
+        const discordId = this.linkedMember.discordId || this.linkedMember.id;
+        const url = this.cardIcon(card);
 
-        // Poll inicial + intervalo (10s)
-        await this.fetchPlayers();
-        setInterval(this.fetchPlayers, 10000);
+        await updateDoc(doc(db,'profiles',uid),{pfpUrl:url});
+        await updateDoc(doc(db,'members',discordId),{pfpUrl:url});
 
-        // Estado Auth
-        onAuthStateChanged(auth, async (user)=>{
-          this.authUser = user || null;
-          if(user){
-            // cargar/crear profile
-            const pref = doc(db,"profiles", user.uid);
-            const psnap = await getDoc(pref);
-            if(psnap.exists()) this.profile = { id:psnap.id, ...psnap.data() };
-            else {
-              await setDoc(pref,{ email:user.email, username:null, pfpUrl:null, emailVerified:user.emailVerified, createdAt:serverTimestamp() });
-              this.profile = { id:user.uid, email:user.email, pfpUrl:null, emailVerified:user.emailVerified };
-            }
-            // buscar vínculo
-            this.linkedMember = await this.findMemberByUid(user.uid);
-            if(!this.linkedMember && this.profile?.username){
-              try{ this.linkedMember = await this.linkByUsername(user.uid, this.profile.username); }catch(e){}
-            }
-            // si hay vínculo, hidrata pfpMap para fusión inmediata
-            if(this.linkedMember){
-              const did = this.linkedMember.discordId || this.linkedMember.id;
-              if(this.profile?.pfpUrl) this.pfpMap[did] = this.profile.pfpUrl;
-            }
-            // arranca stream de cartas en modo autenticado
-            this.startCardsStream();
-          } else {
-            this.profile = null;
-            this.linkedMember = null;
-            this.stopCardsStream();
-          }
+        if(PLAYERS_WRITE_ENDPOINT){
+          try{ await axios.patch(`${PLAYERS_WRITE_ENDPOINT}/${discordId}/pfp`,{pfpUrl:url}); }catch(e){ console.warn('PATCH opcional falló',e); }
+        }
+
+        this.applyPfpLocally(discordId,url);
+        alert('PFP actualizado.');
+      },
+      applyPfpLocally(discordId,url){
+        if(this.profile) this.profile.pfpUrl=url;
+        this.pfpMap[discordId]=url;
+        this.players=this.players.map(p=>{
+          const did=this.getDiscordId(p);
+          return String(did)===String(discordId) ? {...p,pfpUrl:url} : p;
         });
       }
-    }).mount('#app');
-  </script>
+    },
+    async mounted(){
+      /* Dropdown simple */
+      const btn=document.querySelector('.dropbtn'); const menu=document.getElementById('rankList');
+      btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block'})
+      document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none' })
 
-  <script>
-    // Manejo del dropdown (si Vue re-renderiza, ya está cubierto en mounted del módulo)
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.querySelector('.dropbtn');
-      const menu = document.getElementById('rankList');
-      if (!btn || !menu) return;
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      /* Leaderboard */
+      await this.fetchPlayers();
+      setInterval(this.fetchPlayers, 10000);
+
+      /* Auth */
+      onAuthStateChanged(auth, async (user)=>{
+        this.authUser = user || null;
+        if(user){
+          const pref=doc(db,'profiles',user.uid);
+          const psnap=await getDoc(pref);
+          if(psnap.exists()) this.profile={id:psnap.id,...psnap.data()};
+          else{
+            await setDoc(pref,{email:user.email,username:null,pfpUrl:null,emailVerified:user.emailVerified,createdAt:serverTimestamp()});
+            this.profile={id:user.uid,email:user.email,pfpUrl:null,emailVerified:user.emailVerified};
+          }
+          this.linkedMember = await this.findMemberByUid(user.uid);
+          if(!this.linkedMember && this.profile?.username){
+            try{ this.linkedMember = await this.linkByUsername(user.uid,this.profile.username); }catch{}
+          }
+          if(this.linkedMember){
+            const did=this.linkedMember.discordId||this.linkedMember.id;
+            if(this.profile?.pfpUrl) this.pfpMap[did]=this.profile.pfpUrl;
+          }
+          // precarga cartas al entrar a perfil
+          if(this.activeTab==='profile' && !this.cards.length) this.fetchCards();
+        }else{
+          this.profile=null; this.linkedMember=null;
+        }
       });
-      document.addEventListener('click', () => {
-        if (menu.style.display === 'block') menu.style.display = 'none';
-      });
-    });
-  </script>
+    }
+  }).mount('#app');
+</script>
+
+<script>
+  /* Dropdown fallback si Vue re-renderiza */
+  document.addEventListener('DOMContentLoaded',()=>{
+    const btn=document.querySelector('.dropbtn'); const menu=document.getElementById('rankList');
+    if(!btn||!menu) return;
+    btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block'});
+    document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none'; });
+  });
+</script>
 </body>
 </html>
 
