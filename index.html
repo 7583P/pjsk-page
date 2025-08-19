@@ -9,7 +9,7 @@
       --bg:#383838; --panel:#2a2a2a; --panel2:#242424; --ink:#fff; --muted:#bfbfbf;
       --brand:#6c6cf0; --warn:#f0a66c; --ok:#58d68d; --err:#ff6b6b; --line:#0006;
       --row1:#333; --row2:#2a2a2a; --hover:#595959; --chip:#444;
-      --rowh:64px;
+      --rowh:64px; --rowhLB:56px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,7 +17,6 @@
     a{color:inherit;text-decoration:none}
     #app{min-height:100%}
 
-    /* Topbar */
     header.topbar{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
     .topwrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 16px}
     .brand{font-weight:700;letter-spacing:.5px}
@@ -25,20 +24,18 @@
     .tabbtn{padding:8px 12px;border-radius:8px;background:#0000;border:1px solid #0000;color:var(--ink);cursor:pointer;transition:.15s background}
     .tabbtn:hover{background:var(--hover)}
     .tabbtn.active{background:var(--brand);border-color:#0000}
+    .tabbtn[disabled]{opacity:.5;cursor:not-allowed}
 
-    /* Layout */
     .container{max-width:1100px;margin:20px auto;padding:20px}
     .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 0 14px rgba(0,0,0,.35);padding:18px}
     .grid{display:grid;gap:16px}
     .grid.cols-2{grid-template-columns:1fr 1fr}
     @media (max-width:980px){ .grid.cols-2{grid-template-columns:1fr} }
 
-    /* Home hero */
     .hero{text-align:center;padding:28px;border-radius:12px;background:linear-gradient(135deg,#2a2a2a 0%, #242424 100%);border:1px solid var(--line);margin-bottom:16px}
     .hero h1{font-size:clamp(28px,5vw,48px);margin:0 0 6px}
     .hero p{margin:0;color:var(--muted)}
 
-    /* Forms + msgs */
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
     label{font-size:.92rem;color:var(--muted)}
     input, select{padding:10px 12px;border-radius:10px;border:1px solid #0008;background:var(--panel2);color:var(--ink);outline:none}
@@ -47,35 +44,30 @@
     .btn.ghost{background:#0000;border-color:#00000055}
     .btn.warn{background:var(--warn);color:#000}
     .btn.full{width:100%}
+    .btn.small{padding:6px 10px;font-size:.9rem}
     .help{font-size:.9rem;color:var(--muted)}
     .msg{padding:10px 12px;border-radius:10px;margin:10px 0;font-size:.95rem}
     .msg.ok{background:#1e3b2e;color:#d6ffe7;border:1px solid #2a6c4b}
     .msg.err{background:#3b1e1e;color:#ffd6d6;border:1px solid #6c2a2a}
     .msg.info{background:#1e263b;color:#d6e4ff;border:1px solid #2a3f6c}
+    .steps{display:grid;gap:10px;margin-top:10px}
+    .step{padding:10px;border-radius:10px;border:1px solid #0006;background:#212121;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .badge{padding:4px 8px;border-radius:999px;background:#444}
+    .badge.ok{background:#1e3b2e;color:#bff5d2;border:1px solid #2a6c4b}
 
     section{display:none}
     section.active{display:block}
 
-    /* ===================== Leaderboard (Vue) ===================== */
+    /* ===== Leaderboard (Vue) ===== */
     #lbApp h1{font-size:2em;margin-bottom:20px;text-align:center}
     #lbApp .controls{margin-bottom:15px;text-align:center}
-    #lbApp .controls input[type="text"]{
-      padding:5px;width:80%;max-width:400px;border:none;border-radius:4px;text-align:center;background:#555;color:#fff
-    }
-
-    /* Dropdown */
+    #lbApp .controls input[type="text"]{padding:5px;width:80%;max-width:400px;border:none;border-radius:4px;text-align:center;background:#555;color:#fff}
     #lbApp .dropdown{position:relative;display:inline-block;margin-left:10px}
     #lbApp .dropbtn{background:#737373;border:none;padding:6px 12px;cursor:pointer;border-radius:4px;color:#fff;font-weight:bold;white-space:nowrap}
     #lbApp .dropdown-content{position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
     #lbApp .dropdown-content a{display:block;padding:8px 12px;text-decoration:none;font-size:14px;white-space:nowrap;color:#fff}
-    #lbApp .dropdown-content a:hover .text-gradient{opacity:.9}
+    #lbApp .text-gradient, #lbApp .name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-    /* Gradients base */
-    #lbApp .text-gradient, #lbApp .name-gradient{
-      display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent
-    }
-
-    /* Table */
     #lbApp table{width:100%;border-collapse:collapse;margin-top:10px}
     #lbApp th, #lbApp td{padding:10px;text-align:center;color:#fff}
     #lbApp th{background:#030050}
@@ -83,37 +75,46 @@
     #lbApp tbody tr:nth-child(odd){background:#333}
     #lbApp tbody tr:nth-child(even){background:#2a2a2a}
 
-    /* Position + flag */
-    #lbApp .position-cell{position:relative;text-align:center;padding-right:56px}
+    #lbApp .position-cell{position:relative;text-align:center;padding-right:120px}
     #lbApp .position-cell .position-number{display:inline-block}
-    #lbApp .position-cell .flag{width:24px;position:absolute;top:50%;right:8px;transform:translateY(-50%)}
-
-    /* Emojis sin degradado */
-    #lbApp .name-gradient .emoji{
-      background:none !important; -webkit-background-clip:initial !important; -webkit-text-fill-color:currentColor !important
+    #lbApp .position-cell .flag{width:24px;position:absolute;top:50%;right:72px;transform:translateY(-50%)}
+    #lbApp .position-cell .pfp-sq{
+      position:absolute;top:50%;right:8px;transform:translateY(-50%);
+      width:calc(var(--rowhLB) - 10px);height:calc(var(--rowhLB) - 10px);
+      border-radius:8px;border:1px solid #0007;object-fit:cover;background:#111
     }
 
-    /* Paginación */
+    #lbApp .name-gradient .emoji{background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color:currentColor !important}
     #lbApp .pagination{margin-top:15px;display:flex;justify-content:center;align-items:center;gap:8px}
     #lbApp .pagination button{padding:4px 8px;border:none;border-radius:4px;background:#555;color:#fff;cursor:pointer}
     #lbApp .pagination button:disabled{opacity:.4;cursor:default}
     #lbApp .pagination input[type="number"]{width:50px;padding:4px;text-align:center;border-radius:4px;border:1px solid #555;background:#2a2a2a;color:#fff}
 
-    /* Rank gradients (→ izquierda) */
-    .rank-Placement   { background-image: linear-gradient(to left, #ff7000, #ff4600); }
-    .rank-Iron        { background-image: linear-gradient(to left, #616161, #2e2e2e); }
-    .rank-Bronze      { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
-    .rank-Silver      { background-image: linear-gradient(to left, #b3b3b3, #696969); }
-    .rank-Gold        { background-image: linear-gradient(to left, #ffbf60, #c57600); }
-    .rank-Platinum    { background-image: linear-gradient(to left, #767ec2, #38429f); }
-    .rank-Diamond     { background-image: linear-gradient(to left, #42a2ff, #003e8f); }
-    .rank-Crystal     { background-image: linear-gradient(to left, #dca3ff, #883cb4); }
-    .rank-Master      { background-image: linear-gradient(to left, #c34efd, #5f009e); }
-    .rank-Champion    { background-image: linear-gradient(to left, #fe6767, #8f0000); }
-    .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space:nowrap; }
-    .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
+    .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
+    .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
+    .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
+    .rank-Silver{background-image:linear-gradient(to left,#b3b3b3,#696969)}
+    .rank-Gold{background-image:linear-gradient(to left,#ffbf60,#c57600)}
+    .rank-Platinum{background-image:linear-gradient(to left,#767ec2,#38429f)}
+    .rank-Diamond{background-image:linear-gradient(to left,#42a2ff,#003e8f)}
+    .rank-Crystal{background-image:linear-gradient(to left,#dca3ff,#883cb4)}
+    .rank-Master{background-image:linear-gradient(to left,#c34efd,#5f009e)}
+    .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
+    .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
+    .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
 
-    /* ===================== /Leaderboard (Vue) ===================== */
+    /* ===== PFP Picker ===== */
+    .pfp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .pfp-grid{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px}
+    @media (max-width:1100px){ .pfp-grid{grid-template-columns:repeat(5,1fr)} }
+    @media (max-width:900px){ .pfp-grid{grid-template-columns:repeat(4,1fr)} }
+    @media (max-width:680px){ .pfp-grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:480px){ .pfp-grid{grid-template-columns:repeat(2,1fr)} }
+    .card-tile{background:#1f1f1f;border:1px solid #0008;border-radius:10px;overflow:hidden;cursor:pointer;transition:.15s transform}
+    .card-tile:hover{transform:translateY(-2px)}
+    .tile-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#111}
+    .tile-meta{padding:8px;font-size:.85rem;color:#ddd;display:flex;justify-content:space-between;gap:8px}
+    .danger{color:#ffb3b3}
   </style>
 </head>
 <body>
@@ -124,7 +125,7 @@
       <nav class="tabs" id="tabs">
         <button class="tabbtn active" data-tab="home">Home</button>
         <button class="tabbtn" data-tab="leaderboard">Leaderboard</button>
-        <button class="tabbtn" data-tab="profile">Edit Profile</button>
+        <button class="tabbtn" id="tabProfile" data-tab="profile" disabled>Edit Profile</button>
       </nav>
     </div>
   </header>
@@ -134,13 +135,17 @@
     <section id="home" class="active">
       <div class="hero card">
         <h1>Welcome to PJSK LOUNGE</h1>
-        <p>New project of competitive PJSK with a Discord bot and a dedicated page.</p>
+        <p>PJSK competitive — Discord Bot + Page.</p>
       </div>
 
       <div id="authArea" class="grid cols-2">
         <!-- Login -->
         <div class="card">
-          <h2 style="margin:0 0 10px">Iniciar sesión</h2>
+          <h2 style="margin:0 0 10px">Log in</h2>
+          <div class="field">
+            <label for="loginDiscord">Discord username o Showname</label>
+            <input id="loginDiscord" type="text" placeholder="usuario123 o usuario#0001" />
+          </div>
           <div class="field">
             <label for="loginEmail">Email</label>
             <input id="loginEmail" type="email" placeholder="usuario123@email.com" autocomplete="username" />
@@ -150,19 +155,19 @@
             <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" />
           </div>
           <button id="btnLogin" class="btn full">Entrar</button>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap">
             <button id="btnReset" class="btn ghost">Reset password</button>
-            <span class="help">¿Sin verificar? <a href="#" id="btnResendFromLogin">Reenviar verificación</a></span>
+            <button id="btnResendFromLogin" class="btn ghost">Reenviar verificación email</button>
           </div>
           <div id="loginMsg"></div>
         </div>
 
         <!-- Register -->
         <div class="card">
-          <h2 style="margin:0 0 10px">Crear cuenta</h2>
+          <h2 style="margin:0 0 10px">Register</h2>
           <div class="field">
-            <label for="regDisplay">Nombre a mostrar (opcional)</label>
-            <input id="regDisplay" type="text" placeholder="usuario123" />
+            <label for="regDiscord">Discord username o Showname</label>
+            <input id="regDiscord" type="text" placeholder="usuario123 o usuario#0001" />
           </div>
           <div class="field">
             <label for="regEmail">Email</label>
@@ -172,24 +177,53 @@
             <label for="regPass">Contraseña</label>
             <input id="regPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
           </div>
-          <button id="btnRegister" class="btn full">Registrarme</button>
+          <button id="btnRegister" class="btn full">Crear cuenta</button>
           <div id="regMsg"></div>
         </div>
       </div>
 
+      <!-- Post login/registro: pasos de verificación -->
       <div id="welcomeArea" class="card" style="display:none">
         <h2 style="margin:0 0 6px">¡Hola, <span id="welcomeName">usuario123</span>!</h2>
-        <p class="help" style="margin:0 0 12px">Ya iniciaste sesión.</p>
-        <div id="verifyBanner" class="banner" style="display:none"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button id="btnLogout" class="btn">Cerrar sesión</button>
-          <button id="btnGoProfile" class="btn ghost">Ir a Edit Profile</button>
-          <button id="btnResendVerify" class="btn warn" style="display:none">Reenviar verificación</button>
+        <div class="steps">
+          <div class="step">
+            <div>
+              <strong>1) Verificación de Discord</strong><br>
+              <span class="help">Escribe por DM al bot: <code>/verify <span id="discCode">------</span></code></span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="discBadge" class="badge">Pendiente</span>
+              <button id="btnCopyCode" class="btn small ghost">Copiar código</button>
+              <button id="btnRegenCode" class="btn small ghost">Re-generar</button>
+            </div>
+          </div>
+          <div class="step">
+            <div>
+              <strong>2) Verificación de Email</strong><br>
+              <span class="help">Busca el correo y haz click en “Verify”.</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="mailBadge" class="badge">Pendiente</span>
+              <button id="btnResendVerify" class="btn small warn">Reenviar email</button>
+              <button id="btnIHaveVerified" class="btn small ghost">Ya verifiqué</button>
+            </div>
+          </div>
+          <div class="step">
+            <div>
+              <strong>Acceso a Edit PFP</strong><br>
+              <span class="help">Se habilita cuando ambos pasos estén OK.</span>
+            </div>
+            <div>
+              <button id="btnGoProfile" class="btn small" disabled>Ir a Edit Profile</button>
+              <button id="btnLogout" class="btn small ghost" disabled>Log out</button>
+            </div>
+          </div>
         </div>
+        <div id="welcomeMsg"></div>
       </div>
     </section>
 
-    <!-- LEADERBOARD (Vue) -->
+    <!-- LEADERBOARD (Vue, con PFP junto a bandera) -->
     <section id="leaderboard">
       <div class="card">
         <div id="lbApp">
@@ -198,7 +232,6 @@
           <div class="controls">
             <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
 
-            <!-- ▼ Dropdown Rangos -->
             <div class="dropdown" @click.stop>
               <button class="dropbtn" @click.stop="menuOpen = !menuOpen">
                 <template v-if="selectedRank">
@@ -211,13 +244,10 @@
               </button>
               <div id="rankList" class="dropdown-content" v-show="menuOpen">
                 <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)">
-                  <span :class="['text-gradient','rank-'+r.key]">
-                    {{ r.label }} ({{ r.range }})
-                  </span>
+                  <span :class="['text-gradient','rank-'+r.key]">{{ r.label }} ({{ r.range }})</span>
                 </a>
               </div>
             </div>
-            <!-- ▲ -->
 
             <button v-if="selectedRank" @click="clearRank" style="margin-left:10px;background:#555;color:#fff;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;">
               Mostrar todos ▾
@@ -229,10 +259,11 @@
               <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
             </thead>
             <tbody>
-              <tr v-for="p in paginatedPlayers" :key="p.id">
+              <tr v-for="p in paginatedPlayers" :key="p.id" :style="{height:'var(--rowhLB)'}">
                 <td class="position-cell">
                   <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
                   <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
+                  <img v-if="pfpMap[p.name?.toLowerCase?.()]" :src="pfpMap[p.name.toLowerCase()]" alt="pfp" class="pfp-sq" />
                 </td>
                 <td>
                   <span :class="['name-gradient','rank-'+p.rank]">
@@ -258,16 +289,16 @@
       </div>
     </section>
 
-    <!-- PROFILE: Set PFP (tal como lo tenías) -->
+    <!-- PROFILE: Set PFP -->
     <section id="profile">
       <div class="card">
         <h2 style="margin:0 0 10px">Set PFP</h2>
         <p class="help" style="margin:0 0 12px">
-          Busca y selecciona cualquier carta (no entrenada / entrenada). Al hacer click, tu PFP se guarda.
+          Selecciona cualquier carta (normal / entrenada). Si el catálogo no carga, pega una URL manual.
         </p>
 
         <div class="pfp-toolbar">
-          <input id="pfpSearch" type="text" placeholder="Buscar por nombre, id, personaje..." style="min-width:260px">
+          <input id="pfpSearch" type="text" placeholder="Buscar por nombre, id, asset..." style="min-width:260px">
           <select id="pfpVersion">
             <option value="both">Mostrar: ambas versiones</option>
             <option value="normal">Solo no entrenada</option>
@@ -278,17 +309,25 @@
 
         <div id="pfpInfo" class="msg info" style="display:none"></div>
         <div id="pfpGrid" class="pfp-grid"></div>
-        <div id="pfpSelected" class="selected-note help"></div>
+
+        <div class="field" style="margin-top:12px">
+          <label>Fallback manual (si la lista no carga)</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input id="manualUrl" type="text" placeholder="https://...png" style="min-width:360px;flex:1">
+            <button id="btnSetManual" class="btn">Usar esta imagen</button>
+          </div>
+          <span class="help danger">Usa imágenes cuadradas 1:1 para encajar perfecto.</span>
+        </div>
       </div>
     </section>
   </main>
 </div>
 
-<!-- Vue 3 + Axios (para el Leaderboard) -->
+<!-- Vue + Axios para Leaderboard -->
 <script src="https://unpkg.com/vue@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<!-- Leaderboard App (Vue) -->
+<!-- Leaderboard App -->
 <script>
   const { createApp } = Vue;
 
@@ -302,6 +341,7 @@
         pageSize: 50,
         selectedRank: null,
         menuOpen: false,
+        pfpMap: {},  // nameLower -> url
         ranks: [
           { key:'Iron', label:'Iron', range:'0-100' },
           { key:'Bronze', label:'Bronze', range:'101-200' },
@@ -320,9 +360,8 @@
     computed:{
       filteredPlayers(){
         let list = this.players;
-        if (this.selectedRank) {
-          list = list.filter(p => p.rank === this.selectedRank);
-        } else if (this.filter) {
+        if (this.selectedRank)      list = list.filter(p => p.rank === this.selectedRank);
+        else if (this.filter) {
           const q = this.filter.toLowerCase();
           list = list.filter(p => (p.name||'').toLowerCase().includes(q));
         }
@@ -332,9 +371,7 @@
         if(!this.selectedRank) return 0;
         return this.players.filter(p => p.rank === this.selectedRank).length;
       },
-      totalPages(){
-        return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize));
-      },
+      totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize)); },
       paginatedPlayers(){
         const start = (this.currentPage - 1) * this.pageSize;
         return this.filteredPlayers.slice(start, start + this.pageSize);
@@ -354,28 +391,31 @@
       clearRank(){ this.selectedRank = null; },
       prevPage(){ if(this.currentPage > 1) this.currentPage--; },
       nextPage(){ if(this.currentPage < this.totalPages) this.currentPage++; },
-      goToPage(){ /* ya validado por watch */ },
+      goToPage(){},
       async fetchPlayers(){
         try{
           const resp = await axios.get('https://worker-production-1ad2.up.railway.app/api/players', { timeout: 10000 });
           const sorted = (resp.data || []).slice().sort((a,b)=> (b.mmr||0) - (a.mmr||0));
           this.players = sorted;
-          const map = {};
-          sorted.forEach((p,i)=> map[p.id] = i+1);
-          this.playerRankMap = map;
+          const map = {}; sorted.forEach((p,i)=> map[p.id] = i+1); this.playerRankMap = map;
         }catch(err){
-          console.error('Error API players:', err?.message || err);
-          // Fallback de ejemplo (usuario123)
+          console.error('API players error:', err?.message || err);
           const demo = Array.from({length:60}).map((_,i)=>({
-            id: 'demo'+i,
-            name: i%7===0 ? 'usuario123' : ('usuario'+(100+i)),
+            id:'demo'+i, name: i%7===0? 'usuario123' : ('usuario'+(100+i)),
             mmr: 1000 - i*7,
             rank: ['Gold','Platinum','Diamond','Bronze','Silver','Master','Legend'][i%7],
-            country: i%2===0 ? 'pe' : 'us'
+            country: i%2===0?'pe':'us'
           })).sort((a,b)=> b.mmr - a.mmr);
           const map = {}; demo.forEach((p,i)=> map[p.id]=i+1);
           this.players = demo; this.playerRankMap = map;
         }
+      },
+      async fetchPfpMap(){
+        try{
+          if(window.loadPfpMap){
+            this.pfpMap = await window.loadPfpMap();
+          }
+        }catch(e){ console.warn('PFP map error', e); }
       },
       flagUrl(cc){ return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`; },
       displayRank(rank){ return rank==='GrandChampion' ? 'Grand Champion' : rank; },
@@ -384,13 +424,13 @@
         return Array.from(String(name||'')).map(c=>({ char:c, isEmoji: emojiPres.test(c) }));
       },
       onDocClick(e){
-        // Cierra menú de rangos si se hace click fuera
         const dd = document.querySelector('#lbApp .dropdown');
         if(!dd?.contains(e.target)) this.menuOpen = false;
       }
     },
-    mounted(){
-      this.fetchPlayers();
+    async mounted(){
+      await this.fetchPlayers();
+      await this.fetchPfpMap();
       this._timer = setInterval(this.fetchPlayers, 10000);
       document.addEventListener('click', this.onDocClick);
     },
@@ -401,15 +441,16 @@
   }).mount('#lbApp');
 </script>
 
-<!-- Firebase (Auth + PFP picker, igual que antes) -->
+<!-- Firebase + lógica de Auth/Perfil/PFP -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    sendEmailVerification, sendPasswordResetEmail, signOut, updateProfile
+    sendEmailVerification, sendPasswordResetEmail, signOut, updateProfile,
+    setPersistence, browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
-    getFirestore, doc, setDoc, updateDoc, getDoc, getDocs, collection, serverTimestamp
+    getFirestore, doc, setDoc, updateDoc, getDoc, getDocs, collection, serverTimestamp, query, limit
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -424,56 +465,85 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db   = getFirestore(app);
+  await setPersistence(auth, browserLocalPersistence);
 
-  const $  = (sel) => document.querySelector(sel);
-  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-  const show = (el, on=true)=> el && (el.style.display = on ? "" : "none");
-
+  const $  = (sel)=>document.querySelector(sel);
+  const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+  const show = (el,on=true)=> el && (el.style.display = on ? "" : "none");
   function showMsg(el, text, type){ el.className = "msg " + (type||"info"); el.textContent = text; el.style.display = text ? "block" : "none"; }
 
-  // Tabs (delegación robusta)
+  function validateDiscord(u){
+    if(!u) return false;
+    u = u.trim().replace(/^@/,'');
+    const legacy = /^[^\s@#]{2,32}#[0-9]{4}$/;
+    const modern = /^[a-zA-Z0-9._]{2,32}$/;
+    return legacy.test(u) || modern.test(u);
+  }
+  function genCode(){ return Math.random().toString(36).slice(2,8).toUpperCase(); }
+
+  // ===== Tabs
   function setActiveTab(name){
     $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
     $$("main section").forEach(s=>s.classList.toggle("active", s.id===name));
   }
-  $("#tabs").addEventListener("click", (e)=>{
+  $("#tabs").addEventListener("click",(e)=>{
     const btn = e.target.closest(".tabbtn");
-    if(btn && btn.dataset.tab) setActiveTab(btn.dataset.tab);
+    if(!btn || btn.disabled) return;
+    setActiveTab(btn.dataset.tab);
   });
 
-  // ===== Auth =====
+  // ===== Auth: Register
   $("#btnRegister").addEventListener("click", async ()=>{
-    const email = $("#regEmail").value.trim();
-    const pass  = $("#regPass").value.trim();
-    const display = $("#regDisplay").value.trim();
+    const discord = $("#regDiscord").value.trim();
+    const email   = $("#regEmail").value.trim();
+    const pass    = $("#regPass").value.trim();
     const el = $("#regMsg"); showMsg(el,"","info");
-    if(!email || !pass){ showMsg(el,"Completa email y contraseña.","err"); return; }
+    if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
+    if(!validateDiscord(discord)){ showMsg(el,"Discord/Showname inválido.","err"); return; }
     try{
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      if(display){ await updateProfile(cred.user, { displayName: display }); }
-      await setDoc(doc(db,"users",cred.user.uid), {
-        uid: cred.user.uid, email, displayName: display||"",
-        createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+      const user = cred.user;
+      await updateProfile(user, { displayName: discord });
+      // user doc
+      await setDoc(doc(db,"users",user.uid), {
+        uid:user.uid, email, showName: discord, discordName: discord,
+        emailVerified: user.emailVerified || false,
+        discordVerified: false, pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
       }, {merge:true});
-      await sendEmailVerification(cred.user);
-      showMsg(el,"Te enviamos un correo de verificación. Revisa tu bandeja y spam.","ok");
-      $("#regPass").value="";
+      // verification doc
+      const code = genCode();
+      await setDoc(doc(db,"verifications",user.uid), {
+        uid:user.uid, discordName:discord, code, discordVerified:false, emailVerified: user.emailVerified||false,
+        codeCreatedAt: serverTimestamp()
+      }, {merge:true});
+      await sendEmailVerification(user);
+      show($(`#authArea`), false); show($(`#welcomeArea`), true);
+      hydrateVerifyUI({discordVerified:false, emailVerified:false, code, showName:discord});
+      showMsg(el,"Cuenta creada. Revisa los pasos de verificación abajo.","ok");
     }catch(err){
       const map={"auth/email-already-in-use":"Ese email ya está registrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"La contraseña es muy débil (mínimo 6)."};
       showMsg(el, map[err.code] || ("Error al registrar: "+err.message), "err");
     }
   });
 
+  // ===== Auth: Login
   $("#btnLogin").addEventListener("click", async ()=>{
-    const email = $("#loginEmail").value.trim();
-    const pass  = $("#loginPass").value.trim();
+    const discord = $("#loginDiscord").value.trim();
+    const email   = $("#loginEmail").value.trim();
+    const pass    = $("#loginPass").value.trim();
     const el = $("#loginMsg"); showMsg(el,"","info");
-    if(!email || !pass){ showMsg(el,"Completa email y contraseña.","err"); return; }
+    if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
     try{
       const cred = await signInWithEmailAndPassword(auth, email, pass);
-      if(!cred.user.emailVerified){
-        showMsg(el,"Login exitoso, pero tu correo no está verificado. Puedes reenviar la verificación.","info");
-      }else{ showMsg(el,"","info"); }
+      const user = cred.user;
+      await ensureUserDiscord(user.uid, discord);
+      await ensureVerificationDoc(user.uid, discord);
+      await user.reload();
+      const vdoc = await getDoc(doc(db,"verifications",user.uid));
+      const v = vdoc.exists() ? vdoc.data() : {discordVerified:false, emailVerified:user.emailVerified};
+      show($("#authArea"), false); show($("#welcomeArea"), true);
+      hydrateVerifyUI({discordVerified:!!v.discordVerified, emailVerified: user.emailVerified, code: v.code, showName: discord});
+      showMsg(el,"Login correcto. Completa verificación si falta.","ok");
     }catch(err){
       const map={"auth/invalid-email":"Email inválido.","auth/user-disabled":"Usuario deshabilitado.","auth/user-not-found":"No existe cuenta con ese email.","auth/wrong-password":"Contraseña incorrecta."};
       showMsg(el, map[err.code] || ("Error al iniciar sesión: "+err.message), "err");
@@ -487,127 +557,222 @@
     catch(err){ showMsg($("#loginMsg"),"No pudimos enviar el reset: "+err.message,"err"); }
   });
 
-  $("#btnResendFromLogin").addEventListener("click", async (e)=>{
-    e.preventDefault();
-    if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión para reenviar verificación.","err"); return; }
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#loginMsg"),"Correo de verificación reenviado.","ok"); }
+  $("#btnResendFromLogin").addEventListener("click", async ()=>{
+    if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión.","err"); return; }
+    try{ await sendEmailVerification(auth.currentUser); showMsg($("#loginMsg"),"Correo reenviado.","ok"); }
     catch(err){ showMsg($("#loginMsg"),"No se pudo reenviar: "+err.message,"err"); }
   });
 
   onAuthStateChanged(auth, async (user)=>{
-    const authArea = $("#authArea"), welcomeArea=$("#welcomeArea");
     if(user){
-      show(authArea,false); show(welcomeArea,true);
-      $("#welcomeName").textContent = user.displayName || (user.email?.split("@")[0]) || "usuario123";
-      const vb = $("#verifyBanner"), btnResend = $("#btnResendVerify");
-      if(user.emailVerified){ show(vb,false); show(btnResend,false); } else {
-        show(vb,true); vb.className = "msg info"; vb.innerHTML="Tu correo aún no está verificado. Revisa tu bandeja o <strong>reenvía la verificación</strong>.";
-        show(btnResend,true);
+      const udoc = await getDoc(doc(db,"users",user.uid));
+      const vdoc = await getDoc(doc(db,"verifications",user.uid));
+      const showName = udoc.exists() ? (udoc.data().showName || user.displayName || user.email.split("@")[0]) : (user.displayName || user.email.split("@")[0]);
+      const code = vdoc.exists() ? (vdoc.data().code) : genCode();
+      if(!vdoc.exists()){
+        await setDoc(doc(db,"verifications",user.uid), {
+          uid:user.uid, discordName:showName, code, discordVerified:false, emailVerified:user.emailVerified, codeCreatedAt: serverTimestamp()
+        }, {merge:true});
       }
+      show($("#authArea"), false); show($("#welcomeArea"), true);
+      hydrateVerifyUI({discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false, emailVerified: user.emailVerified, code, showName});
     }else{
-      show(welcomeArea,false); show(authArea,true);
+      show($("#welcomeArea"), false); show($("#authArea"), true);
+      $("#tabProfile").disabled = true;
     }
   });
 
   $("#btnResendVerify").addEventListener("click", async ()=>{
     if(!auth.currentUser) return;
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#verifyBanner"),"Correo de verificación reenviado.","ok"); }
-    catch(err){ showMsg($("#verifyBanner"),"No se pudo reenviar: "+err.message,"err"); }
+    try{ await sendEmailVerification(auth.currentUser); showMsg($("#welcomeMsg"),"Correo de verificación reenviado.","ok"); }
+    catch(err){ showMsg($("#welcomeMsg"),"No se pudo reenviar: "+err.message,"err"); }
   });
-  $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); });
-  $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
+  $("#btnIHaveVerified").addEventListener("click", async ()=>{
+    if(!auth.currentUser) return;
+    await auth.currentUser.reload();
+    const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
+    hydrateVerifyUI({discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false, emailVerified: auth.currentUser.emailVerified, code: vdoc.exists()? vdoc.data().code : "------", showName: (await getDoc(doc(db,"users",auth.currentUser.uid))).data().showName});
+  });
 
-  // ===== Set PFP (sekai.best) =====
+  $("#btnCopyCode").addEventListener("click", ()=>{
+    const code = $("#discCode").textContent.trim();
+    navigator.clipboard.writeText(code);
+    showMsg($("#welcomeMsg"),"Código copiado.","ok");
+  });
+
+  $("#btnRegenCode").addEventListener("click", async ()=>{
+    if(!auth.currentUser) return;
+    const code = genCode();
+    await updateDoc(doc(db,"verifications",auth.currentUser.uid), { code, codeCreatedAt: serverTimestamp() });
+    $("#discCode").textContent = code;
+    showMsg($("#welcomeMsg"),"Nuevo código generado.","ok");
+  });
+
+  $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
+  $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); setActiveTab("home"); });
+
+  async function ensureUserDiscord(uid, discord){
+    const uref = doc(db,"users",uid);
+    const snap = await getDoc(uref);
+    if(!snap.exists() || (snap.data().showName||"") !== discord){
+      await setDoc(uref,{ showName:discord, discordName:discord, updatedAt:serverTimestamp() },{merge:true});
+    }
+  }
+  async function ensureVerificationDoc(uid, discord){
+    const vref = doc(db,"verifications",uid);
+    const v = await getDoc(vref);
+    if(!v.exists()){
+      await setDoc(vref,{ uid, discordName:discord, code: genCode(), discordVerified:false, emailVerified:false, codeCreatedAt:serverTimestamp() });
+    }
+  }
+
+  function hydrateVerifyUI({discordVerified, emailVerified, code, showName}){
+    $("#welcomeName").textContent = showName || "usuario123";
+    $("#discCode").textContent = code || "------";
+    $("#discBadge").textContent = discordVerified ? "Verificado" : "Pendiente";
+    $("#discBadge").className = "badge" + (discordVerified ? " ok" : "");
+    $("#mailBadge").textContent = emailVerified ? "Verificado" : "Pendiente";
+    $("#mailBadge").className = "badge" + (emailVerified ? " ok" : "");
+    const ready = discordVerified && emailVerified;
+    $("#btnGoProfile").disabled = !ready;
+    $("#btnLogout").disabled   = !ready;
+    $("#tabProfile").disabled  = !ready;
+    if(ready){ showMsg($("#welcomeMsg"),"¡Todo listo! Ya puedes ir a Edit Profile.","ok"); }
+    else { showMsg($("#welcomeMsg"),"Completa las verificaciones para habilitar Edit Profile.","info"); }
+  }
+
+  // ========= PFP: catálogo con CORS-resiliencia =========
   const IMAGE_BASES = [
     "https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/",
     "https://storage.sekai.best/sekai-assets/thumbnail/chara_card/",
   ];
   const CARD_APIS = [
+    "https://raw.githubusercontent.com/Sekai-World/sekai-master-db-diff/master/cards.json",
     "https://sekai.best/api/v2/cards.json",
     "https://sekai.best/api/cards.json",
-    "https://sekai.best/api/cards",
   ];
 
-  function cardImageUrls(assetbundleName){
-    const fileNormal  = `${assetbundleName}_normal.png`;
-    const fileTrained = `${assetbundleName}_after_training.png`;
-    return { normal: IMAGE_BASES[0] + fileNormal, trained: IMAGE_BASES[0] + fileTrained };
+  function urlsFromAsset(assetbundleName){
+    const normal  = `${assetbundleName}_normal.png`;
+    const trained = `${assetbundleName}_after_training.png`;
+    return { normal: IMAGE_BASES[0]+normal, trained: IMAGE_BASES[0]+trained };
   }
   function normalizeCard(c){
-    const id = c.id || c.cardId || c.resourceId || c.seq || c.card_id || c.assetbundleName || c.assetBundleName;
     const asset = c.assetbundleName || c.assetBundleName || c.assetbundle || c.assetBundle;
-    const name = c.name || c.title || c.cardName || "";
+    const id    = c.id || c.cardId || c.resourceId || c.seq || c.card_id || asset;
+    const name  = c.name || c.title || c.cardName || "";
     if(!asset) return null;
-    const urls = cardImageUrls(asset);
-    return { id: id ?? asset, assetbundleName: asset, name, imgNormal: urls.normal, imgTrained: urls.trained };
+    const u = urlsFromAsset(asset);
+    return { id: id??asset, name, assetbundleName: asset, imgNormal:u.normal, imgTrained:u.trained };
   }
 
-  const statePFP = { cards: [], filtered: [], version: "both", search: "", selectedUrl: "" };
-  $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
-  $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
-  $("#btnClearPfp").addEventListener("click", async ()=>{
-    const u = auth.currentUser; if(!u) return;
-    try{
-      await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
-      statePFP.selectedUrl = ""; $("#pfpSelected").textContent = "PFP eliminado.";
-    }catch(err){ showMsg($("#pfpInfo"), "No se pudo eliminar el PFP: "+err.message, "err"); }
-  });
+  const statePFP = { cards:[], filtered:[], version:"both", search:"" };
 
   async function fetchCards(){
     const info = $("#pfpInfo");
     showMsg(info,"Cargando cartas…","info");
     let ok=false, raw=null;
     for(const api of CARD_APIS){
-      try{ const res = await fetch(api); if(res.ok){ raw = await res.json(); ok=true; break; } }catch{}
+      try{
+        const res = await fetch(api, { mode:"cors", cache:"no-store" });
+        if(res.ok){
+          raw = await res.json(); ok=true; break;
+        }
+      }catch{}
     }
-    if(!ok){ showMsg(info,"No pudimos leer la lista de cartas desde sekai.best.","err"); return; }
-    const list = Array.isArray(raw)? raw : (raw.data || raw.cards || raw.result || []);
+    if(!ok){
+      showMsg(info,"No pudimos leer la lista de cartas desde sekai.best / GitHub. Usa la URL manual temporalmente.","err");
+      return;
+    }
+    const list = Array.isArray(raw) ? raw : (raw.data||raw.cards||raw.result||[]);
     const mapped = [];
     for(const item of list){ const m = normalizeCard(item); if(m) mapped.push(m); }
-    statePFP.cards = mapped; filterCards(); renderCardGrid();
-    showMsg(info,`Cartas cargadas: ${mapped.length}. Usa el buscador.`, "ok");
+    statePFP.cards = mapped;
+    filterCards(); renderCardGrid();
+    showMsg(info,`Cartas cargadas: ${mapped.length}.`, "ok");
   }
+
   function filterCards(){
-    const q = statePFP.search, ver=statePFP.version;
+    const q = statePFP.search.toLowerCase();
+    const ver=statePFP.version;
     statePFP.filtered = statePFP.cards.filter(c=>{
       return (c.name||"").toLowerCase().includes(q) || String(c.id).toLowerCase().includes(q) || c.assetbundleName.toLowerCase().includes(q);
     }).map(c=>{
-      if(ver==="normal") return [{...c, show:"normal"}];
-      if(ver==="trained") return [{...c, show:"trained"}];
-      return [{...c, show:"normal"}, {...c, show:"trained"}];
+      if(ver==="normal") return [{...c,show:"normal"}];
+      if(ver==="trained") return [{...c,show:"trained"}];
+      return [{...c,show:"normal"},{...c,show:"trained"}];
     }).flat();
   }
   function renderCardGrid(){
     const grid = $("#pfpGrid");
-    if(statePFP.filtered.length===0){ grid.innerHTML = `<div class="help">Sin resultados. Prueba con otro término.</div>`; return; }
+    if(statePFP.filtered.length===0){ grid.innerHTML = `<div class="help">Sin resultados. Prueba otro término.</div>`; return; }
     grid.innerHTML = statePFP.filtered.map(c=>{
       const img = c.show==="trained" ? c.imgTrained : c.imgNormal;
-      const labelVer = c.show==="trained" ? "Trained" : "Normal";
+      const ver = c.show==="trained" ? "Trained" : "Normal";
       return `
-        <div class="card-tile" data-url="${img}" title="#${c.id}">
+        <div class="card-tile" data-url="${img}" data-asset="${c.assetbundleName}">
           <img class="tile-img" loading="lazy" src="${img}" alt="#${c.id}">
           <div class="tile-meta">
-            <span class="badge">${labelVer}</span>
+            <span class="badge">${ver}</span>
             <span>#${c.id}</span>
           </div>
         </div>`;
     }).join("");
     $$(".card-tile").forEach(tile=>{
-      tile.addEventListener("click", async ()=>{
-        const url = tile.dataset.url;
-        const u = auth.currentUser;
-        if(!u){ setActiveTab("home"); alert("Inicia sesión para guardar tu PFP."); return; }
-        try{
-          await updateDoc(doc(db,"users",u.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
-          statePFP.selectedUrl = url; $("#pfpSelected").textContent="PFP actualizado ✔";
-        }catch(err){ showMsg($("#pfpInfo"), "No se pudo guardar el PFP: "+err.message, "err"); }
-      });
+      tile.addEventListener("click", ()=> setPfpUrl(tile.dataset.url));
     });
   }
 
+  $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
+  $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
+
+  $("#btnSetManual").addEventListener("click", async ()=>{
+    const url = $("#manualUrl").value.trim();
+    if(!url) return;
+    await setPfpUrl(url);
+  });
+
+  $("#btnClearPfp").addEventListener("click", async ()=>{
+    const u = auth.currentUser; if(!u) return;
+    await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
+    // también limpiar map por nombre si existe
+    const key = await getDisplayKey(u.uid);
+    await setDoc(doc(db,"pfps", key), { url:"", updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+    alert("PFP eliminado.");
+  });
+
+  async function getDisplayKey(uid){
+    const s = await getDoc(doc(db,"users",uid));
+    const showName = s.exists()? (s.data().showName || s.data().discordName || auth.currentUser.displayName || auth.currentUser.email.split("@")[0]) : (auth.currentUser.displayName || auth.currentUser.email.split("@")[0]);
+    return String(showName||"").toLowerCase();
+  }
+
+  async function setPfpUrl(url){
+    const u = auth.currentUser; if(!u){ setActiveTab("home"); alert("Inicia sesión y completa verificaciones."); return; }
+    // Guardar en user doc
+    await updateDoc(doc(db,"users",u.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
+    // Guardar en mapa por nombre (para Leaderboard)
+    const key = await getDisplayKey(u.uid);
+    await setDoc(doc(db,"pfps", key), { url, updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+    alert("PFP actualizado ✔");
+  }
+
+  // Exponer para Vue
+  window.loadPfpMap = async function(){
+    const snap = await getDocs(query(collection(db,"pfps"), limit(2000)));
+    const map = {};
+    snap.forEach(d=>{
+      const url = (d.data().url||"").trim();
+      if(url) map[d.id] = url;
+    });
+    return map;
+  }
+
+  // start
   fetchCards();
 </script>
 </body>
 </html>
+
 
 
