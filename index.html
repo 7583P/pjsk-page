@@ -5,8 +5,7 @@
   <title>PJSK LOUNGE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ===== Base ===== */
-    :root {
+    :root{
       --bg:#383838; --panel:#2a2a2a; --panel2:#242424; --ink:#fff; --muted:#bfbfbf;
       --brand:#6c6cf0; --line:#0006; --btn:#555;
     }
@@ -15,19 +14,18 @@
     #app{max-width:1100px;margin:0 auto}
     h1{margin:0 0 18px;text-align:center}
     .cardish{background:var(--panel);border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,.4);border:1px solid var(--line)}
+    .wrap{padding:18px}
 
-    /* ===== Tabs (arriba) ===== */
+    /* Tabs */
     .tabs{display:flex;gap:8px;margin:0 auto 14px;position:sticky;top:8px;z-index:5}
     .tab{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);cursor:pointer;font-weight:700}
     .tab.active{outline:2px solid var(--brand);background:#31314a}
-    .tab span{opacity:.9}
-    .wrap{padding:18px}
 
-    /* ===== Controles ===== */
+    /* Controles */
     .controls{text-align:center;margin-bottom:12px}
     .controls input[type="text"]{padding:8px 10px;width:min(440px,90%);border-radius:8px;border:1px solid #0000;background:#555;color:#fff;text-align:center}
 
-    /* ===== Dropdown Rangos ===== */
+    /* Dropdown Rangos */
     .dropdown{display:inline-block;position:relative;margin-left:8px}
     .dropbtn{background:#737373;border:none;padding:8px 12px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer}
     .dropdown-content{display:none;position:absolute;top:100%;left:0;min-width:240px;background:#595959;border-radius:8px;overflow:hidden;z-index:10;border:1px solid var(--line)}
@@ -35,7 +33,7 @@
     .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .name-gradient .emoji{background:none!important;-webkit-text-fill-color:currentColor!important}
 
-    /* ===== Tabla ===== */
+    /* Tabla */
     table{width:100%;border-collapse:collapse;margin-top:8px}
     th,td{padding:10px;text-align:center}
     th{background:#030050}
@@ -44,14 +42,13 @@
     tbody tr:nth-child(even){background:#2a2a2a}
     tr.you{outline:1px solid var(--brand);background:rgba(108,108,240,.10)}
 
-    /* ===== Posición + bandera + pfp ===== */
+    /* Posición + bandera + pfp (cuadrado) */
     .position-cell{position:relative;text-align:center;padding-right:64px}
-    .position-cell .position-number{display:inline-block}
+    .position-number{display:inline-block}
     .flag{width:24px;height:18px;object-fit:cover;border-radius:4px;border:1px solid var(--line);background:#222;position:absolute;top:50%;right:36px;transform:translateY(-50%)}
-    /* PFP cuadrado (con esquinas suaves como el ejemplo) */
     .pfp{width:24px;height:24px;border-radius:8px;object-fit:cover;border:2px solid var(--line);background:#222;position:absolute;top:50%;right:6px;transform:translateY(-50%)}
 
-    /* ===== Degradados Rangos ===== */
+    /* Gradients por rango */
     .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
     .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
     .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
@@ -65,13 +62,13 @@
     .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
     .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
 
-    /* ===== Paginación ===== */
+    /* Paginación */
     .pagination{margin-top:12px;display:flex;justify-content:center;align-items:center;gap:8px}
     .pagination button{padding:6px 10px;border:none;border-radius:8px;background:var(--btn);color:#fff;cursor:pointer}
     .pagination button:disabled{opacity:.4;cursor:default}
     .pagination input[type="number"]{width:56px;padding:6px;text-align:center;border-radius:8px;border:1px solid #555;background:#2a2a2a;color:#fff}
 
-    /* ===== Panel Perfil ===== */
+    /* Perfil */
     .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
     .btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:700}
     .btn.ghost{background:transparent;border:1px solid #555}
@@ -79,33 +76,36 @@
     .btn.danger{background:#e26b6b}
     .help{color:var(--muted);font-size:.92rem}
     .notice{background:#0006;border:1px dashed #777;border-radius:10px;padding:10px;color:#eee}
-    /* PFP grande (cuadrado) */
-    .pfp-big{width:88px;height:88px;border-radius:14px;border:2px solid var(--line);background:#1f1f1f;background-size:cover;background-position:center;cursor:pointer}
+    .pfp-big{width:88px;height:88px;border-radius:14px;border:2px solid var(--line);background:#1f1f1f;background-size:cover;background-position:center}
 
-    /* ===== Cartas ===== */
-    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
+    /* Modal Set PFP */
+    .modal-backdrop{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:50}
+    .modal{width:min(1000px,95vw);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+    .modal .head{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .modal .head .left{display:flex;gap:8px;align-items:center}
+    .modal .search{padding:8px 10px;width:min(360px,60vw);border-radius:8px;border:1px solid #0000;background:#555;color:#fff}
+    .close-x{cursor:pointer;font-weight:800;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#444}
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
     .card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px}
-    .card img{width:100%;height:120px;object-fit:cover;border-radius:10px}
-    .card h4{margin:0;font-size:.92rem}
-    .card .rarity{font-size:.78rem;color:var(--muted)}
-    .card .set{margin-top:6px}
+    .thumbs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .thumb{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);cursor:pointer}
+    .thumb img{width:100%;height:120px;object-fit:cover;display:block}
+    .tag{position:absolute;bottom:6px;left:6px;background:#000a;padding:2px 6px;border-radius:6px;font-size:.75rem}
+    .card h4{margin:0;font-size:.9rem}
+    .rarity{font-size:.78rem;color:var(--muted)}
   </style>
 </head>
 <body>
 <div id="app">
   <h1>PJSK LOUNGE – Season {{ seasonLabel }}</h1>
 
-  <!-- ===== TABS (arriba) ===== -->
+  <!-- Pestañas -->
   <div class="tabs">
-    <div class="tab cardish" :class="{active:activeTab==='leaderboard'}" @click="activeTab='leaderboard'">
-      <span>Leaderboard</span>
-    </div>
-    <div class="tab cardish" :class="{active:activeTab==='profile'}" @click="activeTab='profile'">
-      <span>Edit Profile</span>
-    </div>
+    <div class="tab cardish" :class="{active:activeTab==='leaderboard'}" @click="activeTab='leaderboard'"><span>Leaderboard</span></div>
+    <div class="tab cardish" :class="{active:activeTab==='profile'}" @click="activeTab='profile'"><span>Edit Profile</span></div>
   </div>
 
-  <!-- ===== LEADERBOARD ===== -->
+  <!-- Leaderboard -->
   <section v-show="activeTab==='leaderboard'" class="cardish wrap">
     <div class="controls">
       <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank" />
@@ -138,9 +138,8 @@
           </td>
           <td>
             <span :class="['name-gradient','rank-'+p.rank]">
-              <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
-                <span v-else>{{ seg.char }}</span>
+              <template v-for="(seg,i) in splitName(p.name)" :key="i">
+                <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span><span v-else>{{ seg.char }}</span>
               </template>
             </span>
           </td>
@@ -158,15 +157,14 @@
     </div>
   </section>
 
-  <!-- ===== EDIT PROFILE ===== -->
+  <!-- Edit Profile -->
   <section v-show="activeTab==='profile'" class="cardish wrap">
     <h2 style="margin-top:0">Edit Profile</h2>
 
-    <!-- No autenticado -->
+    <!-- Invitado -->
     <div v-if="!authUser">
       <div class="notice"><b>You need to register or login to set a pfp</b></div>
       <div class="row" style="margin-top:10px">
-        <!-- Login -->
         <form @submit.prevent="login" style="display:grid;gap:8px;min-width:260px">
           <input v-model.trim="loginEmail" type="email" placeholder="Email" required />
           <input v-model="loginPass" type="password" placeholder="Contraseña" required />
@@ -178,7 +176,6 @@
           </div>
         </form>
 
-        <!-- Register -->
         <form @submit.prevent="register" style="display:grid;gap:8px;min-width:260px">
           <input v-model.trim="regEmail" type="email" placeholder="Email" required />
           <input v-model="regPass" type="password" placeholder="Contraseña" required />
@@ -192,7 +189,7 @@
     <!-- Autenticado -->
     <div v-else>
       <div class="row">
-        <div :style="{backgroundImage: profilePfp ? `url(${profilePfp})` : 'none'}" class="pfp-big" title="Click para elegir carta" @click="ensureLinkedThenOpenCards"></div>
+        <div :style="{backgroundImage: profilePfp ? `url(${profilePfp})` : 'none'}" class="pfp-big" title="Set PFP" />
         <div>
           <div><b>{{ authUser.email }}</b></div>
           <div class="help" v-if="!authUser.emailVerified">Correo no verificado</div>
@@ -204,6 +201,7 @@
           <div class="help" v-else>No vinculado.</div>
           <div class="row" style="margin-top:8px">
             <button class="btn" @click="promptLink">Vincular con Discord</button>
+            <button class="btn ghost" @click="openPfpModal">Set PFP</button>
             <button class="btn warn" @click="resendVerify">Reenviar verificación</button>
             <button class="btn danger" @click="logout">Logout</button>
           </div>
@@ -213,30 +211,30 @@
       <div class="notice" v-if="!linkedMember" style="margin-top:10px">
         Debes <b>vincular tu casilla</b> para que el PFP se refleje en el leaderboard.
       </div>
-
-      <h3 style="margin:14px 0 6px">Cartas (en vivo)</h3>
-      <div class="cards">
-        <div v-for="c in cards" :key="c.id" class="card">
-          <img :src="cardIcon(c)" :alt="c.name || ('card '+c.id)" />
-          <h4>{{ c.name || ('Card #'+c.id) }}</h4>
-          <div class="rarity">★ {{ c.rarity || '-' }}</div>
-          <button class="btn set" @click="selectCard(c)">Set as Profile</button>
-        </div>
-      </div>
-      <div class="help" style="margin-top:6px">
-        Fuente de cartas: sekai.best / sekai-master-db (cargadas automáticamente).
-      </div>
     </div>
   </section>
+</div>
+
+<!-- Modal Set PFP -->
+<div id="pfpModal" class="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="head">
+      <div class="left">
+        <strong>Elegir Carta (Normal / Entrenada)</strong>
+        <input id="cardSearch" class="search" placeholder="Buscar por nombre o ID…">
+      </div>
+      <button class="close-x" id="closeModal">✕</button>
+    </div>
+    <div id="cardsGrid" class="cards"><!-- se llena con Vue (via portal simple) --></div>
+  </div>
 </div>
 
 <!-- Vue + Axios -->
 <script src="https://unpkg.com/vue@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<!-- Firebase (modular) + App -->
+<!-- App + Firebase -->
 <script type="module">
-  /* ===== Firebase ===== */
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
     getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,
@@ -244,30 +242,29 @@
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
   import {
     getFirestore,doc,getDoc,setDoc,updateDoc,serverTimestamp,
-    collection,query,where,orderBy,onSnapshot,getDocs,limit
+    collection,query,where,limit,getDocs
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  /* ===== CONFIG (edita esto) ===== */
+  /* ===== CONFIG ===== */
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
     projectId: "TU_PROJECT_ID",
     storageBucket: "TU_BUCKET",
     messagingSenderId: "TU_SENDER_ID",
-    appId: "TU_APP_ID",
+    appId: "TU_APP_ID"
   };
   const PLAYERS_READ_ENDPOINT  = "https://worker-production-1ad2.up.railway.app/api/players";
-  const PLAYERS_WRITE_ENDPOINT = ""; // opcional (PATCH para guardar pfp en tu backend)
+  const PLAYERS_WRITE_ENDPOINT = ""; // opcional
 
-  /* Cartas (fuente pública) */
-  // cards.json del master DB en inglés (CORS ok al raw de GitHub)
+  /* Cartas (Sekai) */
   const CARDS_JSON = "https://raw.githubusercontent.com/Sekai-World/sekai-master-db-en-diff/main/cards.json";
-  // CDN con assets del juego (usado por la comunidad)
   const CARD_CDN   = "https://sekai-res.dnaroma.eu/file/sekai-assets/character/member";
 
   const fbApp = initializeApp(firebaseConfig);
   const auth  = getAuth(fbApp);
   const db    = getFirestore(fbApp);
+
   const { createApp } = window.Vue;
   const axios = window.axios;
 
@@ -275,32 +272,23 @@
     data(){return{
       /* tabs */
       activeTab:'leaderboard',
-
       /* leaderboard */
-      players:[], pfpMap:{},
-      filter:'', playerRankMap:{}, currentPage:1, pageSize:50,
+      players:[], pfpMap:{}, filter:'', playerRankMap:{}, currentPage:1, pageSize:50,
       selectedRank:null,
       ranks:[
-        { key:'Iron', label:'Iron', range:'0-100' },
-        { key:'Bronze', label:'Bronze', range:'101-200' },
-        { key:'Silver', label:'Silver', range:'201-300' },
-        { key:'Gold', label:'Gold', range:'301-400' },
-        { key:'Platinum', label:'Platinum', range:'401-500' },
-        { key:'Diamond', label:'Diamond', range:'501-600' },
-        { key:'Crystal', label:'Crystal', range:'601-700' },
-        { key:'Master', label:'Master', range:'701-800' },
-        { key:'Champion', label:'Champion', range:'801-900' },
-        { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
-        { key:'Legend', label:'Legend', range:'+1000' }
+        {key:'Iron',label:'Iron',range:'0-100'},{key:'Bronze',label:'Bronze',range:'101-200'},
+        {key:'Silver',label:'Silver',range:'201-300'},{key:'Gold',label:'Gold',range:'301-400'},
+        {key:'Platinum',label:'Platinum',range:'401-500'},{key:'Diamond',label:'Diamond',range:'501-600'},
+        {key:'Crystal',label:'Crystal',range:'601-700'},{key:'Master',label:'Master',range:'701-800'},
+        {key:'Champion',label:'Champion',range:'801-900'},{key:'GrandChampion',label:'Grand Champion',range:'901-999'},
+        {key:'Legend',label:'Legend',range:'+1000'}
       ],
-
       /* auth/profile */
       authUser:null, profile:null, linkedMember:null,
       loginEmail:'',loginPass:'',showReset:false,resetEmail:'',
       regEmail:'',regPass:'',regUsername:'',
-
-      /* cards */
-      cards:[], stopCardsUnsub:null
+      /* cards (modal) */
+      allCards:[], cardSearch:'', isModalOpen:false
     }},
     computed:{
       seasonLabel(){return 'Beta'},
@@ -321,12 +309,12 @@
       currentPage(v){if(v<1)this.currentPage=1;else if(v>this.totalPages)this.currentPage=this.totalPages}
     },
     methods:{
-      /* ===== Leaderboard ===== */
+      /* Leaderboard */
       async fetchPlayers(){
         try{
-          const {data} = await axios.get(PLAYERS_READ_ENDPOINT);
-          const sorted = data.sort((a,b)=>(b.mmr||0)-(a.mmr||0));
-          const merged = sorted.map(p=>{
+          const {data}=await axios.get(PLAYERS_READ_ENDPOINT);
+          const sorted=data.sort((a,b)=>(b.mmr||0)-(a.mmr||0));
+          const merged=sorted.map(p=>{
             const did=this.getDiscordId(p);
             const pfp=p.pfpUrl||p.pfp||this.pfpMap[did]||null;
             return {...p,pfpUrl:pfp};
@@ -351,13 +339,13 @@
         return did && my && String(did)===String(my);
       },
 
-      /* ===== Auth ===== */
+      /* Auth */
       async register(){
-        const cred = await createUserWithEmailAndPassword(auth,this.regEmail,this.regPass);
+        const cred=await createUserWithEmailAndPassword(auth,this.regEmail,this.regPass);
         await sendEmailVerification(cred.user);
         await setDoc(doc(db,'profiles',cred.user.uid),{
-          email:this.regEmail, username:this.regUsername||null, pfpUrl:null,
-          emailVerified:cred.user.emailVerified, createdAt:serverTimestamp()
+          email:this.regEmail,username:this.regUsername||null,pfpUrl:null,
+          emailVerified:cred.user.emailVerified,createdAt:serverTimestamp()
         });
         if(this.regUsername){ try{ await this.linkByUsername(cred.user.uid,this.regUsername); }catch{} }
         alert('Registro completado. Revisa tu correo.');
@@ -367,17 +355,17 @@
       async resetPassword(){ if(!this.resetEmail)return alert('Ingresa tu email'); await sendPasswordResetEmail(auth,this.resetEmail); alert('Reset enviado (si existe).'); },
       async resendVerify(){ if(this.authUser){ await sendEmailVerification(this.authUser); alert('Verificación reenviada.'); } },
 
-      /* ===== Link Discord row ===== */
+      /* Link Discord row */
       async promptLink(){
         if(!this.authUser) return alert('Inicia sesión primero');
         const v = prompt('Escribe tu username de Discord EXACTO o pega tu discordId:');
         if(!v) return;
         try{
-          const linked = /^\d{16,20}$/.test(v)
-            ? await this.linkByDiscordId(this.authUser.uid, v)
-            : await this.linkByUsername(this.authUser.uid, v);
+          const linked=/^\d{16,20}$/.test(v)
+            ? await this.linkByDiscordId(this.authUser.uid,v)
+            : await this.linkByUsername(this.authUser.uid,v);
           if(linked){
-            this.linkedMember = linked;
+            this.linkedMember=linked;
             if(this.profilePfp) this.applyPfpLocally(linked.discordId||linked.id,this.profilePfp);
             alert('¡Vinculado correctamente!');
           }else alert('No se encontró esa casilla o ya fue reclamada.');
@@ -405,41 +393,71 @@
         return {id:discordId,...data,uid};
       },
 
-      /* ===== Cartas ===== */
+      /* ===== Modal Set PFP ===== */
+      openPfpModal(){
+        if(!this.authUser) return alert('Inicia sesión primero.');
+        if(!this.linkedMember) return alert('Vincula tu casilla de Discord antes de elegir PFP.');
+        this.isModalOpen=true;
+        document.getElementById('pfpModal').style.display='flex';
+        if(!this.allCards.length) this.fetchCards();
+        document.getElementById('cardSearch').focus();
+      },
+      closePfpModal(){
+        this.isModalOpen=false;
+        document.getElementById('pfpModal').style.display='none';
+      },
       async fetchCards(){
         try{
-          const r = await fetch(CARDS_JSON,{cache:'no-store'});
-          const arr = await r.json(); // enorme (todas las cartas)
-          // Normalizamos nombre, rareza y assetbundleName:
-          this.cards = arr.map(c=>({
+          const r=await fetch(CARDS_JSON,{cache:'no-store'});
+          const arr=await r.json();
+          this.allCards = arr.map(c=>({
             id: c.id,
-            rarity: c.rarity || c.cardRarityType || c.cardRarity || c.cardRarityId || '',
+            rarity: c.rarity || c.cardRarityType || c.cardRarity || '',
             name: c.prefix || c.cardTitle || '',
-            assetbundleName: c.assetbundleName || c.assetbundle_name || c.assetBundleName || ''
-          })).filter(c=>c.assetbundleName);
-        }catch(e){
-          console.warn('No se pudieron cargar cartas', e);
-          this.cards = [];
+            asset: c.assetbundleName || c.assetbundle_name || c.assetBundleName || ''
+          })).filter(c=>c.asset);
+          this.renderCardGrid(); // primera vez
+        }catch(e){ console.warn('Cartas no disponibles',e); }
+      },
+      cardUrl(asset, trained){
+        // normal vs after_training
+        const fn = trained ? 'card_after_training.png' : 'card_normal.png';
+        return `${CARD_CDN}/${asset}_rip/${fn}`;
+      },
+      /* Genera el grid dentro del modal con búsqueda en vivo */
+      renderCardGrid(){
+        const grid = document.getElementById('cardsGrid');
+        const q = (this.cardSearch||'').toLowerCase().trim();
+        grid.innerHTML = '';
+        const items = !q ? this.allCards : this.allCards.filter(c=>{
+          const hay = `${c.id} ${c.name}`.toLowerCase();
+          return hay.includes(q);
+        });
+        for(const c of items){
+          const card = document.createElement('div'); card.className='card';
+          const name = document.createElement('h4'); name.textContent = c.name || ('Card #'+c.id);
+          const rar  = document.createElement('div'); rar.className='rarity'; rar.textContent = `ID ${c.id} • ★ ${c.rarity||'-'}`;
+          const thumbs = document.createElement('div'); thumbs.className='thumbs';
+
+          const t1 = document.createElement('div'); t1.className='thumb';
+          const i1 = document.createElement('img'); i1.src=this.cardUrl(c.asset,false); i1.alt=`${c.name} (normal)`;
+          const g1 = document.createElement('div'); g1.className='tag'; g1.textContent='Normal';
+          t1.append(i1,g1); t1.onclick=()=>this.selectCardUrl(this.cardUrl(c.asset,false));
+
+          const t2 = document.createElement('div'); t2.className='thumb';
+          const i2 = document.createElement('img'); i2.src=this.cardUrl(c.asset,true); i2.alt=`${c.name} (trained)`;
+          const g2 = document.createElement('div'); g2.className='tag'; g2.textContent='Trained';
+          t2.append(i2,g2); t2.onclick=()=>this.selectCardUrl(this.cardUrl(c.asset,true));
+
+          thumbs.append(t1,t2);
+          card.append(thumbs,name,rar);
+          grid.append(card);
         }
       },
-      cardIcon(c){
-        // Formato cuadrado; usamos el arte "card_normal.png" (sin entrenar).
-        // Si quieres el entrenado, cambia a "card_after_training.png".
-        return `${CARD_CDN}/${c.assetbundleName}_rip/card_normal.png`;
-      },
-      ensureLinkedThenOpenCards(){
-        if(!this.authUser) return alert('Inicia sesión primero.');
-        if(!this.linkedMember) return alert('Vincula tu casilla de Discord antes de elegir PFP.');
-        // Cargar cartas si aún no están
-        if(!this.cards.length) this.fetchCards();
-        alert('Desplázate abajo para ver las cartas y elegir una.');
-      },
-      async selectCard(card){
-        if(!this.authUser) return alert('Inicia sesión primero.');
-        if(!this.linkedMember) return alert('Vincula tu casilla de Discord antes de elegir PFP.');
-        const uid = this.authUser.uid;
-        const discordId = this.linkedMember.discordId || this.linkedMember.id;
-        const url = this.cardIcon(card);
+      async selectCardUrl(url){
+        if(!this.authUser || !this.linkedMember) return;
+        const uid=this.authUser.uid;
+        const discordId=this.linkedMember.discordId||this.linkedMember.id;
 
         await updateDoc(doc(db,'profiles',uid),{pfpUrl:url});
         await updateDoc(doc(db,'members',discordId),{pfpUrl:url});
@@ -447,8 +465,8 @@
         if(PLAYERS_WRITE_ENDPOINT){
           try{ await axios.patch(`${PLAYERS_WRITE_ENDPOINT}/${discordId}/pfp`,{pfpUrl:url}); }catch(e){ console.warn('PATCH opcional falló',e); }
         }
-
         this.applyPfpLocally(discordId,url);
+        this.closePfpModal();
         alert('PFP actualizado.');
       },
       applyPfpLocally(discordId,url){
@@ -460,47 +478,47 @@
         });
       }
     },
-    async mounted(){
-      /* Dropdown simple */
+    mounted(){
+      // Dropdown rangos
       const btn=document.querySelector('.dropbtn'); const menu=document.getElementById('rankList');
-      btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block'})
-      document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none' })
+      btn.addEventListener('click',e=>{e.stopPropagation();menu.style.display=menu.style.display==='block'?'none':'block'});
+      document.addEventListener('click',()=>{ if(menu.style.display==='block') menu.style.display='none'; });
 
-      /* Leaderboard */
-      await this.fetchPlayers();
-      setInterval(this.fetchPlayers, 10000);
+      // Poll leaderboard
+      this.fetchPlayers(); setInterval(this.fetchPlayers,10000);
 
-      /* Auth */
+      // Auth state
       onAuthStateChanged(auth, async (user)=>{
-        this.authUser = user || null;
+        this.authUser=user||null;
         if(user){
           const pref=doc(db,'profiles',user.uid);
-          const psnap=await getDoc(pref);
-          if(psnap.exists()) this.profile={id:psnap.id,...psnap.data()};
+          const ps=await getDoc(pref);
+          if(ps.exists()) this.profile={id:ps.id,...ps.data()};
           else{
             await setDoc(pref,{email:user.email,username:null,pfpUrl:null,emailVerified:user.emailVerified,createdAt:serverTimestamp()});
             this.profile={id:user.uid,email:user.email,pfpUrl:null,emailVerified:user.emailVerified};
           }
-          this.linkedMember = await this.findMemberByUid(user.uid);
+          this.linkedMember=await this.findMemberByUid(user.uid);
           if(!this.linkedMember && this.profile?.username){
-            try{ this.linkedMember = await this.linkByUsername(user.uid,this.profile.username); }catch{}
+            try{ this.linkedMember=await this.linkByUsername(user.uid,this.profile.username); }catch{}
           }
-          if(this.linkedMember){
-            const did=this.linkedMember.discordId||this.linkedMember.id;
-            if(this.profile?.pfpUrl) this.pfpMap[did]=this.profile.pfpUrl;
-          }
-          // precarga cartas al entrar a perfil
-          if(this.activeTab==='profile' && !this.cards.length) this.fetchCards();
-        }else{
-          this.profile=null; this.linkedMember=null;
-        }
+        }else{ this.profile=null; this.linkedMember=null; }
       });
+
+      // Modal search bindings
+      const search = document.getElementById('cardSearch');
+      const close  = document.getElementById('closeModal');
+      const modal  = document.getElementById('pfpModal');
+      search.addEventListener('input', (e)=>{ this.cardSearch=e.target.value; this.renderCardGrid(); });
+      close.addEventListener('click', ()=>this.closePfpModal());
+      modal.addEventListener('click', (e)=>{ if(e.target===modal) this.closePfpModal(); });
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && this.isModalOpen) this.closePfpModal(); });
     }
   }).mount('#app');
 </script>
 
 <script>
-  /* Dropdown fallback si Vue re-renderiza */
+  /* Fallback si Vue re-renderiza el dropdown */
   document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.querySelector('.dropbtn'); const menu=document.getElementById('rankList');
     if(!btn||!menu) return;
