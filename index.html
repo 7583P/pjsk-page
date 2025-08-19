@@ -7,9 +7,9 @@
   <style>
     :root{
       --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
-      --hover:#595959; --accent:#6c6cf0; --warn:#f0a66c;
-      --head:#030050; --row1:#333; --row2:#2a2a2a;
-      --grid:#555;
+      --hover:#595959; --accent:#6c6cf0; --warn:#f0a66c; --ok:#35c07a;
+      --head:#030050; --row1:#333; --row2:#2a2a2a; --chip:#737373;
+      --danger:#e26b6b;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,547 +17,645 @@
     a{color:inherit;text-decoration:none}
     #app{min-height:100%}
 
-    header.topbar{background:var(--panel);border-bottom:1px solid #0006;position:sticky;top:0;z-index:10}
-    .nav{max-width:1000px;margin:0 auto;display:flex;gap:14px;align-items:center;padding:12px}
-    .nav a{padding:8px 10px;border-radius:8px}
-    .nav a.active{background:#444}
-    .nav a:hover{background:var(--hover)}
-    .grow{flex:1}
-    .container{max-width:1000px;margin:20px auto;padding:20px;background:var(--panel);border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.45)}
-
-    .btn{background:#5050ff1f;border:1px solid var(--accent);border-radius:8px;padding:8px 12px;color:#cfd0ff;cursor:pointer}
-    .btn:hover{background:#6c6cf02f}
-    .btn.ghost{background:transparent;border-color:#777;color:#ddd}
-    .btn.warn{border-color:var(--warn);color:#ffd9c0}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .grid{display:grid;gap:12px}
-    .card{background:#1f1f1f;border:1px solid #3a3a3a;border-radius:12px;padding:12px}
-    .input{background:#1f1f1f;border:1px solid #555;color:#fff;border-radius:8px;padding:8px 10px;width:100%}
-    .help{color:var(--muted);font-size:13px}
-    .badge{display:inline-grid;place-items:center;border:1px solid #555;color:#bbb;padding:3px 8px;border-radius:999px;font-size:12px}
-
-    .hero{font-size:30px;margin:0 0 10px;text-align:center}
-    .welcome-block{white-space:pre-wrap;background:#1a1a1a;border:1px solid #333;padding:16px;border-radius:12px;font-family:inherit}
-
-    /* PFP */
-    .pfp-box{width:220px;height:220px;background:#303030;border:2px dashed #555;border-radius:12px;display:grid;place-items:center;overflow:hidden}
-    .pfp-box img{width:100%;height:100%;object-fit:cover}
-    .grid.cards{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
-    .cardbtn{padding:8px;text-align:center;cursor:pointer}
-    .cardbtn.selected{outline:2px solid var(--accent);border-radius:10px}
-
-    /* ===== Leaderboard ===== */
-    .page-title{font-size:34px;margin:0 0 14px;text-align:center;letter-spacing:.3px}
-    .controls{margin-bottom:15px;text-align:center}
-    .controls input[type="text"]{
-      padding:10px;width:80%;max-width:420px;border:1px solid #555;border-radius:10px;
-      background:#1f1f1f;color:#fff;text-align:center
+    header.topbar{
+      background:var(--panel);border-bottom:1px solid #0006;
+      position:sticky;top:0;z-index:10;
     }
-
-    /* Dropdown (igual look de tu captura) */
-    .dropdown{position:relative;display:inline-block;margin-left:10px}
-    .dropbtn{background:#737373;border:none;color:#c9f4ff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;white-space:nowrap}
-    .dropdown-content{position:absolute;top:100%;left:0;min-width:220px;background:#595959;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;border-radius:4px;overflow:hidden}
-    .dropdown-content a{display:block;padding:8px 12px;color:#fff;text-decoration:none;font-size:14px;white-space:nowrap}
-    .dropdown-content a:hover .text-gradient{opacity:.9}
-
-    /* Tabla */
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{
-      padding:10px;
-      text-align:center;
-      color:#fff;
-      border-bottom:1px solid var(--grid); /* solo horizontales */
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 18px;display:flex;gap:12px;align-items:center}
+    .brand{font-weight:700;letter-spacing:.3px}
+    .tabs{margin-left:auto;display:flex;gap:8px}
+    .tabs button{
+      background:transparent;color:var(--text);border:1px solid #0006;border-radius:8px;
+      padding:8px 12px;cursor:pointer
     }
-    
-    /* sin separadores verticales */
-    th+th, td+td{border-left:0 !important;}
+    .tabs button.active{background:var(--hover)}
+    main{max-width:1100px;margin:16px auto;padding:12px}
 
-    /* posición y bandera */
-    .position-cell{position:relative;text-align:center;padding-right:32px}
-    .position-number{display:inline-block}
-    .flag{width:24px;position:absolute;top:50%;right:8px;transform:translateY(-50%)}
+    .panel{background:var(--panel);border:1px solid #0006;border-radius:10px;padding:16px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 
-    /* Gradientes por rango */
-    .text-gradient,.name-gradient{display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .rank-Placement{background-image:linear-gradient(to left,#ff7000,#ff4600)}
-    .rank-Iron{background-image:linear-gradient(to left,#616161,#2e2e2e)}
-    .rank-Bronze{background-image:linear-gradient(to left,#6d2a00,#3d1d00)}
-    .rank-Silver{background-image:linear-gradient(to left,#b3b3b3,#696969)}
-    .rank-Gold{background-image:linear-gradient(to left,#ffbf60,#c57600)}
-    .rank-Platinum{background-image:linear-gradient(to left,#767ec2,#38429f)}
-    .rank-Diamond{background-image:linear-gradient(to left,#42a2ff,#003e8f)}
-    .rank-Crystal{background-image:linear-gradient(to left,#dca3ff,#883cb4)}
-    .rank-Master{background-image:linear-gradient(to left,#c34efd,#5f009e)}
-    .rank-Champion{background-image:linear-gradient(to left,#fe6767,#8f0000)}
-    .rank-GrandChampion{background-image:linear-gradient(to left,#ff0800,#570300);white-space:nowrap}
-    .rank-Legend{background-image:linear-gradient(to left,#c9f4ff,#c9f4ff)}
-    .name-gradient .emoji{background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color:currentColor !important}
+    h1{margin:.2rem 0 1rem 0;font-size:1.6rem}
+    h2{margin:1rem 0 .5rem 0;font-size:1.2rem}
+    p.muted{color:var(--muted);margin:.25rem 0}
 
-    /* Paginación */
-    .pagination{margin-top:15px;display:flex;justify-content:center;align-items:center;gap:8px}
-    .pagination button{padding:6px 10px;border:none;border-radius:6px;background:#555;color:#fff;cursor:pointer}
-    .pagination button:disabled{opacity:.4;cursor:default}
-    .pagination input[type="number"]{width:60px;padding:6px;text-align:center;border-radius:6px;border:1px solid #555;background:#2a2a2a;color:#fff}
+    /* Formularios */
+    form{display:grid;gap:10px}
+    input,select{
+      width:100%;padding:10px;border-radius:8px;border:1px solid #0006;background:#1f1f1f;color:var(--text)
+    }
+    .row{display:flex;gap:8px;align-items:center}
+    .row .grow{flex:1}
+    .btn{
+      background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600
+    }
+    .btn.secondary{background:#5050aa66;border:1px solid #6c6cf099}
+    .btn.warn{background:var(--warn)}
+    .btn.danger{background:var(--danger)}
+    .btn.ghost{background:transparent;border:1px solid #0006}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .chip{display:inline-flex;align-items:center;gap:6px;background:var(--chip);color:#fff;padding:4px 8px;border-radius:999px;font-size:.85rem}
+
+    /* Perfil */
+    .profile{
+      display:flex;gap:16px;align-items:center;flex-wrap:wrap
+    }
+    .pfp{
+      width:72px;height:72px;border-radius:999px;background:#1f1f1f;border:2px solid #0006;
+      background-size:cover;background-position:center;cursor:pointer;position:relative
+    }
+    .pfp::after{
+      content:"Editar";position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+      font-size:.7rem;background:#000a;padding:2px 6px;border-radius:8px
+    }
+    .badge{padding:2px 6px;border-radius:6px;font-size:.8rem}
+    .badge.ok{background:#2a5;}.badge.warn{background:#a82}
+    .help{font-size:.9rem;color:var(--muted)}
+
+    /* Leaderboard */
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    thead th{
+      font-weight:700;text-align:left;padding:10px;border-bottom:1px solid #0006;background:var(--head)
+    }
+    tbody tr:nth-child(odd){background:var(--row1)}
+    tbody tr:nth-child(even){background:var(--row2)}
+    td{padding:10px;border-bottom:1px solid #0006}
+    .cell-user{display:flex;align-items:center;gap:12px}
+    .flag-pfp{display:inline-flex;align-items:center;gap:8px}
+    .flag{width:26px;height:18px;border:1px solid #0006;border-radius:3px;object-fit:cover}
+    .pfp-small{
+      width:26px;height:26px;border-radius:999px;border:2px solid #0006;object-fit:cover
+    }
+    .you{border:1px solid #6c6cf0;background:#6c6cf01a;border-radius:8px}
+
+    /* Modal cartas */
+    .modal-backdrop{
+      position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50
+    }
+    .modal{width:min(900px,95vw);max-height:85vh;overflow:auto;background:var(--panel);border:1px solid #0006;border-radius:12px;padding:16px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+    .card{
+      background:#1f1f1f;border:1px solid #0006;border-radius:12px;padding:8px;cursor:pointer;display:flex;flex-direction:column;gap:6px
+    }
+    .card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+    .card h4{margin:0;font-size:.95rem}
+    .card .rarity{font-size:.75rem;color:var(--muted)}
+    .close-x{float:right;cursor:pointer;font-weight:700}
+
+    .notice{
+      background:#0006;border:1px dashed #999;border-radius:8px;padding:10px;color:#eee
+    }
   </style>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
-    <nav class="nav">
-      <a href="#/" data-route>Home</a>
-      <a href="#/edit-profile" data-route>Edit Profile</a>
-      <a href="#/pjsk-lounge" data-route>PJSK LOUNGE</a>
-      <div class="grow"></div>
-      <div id="authStatus" class="row"></div>
-    </nav>
+    <div class="wrap">
+      <div class="brand">PJSK LOUNGE</div>
+      <div class="tabs">
+        <button id="tab-home" class="active">Home</button>
+        <button id="tab-lb">Leaderboard</button>
+      </div>
+    </div>
   </header>
 
-  <main class="container">
-    <!-- ===== HOME ===== -->
-    <section id="route-home" class="grid" style="gap:18px;display:none">
-      <div>
-        <h1 class="hero">Welcome to PJSK LOUNGE</h1>
-        <div class="welcome-block">
-PJSK LOUNGE, new project of competitive pjsk with a DISCORD BOT and PAGE especially created for this project (11/05/25)
-How it works?
-first of all, the format is 1v1v1v1v1 (2-4 available for now) into a CO-OP with 5 ROUNDS, the amount of perfect,great,good,bad and miss taps will be counted and if u are placement depending on your amount from great to miss taps will determine your starting rank (there are 11 ranks) after the room in discord is full the bot will launch random songs to be selected on HARD/EXPERT/MASTER/APPEND difficulty according to your rank, once the 5 rounds are finished !submit command will be use to update MMR/RANK/ROLES into DISCORD and into the PAGE there are COMMANDS to join a room, leave a room, check top 10, check your mmr (and mmr/rank from other player), check your x season stats/current seasons stats, etc if you are new into the game or you are a top player dosnt matter, any skill is welcome
-        </div>
-      </div>
+  <main>
+    <!-- HOME -->
+    <section id="home" class="panel">
+      <h1>Welcome to PJSK LOUNGE</h1>
+      <p class="muted">Proyecto competitivo con Discord Bot y Página. Aquí puedes registrarte/iniciar sesión, vincular tu casilla del leaderboard (creada al unirte al servidor de Discord) y configurar tu <b>PFP</b> con cartas.</p>
 
-      <div class="card">
-        <div id="homeButtons" class="row"></div>
-        <p id="homeHint" class="help"></p>
-      </div>
-
-      <!-- Modales -->
-      <div id="panel-register" class="card grid" style="gap:10px;display:none">
-        <h3>Register</h3>
-        <input class="input" id="regEmail" placeholder="Email" type="email">
-        <input class="input" id="regPass" placeholder="Password" type="password">
-        <div class="row">
-          <button class="btn" id="btnDoRegister">Crear cuenta</button>
-          <button class="btn ghost" data-close="panel-register">Cancelar</button>
-        </div>
-        <p class="help">Recibirás un correo con botón/enlace de verificación.</p>
-        <p id="msgRegister" class="help"></p>
-      </div>
-
-      <div id="panel-login" class="card grid" style="gap:10px;display:none">
-        <h3>Login</h3>
-        <input class="input" id="logEmail" placeholder="Email" type="email">
-        <input class="input" id="logPass" placeholder="Password" type="password">
-        <div class="row">
-          <button class="btn" id="btnDoLogin">Entrar</button>
-          <button class="btn ghost" data-close="panel-login">Cancelar</button>
-        </div>
-        <p id="msgLogin" class="help"></p>
-      </div>
-
-      <div id="panel-reset" class="card grid" style="gap:10px;display:none">
-        <h3>Reset password</h3>
-        <input class="input" id="resetEmail" placeholder="Tu correo" type="email">
-        <div class="row">
-          <button class="btn" id="btnDoReset">Enviar email</button>
-          <button class="btn ghost" data-close="panel-reset">Cancelar</button>
-        </div>
-        <p class="help">Si no existe cuenta, te enviaremos instrucciones para registrarte.</p>
-        <p id="msgReset" class="help"></p>
-      </div>
-    </section>
-
-    <!-- ===== EDIT PROFILE ===== -->
-    <section id="route-edit" class="grid" style="gap:18px;display:none">
-      <h2>Edit Profile</h2>
-      <div id="edit-loading">Cargando…</div>
-
-      <!-- No autenticado -->
-      <div id="edit-guest" class="card grid" style="gap:10px;display:none">
-        <p class="help">No has iniciado sesión.</p>
-        <div class="row">
-          <button class="btn" data-open="panel-register">Register</button>
-          <button class="btn ghost" data-open="panel-login">Login</button>
-          <button class="btn ghost" data-open="panel-reset">Reset password</button>
-        </div>
-      </div>
-
-      <!-- Autenticado, no verificado -->
-      <div id="edit-unverified" class="card grid" style="gap:10px;display:none">
-        <p><strong>Verifica tu correo para continuar</strong></p>
-        <p class="help">Te hemos enviado un email con un botón/enlace de verificación.</p>
-        <div class="row">
-          <button class="btn" id="btnResend">Resend verification</button>
-          <button class="btn ghost" id="btnReload">Refrescar estado</button>
-        </div>
-        <p id="msgEditUnv" class="help"></p>
-      </div>
-
-      <!-- Autenticado y verificado -->
-      <div id="edit-verified" class="grid" style="gap:14px;display:none">
-        <div class="card grid" style="gap:10px">
-          <label>Name (read-only)</label>
-          <input class="input" id="displayNameRO" readonly />
-        </div>
-
-        <div class="grid" style="gap:14px">
-          <h3>set pfp in game cards</h3>
-          <div class="row" style="align-items:flex-start">
-            <div class="pfp-box" id="pfpBox"><span class="help">(sin PFP)</span></div>
-            <div class="card" style="flex:1">
-              <div id="cardsGrid" class="grid cards"></div>
-              <div class="row" style="margin-top:10px">
-                <button class="btn warn" id="btnDeletePfp">Delete pfp</button>
+      <div id="auth-area" class="grid2">
+        <!-- Columna izquierda: autenticado / perfil -->
+        <div class="panel" id="perfil-panel" style="display:none">
+          <h2>Tu perfil</h2>
+          <div class="profile">
+            <div id="pfp" class="pfp" title="Click para elegir carta"></div>
+            <div>
+              <div id="user-email"></div>
+              <div id="email-verif"></div>
+              <div id="vinculo-discord" class="help"></div>
+              <div class="row" style="margin-top:8px;gap:10px">
+                <button class="btn" id="btn-vincular">Vincular con Discord</button>
+                <button class="btn warn" id="btn-reenviar" title="Reenviar verificación a tu email">Reenviar verificación</button>
+                <button class="btn danger" id="btn-logout">Logout</button>
               </div>
-              <p id="msgPfp" class="help"></p>
             </div>
           </div>
+          <div class="notice" style="margin-top:12px">
+            <b>Set PFP:</b> debes estar <b>vinculado</b> a tu casilla de Discord para que se refleje en el leaderboard.
+          </div>
+        </div>
+
+        <!-- Columna derecha: login/register/reset (cuando no autenticado) -->
+        <div id="forms-panel" class="panel">
+          <h2>Acceso</h2>
+          <div class="row">
+            <button class="btn ghost" id="show-login">Login</button>
+            <button class="btn ghost" id="show-register">Register</button>
+            <button class="btn ghost" id="show-reset">Reset password</button>
+          </div>
+
+          <form id="form-login" style="display:none">
+            <h3>Iniciar sesión</h3>
+            <input id="login-email" type="email" placeholder="Email" required />
+            <input id="login-pass" type="password" placeholder="Contraseña" required />
+            <button class="btn" type="submit">Login</button>
+          </form>
+
+          <form id="form-register" style="display:none">
+            <h3>Crear cuenta</h3>
+            <input id="reg-email" type="email" placeholder="Email" required />
+            <input id="reg-pass" type="password" placeholder="Contraseña" required />
+            <div class="row">
+              <input id="reg-username" class="grow" placeholder="Tu username de Discord (exacto)" />
+            </div>
+            <button class="btn" type="submit">Registrar y enviar verificación</button>
+            <p class="help">Al registrarte puedes ingresar tu <b>username de Discord</b> para vincular tu casilla si ya estás en el servidor.</p>
+          </form>
+
+          <form id="form-reset" style="display:none">
+            <h3>Reset password</h3>
+            <input id="reset-email" type="email" placeholder="Email" required />
+            <button class="btn" type="submit">Enviar correo de reseteo</button>
+          </form>
         </div>
       </div>
     </section>
 
-    <!-- ===== PJSK LOUNGE (Leaderboard — Vue) ===== -->
-    <section id="route-lounge" style="display:none">
-      <div id="loungeApp">
-        <h2 class="page-title">PJSK LOUNGE — Season {{ seasonLabel }}</h2>
-
-        <div class="controls">
-          <input type="text" v-model="filter" placeholder="Buscar por nombre…" v-if="!selectedRank">
-
-          <!-- ▼ Mini pestaña de Rangos -->
-          <div class="dropdown">
-            <button class="dropbtn" @click.stop.prevent="showRanks = !showRanks">
-              <template v-if="selectedRank">
-                <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
-                <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
-              </template>
-              <template v-else>
-                <span class="text-gradient rank-Legend">Rangos ▾</span>
-              </template>
-            </button>
-
-            <!-- v-if para montar/desmontar y evitar estilos residuales -->
-            <div class="dropdown-content" v-if="showRanks" id="rankList" @click.stop>
-              <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)">
-                <span :class="['text-gradient','rank-'+r.key]">{{ r.label }} ({{ r.range }})</span>
-              </a>
-            </div>
-          </div>
-
-          <button v-if="selectedRank"
-                  @click="clearRank"
-                  style="margin-left:10px;background:#555;color:#fff;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;">
-            Mostrar todos ▾
-          </button>
-        </div>
-
-        <div class="card">
-          <table>
-            <thead>
-              <tr><th>#</th><th>Player</th><th>MMR</th><th>Rango</th></tr>
-            </thead>
-            <tbody>
-              <tr v-if="loading"><td colspan="4" class="help">Cargando...</td></tr>
-              <tr v-else-if="errorMsg"><td colspan="4" class="help">{{ errorMsg }}</td></tr>
-              <tr v-else-if="!paginatedPlayers.length"><td colspan="4" class="help">—</td></tr>
-
-              <tr v-for="p in paginatedPlayers" :key="p.id">
-                <td class="position-cell">
-                  <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
-                  <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
-                </td>
-                <td>
-                  <span :class="['name-gradient','rank-'+p.rank]">
-                    <template v-for="(seg, idx) in splitName(p.name)" :key="idx">
-                      <span v-if="seg.isEmoji" class="emoji">{{ seg.char }}</span>
-                      <span v-else>{{ seg.char }}</span>
-                    </template>
-                  </span>
-                </td>
-                <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
-                <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="pagination">
-          <button @click="prevPage" :disabled="currentPage<=1">&laquo;</button>
-          <input type="number" v-model.number="currentPage" :min="1" :max="totalPages" />
-          <span>/ {{ totalPages }}</span>
-          <button @click="nextPage" :disabled="currentPage>=totalPages">&raquo;</button>
-        </div>
-      </div>
+    <!-- LEADERBOARD -->
+    <section id="leaderboard" class="panel" style="display:none">
+      <h2>Leaderboard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px">#</th>
+            <th>Jugador</th>
+            <th>Username</th>
+            <th style="width:160px">País + PFP</th>
+          </tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
     </section>
   </main>
 </div>
 
-<!-- Firebase SDK (auth + firestore) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import {
-    getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged,
-    createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification,
-    sendPasswordResetEmail, signOut, updateProfile, reload
-  } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-  import {
-    getFirestore, doc, getDoc, setDoc, writeBatch
-  } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+<!-- Modal selector de cartas -->
+<div id="cards-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <span class="close-x" id="close-cards">✕</span>
+    <h3>Elige tu carta para el PFP</h3>
+    <p class="help">Al seleccionar, se actualizará tu perfil y tu casilla del leaderboard.</p>
+    <div id="cards-grid" class="cards"></div>
+  </div>
+</div>
 
-  /* === TU CONFIG FIREBASE === */
+<!-- Firebase (modular) -->
+<script type="module">
+  // =============================
+  //  Firebase inicialización
+  // =============================
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, sendEmailVerification, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp,
+    collection, query, where, orderBy, onSnapshot, getDocs, limit
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+  // TODO: Reemplaza con tu configuración
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
     projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_BUCKET",
+    messagingSenderId: "TU_SENDER_ID",
+    appId: "TU_APP_ID"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  await setPersistence(auth, browserLocalPersistence);
+  const app   = initializeApp(firebaseConfig);
+  const auth  = getAuth(app);
+  const db    = getFirestore(app);
 
-  /* Utils + router */
-  const $ = s=>document.querySelector(s); const $$ = s=>Array.from(document.querySelectorAll(s));
-  function setActiveRoute(){ const h=location.hash||"#/"; $$('a[data-route]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===h)); }
-  function showRoute(el){ $("#route-home").style.display="none"; $("#route-edit").style.display="none"; $("#route-lounge").style.display="none"; el&&(el.style.display=""); setActiveRoute(); }
-  function render(){ const h=location.hash||"#/"; if(h.startsWith("#/edit-profile")){ showRoute($("#route-edit")); renderEdit(); } else if(h.startsWith("#/pjsk-lounge")){ showRoute($("#route-lounge")); } else { showRoute($("#route-home")); renderHome(); } }
-  window.addEventListener("hashchange", render);
+  // =============================
+  //  Utilidades UI
+  // =============================
+  const $ = (sel)=>document.querySelector(sel);
+  const el = (tag, attrs={}, ...children)=>{
+    const n=document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==='class') n.className=v;
+      else if(k==='style') n.style.cssText=v;
+      else if(k.startsWith('on') && typeof v==='function') n.addEventListener(k.slice(2),v);
+      else n.setAttribute(k,v);
+    });
+    for (const c of children) n.append(c);
+    return n;
+  };
 
-  /* Header */
-  let currentUser=null, currentProfile=null;
-  function updateHeader(){
-    const box=$("#authStatus"); box.innerHTML="";
-    if(currentUser){
-      const badge=document.createElement("span"); badge.className="badge"; badge.textContent=currentUser.email;
-      const btn=document.createElement("button"); btn.className="btn ghost"; btn.textContent="Log out";
-      btn.onclick=async()=>{ await signOut(auth); location.hash="#/"; };
-      box.append(badge,btn);
-    }else{
-      const a1=document.createElement("a"); a1.className="btn ghost"; a1.href="#/"; a1.textContent="Register";
-      const a2=document.createElement("a"); a2.className="btn"; a2.href="#/"; a2.textContent="Login";
-      box.append(a1,a2);
+  // Tabs
+  const tabHome = $("#tab-home");
+  const tabLb   = $("#tab-lb");
+  const secHome = $("#home");
+  const secLb   = $("#leaderboard");
+  tabHome.addEventListener("click", ()=>{
+    tabHome.classList.add("active"); tabLb.classList.remove("active");
+    secHome.style.display="block"; secLb.style.display="none";
+  });
+  tabLb.addEventListener("click", ()=>{
+    tabLb.classList.add("active"); tabHome.classList.remove("active");
+    secHome.style.display="none"; secLb.style.display="block";
+  });
+
+  // Panels y forms
+  const perfilPanel = $("#perfil-panel");
+  const formsPanel  = $("#forms-panel");
+  const showLogin   = $("#show-login");
+  const showReg     = $("#show-register");
+  const showReset   = $("#show-reset");
+  const fLogin      = $("#form-login");
+  const fRegister   = $("#form-register");
+  const fReset      = $("#form-reset");
+
+  function showForm(which){
+    fLogin.style.display   = which==='login' ? 'grid':'none';
+    fRegister.style.display= which==='register' ? 'grid':'none';
+    fReset.style.display   = which==='reset' ? 'grid':'none';
+  }
+  showLogin.addEventListener("click", ()=>showForm('login'));
+  showReg.addEventListener("click", ()=>showForm('register'));
+  showReset.addEventListener("click", ()=>showForm('reset'));
+  // por defecto muestra login
+  showForm('login');
+
+  // Perfil UI refs
+  const pfpDiv        = $("#pfp");
+  const userEmailDiv  = $("#user-email");
+  const emailVerifDiv = $("#email-verif");
+  const vinculoDiv    = $("#vinculo-discord");
+  const btnVincular   = $("#btn-vincular");
+  const btnReenviar   = $("#btn-reenviar");
+  const btnLogout     = $("#btn-logout");
+
+  // Modal cartas
+  const modal    = $("#cards-modal");
+  const closeX   = $("#close-cards");
+  const cardsGrid= $("#cards-grid");
+  closeX.addEventListener("click", ()=> modal.style.display='none');
+  modal.addEventListener("click",(e)=>{ if(e.target===modal) modal.style.display='none'; });
+
+  // Estado global
+  let currentUser = null;            // auth user
+  let linkedMemberDoc = null;        // doc de members vinculado a este uid (si existe)
+  let currentProfile = null;         // doc de profiles/{uid}
+
+  // ===========
+  //  Auth
+  // ===========
+  fRegister.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email = $("#reg-email").value.trim();
+    const pass  = $("#reg-pass").value;
+    const discU = ($("#reg-username").value||"").trim();
+
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await sendEmailVerification(cred.user);
+
+    // Crea profile
+    await setDoc(doc(db,"profiles", cred.user.uid),{
+      email,
+      username: discU || null,
+      pfpUrl: null,
+      emailVerified: cred.user.emailVerified,
+      createdAt: serverTimestamp()
+    });
+
+    // Intenta vincular si dio username
+    if (discU){
+      await linkDiscordRowByUsername(cred.user.uid, discU);
     }
-  }
+    alert("Registro completado. Revisa tu correo para verificar la cuenta.");
+  });
 
-  /* Home (register/login/reset) */
-  function renderHome(){
-    const hb=$("#homeButtons"), hint=$("#homeHint");
-    $("#panel-register").style.display="none"; $("#panel-login").style.display="none"; $("#panel-reset").style.display="none";
-    $("#msgRegister").textContent=""; $("#msgLogin").textContent=""; $("#msgReset").textContent="";
-    hb.innerHTML="";
-    if(!currentUser){
-      hb.append(btn("Register",()=>open("panel-register")), btn("Login",()=>open("panel-login"),"ghost"), btn("Reset password",()=>open("panel-reset"),"ghost"));
-      hint.textContent="También puedes usar Edit Profile para acceder a Register/Login/Reset.";
-    }else{
-      hb.append(btn("Log out", async()=>{ await signOut(auth); },"warn")); hint.textContent="Sigue en Edit Profile para configurar tu PFP.";
+  fLogin.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email = $("#login-email").value.trim();
+    const pass  = $("#login-pass").value;
+    await signInWithEmailAndPassword(auth, email, pass);
+  });
+
+  fReset.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email = $("#reset-email").value.trim();
+    await sendPasswordResetEmail(auth, email);
+    alert("Si el correo existe, se envió el reset.");
+  });
+
+  btnReenviar.addEventListener("click", async ()=>{
+    if(currentUser) {
+      await sendEmailVerification(currentUser);
+      alert("Verificación reenviada.");
     }
-  }
-  function btn(t,fn,v=""){ const b=document.createElement("button"); b.className="btn"+(v?` ${v}`:""); b.textContent=t; b.onclick=fn; return b; }
-  function open(id){ $("#"+id).style.display=""; }
-  $$("#route-home [data-close]").forEach(el=> el.addEventListener("click", ()=> $("#"+el.getAttribute("data-close")).style.display="none"));
-
-  $("#btnDoRegister").addEventListener("click", async ()=>{
-    const email=$("#regEmail").value.trim(), pass=$("#regPass").value; $("#msgRegister").textContent="";
-    try{
-      const cred = await createUserWithEmailAndPassword(auth,email,pass);
-      const displayName=email.split("@")[0]; await updateProfile(cred.user,{displayName}); await sendEmailVerification(cred.user);
-      const batch=writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", cred.user.uid), {user_id:cred.user.uid,pfp_card_id:null,mmr:0,rank:"Placement",updated_at:now});
-      batch.set(doc(db,"public_players", cred.user.uid), {display_name:displayName,mmr:0,rank:"Placement",pfp_card_id:null,pfp_image:null});
-      await batch.commit();
-      $("#msgRegister").textContent="Cuenta creada. Revisa tu correo para verificar tu cuenta."; $("#panel-register").style.display="none";
-    }catch(e){ $("#msgRegister").textContent=e.message; }
   });
 
-  $("#btnDoLogin").addEventListener("click", async ()=>{
-    const email=$("#logEmail").value.trim(), pass=$("#logPass").value; $("#msgLogin").textContent="";
-    try{
-      const { user } = await signInWithEmailAndPassword(auth,email,pass);
-      if(!user.emailVerified){ $("#msgLogin").textContent="Tu correo no está verificado. Usa 'Resend verification' en Edit Profile."; }
-      else { $("#msgLogin").textContent="Login correcto."; $("#panel-login").style.display="none"; location.hash="#/edit-profile"; }
-    }catch(e){ $("#msgLogin").textContent=e.message; }
+  btnLogout.addEventListener("click", async ()=>{
+    await signOut(auth);
   });
 
-  $("#btnDoReset").addEventListener("click", async ()=>{
-    const email=$("#resetEmail").value.trim(); $("#msgReset").textContent="";
-    try{ await sendPasswordResetEmail(auth,email); $("#msgReset").textContent="Si existe una cuenta, te enviamos instrucciones. Si no, te guiaremos a registrarte."; $("#panel-reset").style.display="none"; }
-    catch(e){ $("#msgReset").textContent=e.message; }
-  });
+  onAuthStateChanged(auth, async (user)=>{
+    currentUser = user;
+    if (user){
+      formsPanel.style.display = "none";
+      perfilPanel.style.display= "block";
 
-  /* Edit Profile */
-  async function renderEdit(){
-    $("#edit-loading").style.display=""; $("#edit-guest").style.display="none"; $("#edit-unverified").style.display="none"; $("#edit-verified").style.display="none";
-    $("#msgPfp").textContent=""; $("#msgEditUnv").textContent="";
-    if(!currentUser){ $("#edit-loading").style.display="none"; $("#edit-guest").style.display=""; return; }
-    await reload(currentUser); const verified=!!currentUser.emailVerified; $("#edit-loading").style.display="none";
-    if(!verified){ $("#edit-unverified").style.display=""; return; }
-    $("#edit-verified").style.display=""; $("#displayNameRO").value=currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player");
-    await loadProfileAndPfp(); drawCards();
-  }
-  async function loadProfileAndPfp(){
-    const snap = await getDoc(doc(db,"player_profiles", currentUser.uid));
-    currentProfile = snap.exists()? snap.data(): null;
-    const box=$("#pfpBox"); box.innerHTML="";
-    if(currentProfile?.pfp_card_id){ box.innerHTML='<span class="help">(pfp seleccionado)</span>'; } else { box.innerHTML='<span class="help">(sin PFP)</span>'; }
-  }
-  function drawCards(){
-    const CARDS=[{id:"c1",name:"Miku — Sky Blue",imageUrl:""}, {id:"c2",name:"Miku — Neon Heart",imageUrl:""}]; // mock visible
-    const grid=$("#cardsGrid"); grid.innerHTML="";
-    CARDS.forEach(c=>{ const b=document.createElement("button"); b.className="card cardbtn"; b.innerHTML=`<div style="height:150px;border-radius:8px;background:#222;display:grid;place-items:center">${c.name}</div>`; if(currentProfile?.pfp_card_id===c.id) b.classList.add("selected"); b.onclick=()=>setPfp(c); grid.appendChild(b); });
-  }
-  async function setPfp(card){
-    try{
-      const batch=writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", currentUser.uid), {user_id:currentUser.uid,pfp_card_id:card.id,mmr:currentProfile?.mmr??0,rank:currentProfile?.rank??"Placement",updated_at:now},{merge:true});
-      batch.set(doc(db,"public_players", currentUser.uid), {display_name: currentUser.displayName || (currentUser.email?.split("@")[0] ?? "Player"), mmr:currentProfile?.mmr??0, rank:currentProfile?.rank??"Placement", pfp_card_id:card.id, pfp_image:null},{merge:true});
-      await batch.commit(); $("#msgPfp").textContent="PFP actualizado."; await loadProfileAndPfp(); drawCards();
-    }catch(e){ $("#msgPfp").textContent=e.message; }
-  }
-  $("#btnDeletePfp").addEventListener("click", async ()=>{
-    try{
-      const batch=writeBatch(db), now=new Date().toISOString();
-      batch.set(doc(db,"player_profiles", currentUser.uid), {pfp_card_id:null,updated_at:now},{merge:true});
-      batch.set(doc(db,"public_players", currentUser.uid), {pfp_card_id:null,pfp_image:null},{merge:true});
-      await batch.commit(); $("#msgPfp").textContent="PFP eliminado."; await loadProfileAndPfp(); drawCards();
-    }catch(e){ $("#msgPfp").textContent=e.message; }
-  });
-  $("#btnResend").addEventListener("click", async ()=>{ try{ await sendEmailVerification(currentUser); $("#msgEditUnv").textContent="Verificación reenviada."; }catch(e){ $("#msgEditUnv").textContent=e.message; } });
-  $("#btnReload").addEventListener("click", async ()=>{ try{ await reload(currentUser); if(currentUser.emailVerified) render(); else $("#msgEditUnv").textContent="Aún sin verificar."; }catch(e){ $("#msgEditUnv").textContent=e.message; } });
+      await user.reload();
+      const verified = user.emailVerified;
 
-  /* Auth state */
-  onAuthStateChanged(auth,(u)=>{ currentUser=u||null; updateHeader(); if(location.hash===""||location.hash==="#") location.hash="#/"; render(); });
-  setActiveRoute(); render();
-  $$("#route-edit [data-open]").forEach(el=> el.addEventListener("click", ()=> open(el.getAttribute("data-open"))));
-</script>
-
-<!-- Vue + Axios SOLO para el leaderboard -->
-<script src="https://unpkg.com/vue@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  const { createApp } = Vue;
-
-  // Normaliza filas para tolerar cambios de nombres de campo
-  function normalizeRow(row, i){
-    return {
-      id: row.id || row.uid || row.userId || row._id || String(i),
-      name: row.name || row.display_name || row.player || row.Player || 'Player',
-      mmr: Number(row.mmr ?? row.MMR ?? row.rating ?? 0),
-      rank: row.rank || row.Rango || row.tier || 'Placement',
-      country: row.country || row.flag || row.cc || row.Country || null
-    };
-  }
-
-  const loungeApp = createApp({
-    data(){ return {
-      loading:true,
-      errorMsg:'',
-      players:[],
-      filter:'',
-      selectedRank:null,
-      showRanks:false,
-      playerRankMap:{},
-      currentPage:1,
-      pageSize:50,
-      ranks:[
-        { key:'Iron',           label:'Iron',           range:'0-100'   },
-        { key:'Bronze',         label:'Bronze',         range:'101-200' },
-        { key:'Silver',         label:'Silver',         range:'201-300' },
-        { key:'Gold',           label:'Gold',           range:'301-400' },
-        { key:'Platinum',       label:'Platinum',       range:'401-500' },
-        { key:'Diamond',        label:'Diamond',        range:'501-600' },
-        { key:'Crystal',        label:'Crystal',        range:'601-700' },
-        { key:'Master',         label:'Master',         range:'701-800' },
-        { key:'Champion',       label:'Champion',       range:'801-900' },
-        { key:'GrandChampion',  label:'Grand Champion', range:'901-999' },
-        { key:'Legend',         label:'Legend',         range:'+1000'   }
-      ]
-    }},
-    computed:{
-      filteredPlayers(){
-        let list=this.players;
-        if (this.selectedRank) {
-          list = list.filter(p => p.rank === this.selectedRank);
-        } else if (this.filter) {
-          list = list.filter(p => (p.name||'').toLowerCase().includes(this.filter.toLowerCase()));
-        }
-        return list;
-      },
-      filteredCount(){ return this.players.filter(p => p.rank === this.selectedRank).length; },
-      totalPages(){ return Math.max(1, Math.ceil(this.filteredPlayers.length / this.pageSize)); },
-      paginatedPlayers(){
-        const start=(this.currentPage-1)*this.pageSize;
-        return this.filteredPlayers.slice(start, start+this.pageSize);
-      },
-      seasonLabel(){ return 'Beta'; }
-    },
-    watch:{
-      filter(){ this.currentPage=1; },
-      selectedRank(){ this.currentPage=1; this.filter=''; }
-    },
-    methods:{
-      selectRank(r){ this.selectedRank=r; this.showRanks=false; },
-      clearRank(){ this.selectedRank=null; this.showRanks=false; },
-      prevPage(){ if(this.currentPage>1) this.currentPage--; },
-      nextPage(){ if(this.currentPage<this.totalPages) this.currentPage++; },
-
-      async fetchPlayers(){
-        this.loading = true; this.errorMsg='';
-        try{
-          const url = 'https://worker-production-1ad2.up.railway.app/api/players';
-
-          let data;
-          try {
-            const resp = await axios.get(url, { withCredentials:false });
-            data = resp.data;
-          } catch (axErr) {
-            // Fallback por si axios choca con CORS en ciertos hostings
-            const r = await fetch(url, { mode:'cors', credentials:'omit' });
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            data = await r.json();
-          }
-
-          if (!Array.isArray(data)) throw new Error('Respuesta no es un array');
-
-          const normalized = data.map((row,i)=> normalizeRow(row,i));
-          const sorted = normalized.sort((a,b)=> (b.mmr||0) - (a.mmr||0));
-          const map={}; sorted.forEach((p,i)=> map[p.id]=i+1);
-
-          this.players = sorted;
-          this.playerRankMap = map;
-        }catch(e){
-          console.error(e);
-          this.players=[]; this.playerRankMap={};
-          this.errorMsg = (e && e.message) ? `Error al cargar datos: ${e.message}` : 'Error al cargar datos';
-        }finally{
-          this.loading=false;
-        }
-      },
-
-      flagUrl(cc){ return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`; },
-      displayRank(r){ return r==='GrandChampion' ? 'Grand Champion' : r; },
-      splitName(name){
-        const emojiPres=/\p{Emoji_Presentation}/u;
-        return Array.from(String(name||'')).map(c=>({char:c,isEmoji:emojiPres.test(c)}));
+      // Cargar profile
+      const pref = doc(db,"profiles", user.uid);
+      const psnap = await getDoc(pref);
+      if (psnap.exists()){
+        currentProfile = { id: psnap.id, ...psnap.data() };
+      } else {
+        // crea si no existe por seguridad
+        await setDoc(pref, {
+          email: user.email, username: null, pfpUrl: null,
+          emailVerified: user.emailVerified, createdAt: serverTimestamp()
+        });
+        currentProfile = { id: user.uid, email: user.email, pfpUrl:null, emailVerified: user.emailVerified };
       }
-    },
-    mounted(){
-      this.fetchPlayers();
-      // Auto refresh cada 10s
-      this._timer=setInterval(this.fetchPlayers, 10000);
 
-      // Cierre al hacer click FUERA del dropdown
-      this._outside = (e)=>{
-        const root = this.$el.querySelector('.dropdown');
-        if (this.showRanks && root && !root.contains(e.target)) this.showRanks = false;
-      };
-      document.addEventListener('click', this._outside);
-    },
-    beforeUnmount(){
-      clearInterval(this._timer);
-      document.removeEventListener('click', this._outside);
+      userEmailDiv.textContent = user.email || "(sin email)";
+      emailVerifDiv.innerHTML  = verified
+        ? `<span class="badge ok">Correo verificado</span>`
+        : `<span class="badge warn">Correo no verificado</span>`;
+
+      // Buscar si ya está vinculado en members por uid
+      linkedMemberDoc = await findMemberByUid(user.uid);
+
+      // Si no está vinculado pero el profile tiene username guardado, intenta vincular
+      if (!linkedMemberDoc && currentProfile?.username){
+        try {
+          linkedMemberDoc = await linkDiscordRowByUsername(user.uid, currentProfile.username);
+        } catch(e){
+          console.warn("No se pudo vincular automáticamente:", e);
+        }
+      }
+
+      // Pinta PFP
+      const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
+      pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
+
+      // Texto de vínculo
+      if (linkedMemberDoc){
+        vinculoDiv.innerHTML = `Vinculado a: <b>${linkedMemberDoc.showname || linkedMemberDoc.nickname || linkedMemberDoc.username}</b> <span class="chip">discordId: ${linkedMemberDoc.discordId}</span>`;
+      } else {
+        vinculoDiv.innerHTML = `No vinculado. <span class="chip">Usa "Vincular con Discord"</span>`;
+      }
+    } else {
+      // no autenticado
+      perfilPanel.style.display= "none";
+      formsPanel.style.display = "block";
+      showForm('login');
+      currentProfile = null;
+      linkedMemberDoc= null;
+      pfpDiv.style.backgroundImage = "none";
     }
   });
 
-  loungeApp.mount('#loungeApp');
+  // ===========
+  //  VINCULAR
+  // ===========
+  btnVincular.addEventListener("click", async ()=>{
+    if(!currentUser){ alert("Primero inicia sesión"); return; }
+
+    const modo = prompt("Escribe tu username de Discord EXACTO (o pega tu discordId si lo sabes). Ejemplos:\n- username\n- 123456789012345678 (discordId)");
+    if(!modo) return;
+
+    if (/^\d{16,20}$/.test(modo)){ // parece discordId
+      const linked = await linkDiscordRowByDiscordId(currentUser.uid, modo);
+      if (linked) {
+        linkedMemberDoc = linked;
+        // reflejar PFP
+        const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
+        pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
+        vinculoDiv.innerHTML = `Vinculado a: <b>${linked.showname || linked.nickname || linked.username}</b> <span class="chip">discordId: ${linked.discordId}</span>`;
+        alert("¡Vinculado correctamente!");
+      } else {
+        alert("No se encontró ese discordId o ya estaba reclamado.");
+      }
+      return;
+    }
+
+    // si no es ID, tomamos como username
+    const linked = await linkDiscordRowByUsername(currentUser.uid, modo);
+    if (linked){
+      linkedMemberDoc = linked;
+      const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
+      pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
+      vinculoDiv.innerHTML = `Vinculado a: <b>${linked.showname || linked.nickname || linked.username}</b> <span class="chip">discordId: ${linked.discordId}</span>`;
+      alert("¡Vinculado correctamente!");
+    } else {
+      alert("No se encontró ese username en el leaderboard o ya está reclamado.");
+    }
+  });
+
+  async function findMemberByUid(uid){
+    const qRef = query(collection(db,"members"), where("uid","==",uid), limit(1));
+    const snap = await getDocs(qRef);
+    if (!snap.empty){
+      const d = snap.docs[0];
+      return { id: d.id, ...d.data() };
+    }
+    return null;
+  }
+
+  async function linkDiscordRowByUsername(uid, username){
+    const uname = username.trim();
+    const unameLower = uname.toLowerCase();
+    const qRef = query(collection(db,"members"), where("usernameLower","==",unameLower), limit(1));
+    const snap = await getDocs(qRef);
+    if (snap.empty) return null;
+    const d = snap.docs[0];
+    const data = d.data();
+    // si ya está reclamado por otro, no permitir
+    if (data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
+    // escribe vínculo en members y profile
+    await updateDoc(doc(db,"members", d.id), { uid });
+    await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || d.id });
+    return { id:d.id, ...data, uid };
+  }
+
+  async function linkDiscordRowByDiscordId(uid, discordId){
+    const ref = doc(db,"members", discordId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    const data = snap.data();
+    if (data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
+    await updateDoc(ref, { uid });
+    await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || discordId });
+    return { id:discordId, ...data, uid };
+  }
+
+  // ==========================
+  //  Selector de cartas / PFP
+  // ==========================
+  pfpDiv.addEventListener("click", async ()=>{
+    if (!currentUser){ alert("Inicia sesión primero."); return; }
+    if (!linkedMemberDoc){ alert("Vincula tu casilla de Discord antes de elegir PFP."); return; }
+
+    // Carga cartas (todas). Si quieres filtrar por inventario, descomenta el bloque de owned.
+    const cards = await loadCards();
+    // const owned = await loadOwnedCardIds(currentUser.uid);
+    // const usable = cards.filter(c=> owned.has(c.id));
+
+    renderCards(cards /* usable */);
+    modal.style.display = 'flex';
+  });
+
+  async function loadCards(){
+    const out = [];
+    const snap = await getDocs(collection(db,"cards"));
+    snap.forEach(d=>{
+      out.push({ id:d.id, ...d.data() });
+    });
+    return out;
+  }
+  async function loadOwnedCardIds(uid){
+    const set = new Set();
+    const snap = await getDocs(collection(db, `inventory/${uid}/ownedCards`));
+    snap.forEach(d=> set.add(d.id));
+    return set;
+  }
+
+  function renderCards(cards){
+    cardsGrid.innerHTML = "";
+    for (const c of cards){
+      const cardEl = el("div", {class:"card", onclick: ()=> selectCard(c)});
+      const img = el("img", {src:c.imageUrl || "", alt:c.name||"card"});
+      const name= el("h4", {}, c.name || "Card");
+      const rar = el("div", {class:"rarity"}, c.rarity || "—");
+      cardEl.append(img, name, rar);
+      cardsGrid.append(cardEl);
+    }
+  }
+
+  async function selectCard(card){
+    try{
+      if (!currentUser || !linkedMemberDoc) return;
+
+      // 1) Actualiza perfil
+      await updateDoc(doc(db,"profiles", currentUser.uid), { pfpUrl: card.imageUrl });
+
+      // 2) Actualiza members/{discordId} (para que el leaderboard lo refleje)
+      const discordId = linkedMemberDoc.discordId || linkedMemberDoc.id;
+      await updateDoc(doc(db,"members", discordId), { pfpUrl: card.imageUrl });
+
+      // 3) Refresca UI local
+      pfpDiv.style.backgroundImage = `url("${card.imageUrl}")`;
+      modal.style.display='none';
+      alert("PFP actualizado.");
+
+    } catch(err){
+      console.error(err);
+      alert("No se pudo actualizar el PFP. Revisa reglas de seguridad y colecciones.");
+    }
+  }
+
+  // ==========================
+  //  Leaderboard en vivo
+  // ==========================
+  const lbBody = $("#lb-body");
+
+  // Cambia "orderBy('orderIndex')" por 'mmr' si prefieres
+  const lbQuery = query(collection(db, "members"), orderBy("orderIndex"));
+  onSnapshot(lbQuery, (snap)=>{
+    const rows = [];
+    snap.forEach(d=> rows.push({ id:d.id, ...d.data() }));
+    renderLeaderboard(rows);
+  });
+
+  function renderLeaderboard(rows){
+    lbBody.innerHTML = "";
+    let pos = 1;
+    for (const r of rows){
+      const isYou = currentUser && (r.uid === currentUser.uid);
+
+      const tr = document.createElement("tr");
+      if (isYou) tr.classList.add("you");
+
+      const tdPos = el("td", {}, String(pos++));
+      const tdPlayer = el("td", {class:"cell-user"},
+        el("div", {},
+          el("div", {}, r.showname || r.nickname || "—"),
+          el("div", {class:"help"}, r.discordId ? `ID: ${r.discordId}` : "")
+        )
+      );
+      const tdUsername = el("td", {}, r.username || "—");
+
+      // País + PFP (PFP a la derecha de la bandera)
+      const flagUrl = r.countryCode ? `https://flagcdn.com/24/${(r.countryCode||"").toLowerCase()}.png` : "";
+      const flagImg = flagUrl ? el("img",{class:"flag", src:flagUrl, alt:r.countryCode}) : el("div",{class:"flag", style:"background:#222"});
+      const pfp = r.pfpUrl ? el("img",{class:"pfp-small", src:r.pfpUrl, alt:"pfp"}) : el("div",{class:"pfp-small", style:"background:#222"});
+
+      const tdCountry = el("td", {},
+        el("div",{class:"flag-pfp"}, flagImg, pfp) // <— PFP queda a la derecha
+      );
+
+      tr.append(tdPos, tdPlayer, tdUsername, tdCountry);
+      lbBody.append(tr);
+    }
+  }
+
+  // ==========================
+  //  Notas de seguridad
+  // ==========================
+  /*
+  Firestore Rules sugeridas:
+
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{db}/documents {
+      function signedIn() { return request.auth != null; }
+      function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+      // Perfil: cada quien solo su doc
+      match /profiles/{uid} {
+        allow read: if signedIn(); // o true si quieres público
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid);
+      }
+
+      // Leaderboard/members: lectura pública, escritura controlada
+      match /members/{discordId} {
+        allow read: if true;
+
+        // Permite reclamar solo si el doc no tiene uid o ya es del mismo usuario.
+        allow update: if signedIn()
+          && (
+               (!existsAfter(/databases/$(db)/documents/members/$(discordId)).uid) ||
+               (resource.data.uid == request.auth.uid) ||
+               (request.resource.data.uid == request.auth.uid && resource.data.uid == null)
+             );
+
+        // Opcionalmente restringe actualizar pfpUrl sólo si ya es su casilla:
+        allow update: if signedIn() && resource.data.uid == request.auth.uid;
+      }
+
+      match /cards/{cardId} {
+        allow read: if true;
+      }
+
+      match /inventory/{uid}/{any=**} {
+        allow read: if isOwner(uid);
+      }
+    }
+  }
+  */
 </script>
 </body>
 </html>
