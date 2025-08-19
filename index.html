@@ -9,7 +9,7 @@
       --bg:#383838; --panel:#2a2a2a; --panel2:#242424; --ink:#fff; --muted:#bfbfbf;
       --brand:#6c6cf0; --warn:#f0a66c; --ok:#58d68d; --err:#ff6b6b; --line:#0006;
       --row1:#333; --row2:#2a2a2a; --hover:#595959; --chip:#444;
-      --rowh:64px; /* altura de cada fila del leaderboard */
+      --rowh:64px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,10 +17,7 @@
     a{color:inherit;text-decoration:none}
     #app{min-height:100%}
 
-    /* Top bar */
-    header.topbar{
-      position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)
-    }
+    header.topbar{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
     .topwrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 16px}
     .brand{font-weight:700;letter-spacing:.5px}
     nav.tabs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
@@ -28,7 +25,6 @@
     .tabbtn:hover{background:var(--hover)}
     .tabbtn.active{background:var(--brand);border-color:#0000}
 
-    /* Layout */
     .container{max-width:1100px;margin:20px auto;padding:20px}
     .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 0 14px rgba(0,0,0,.35);padding:18px}
     .grid{display:grid;gap:16px}
@@ -36,17 +32,13 @@
     .grid.cols-3{grid-template-columns:1fr 1fr 1fr}
     @media (max-width:980px){ .grid.cols-2,.grid.cols-3{grid-template-columns:1fr} }
 
-    /* Home hero */
     .hero{text-align:center;padding:28px;border-radius:12px;background:linear-gradient(135deg,#2a2a2a 0%, #242424 100%);border:1px solid var(--line);margin-bottom:16px}
     .hero h1{font-size:clamp(28px,5vw,48px);margin:0 0 6px}
     .hero p{margin:0;color:var(--muted)}
 
-    /* Forms + msgs */
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
     label{font-size:.92rem;color:var(--muted)}
-    input, select{
-      padding:10px 12px;border-radius:10px;border:1px solid #0008;background:var(--panel2);color:var(--ink);outline:none
-    }
+    input, select{padding:10px 12px;border-radius:10px;border:1px solid #0008;background:var(--panel2);color:var(--ink);outline:none}
     input:focus, select:focus{border-color:var(--brand)}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid #0000;background:var(--brand);color:#fff;cursor:pointer;font-weight:600}
     .btn.ghost{background:#0000;border-color:#00000055}
@@ -58,11 +50,9 @@
     .msg.err{background:#3b1e1e;color:#ffd6d6;border:1px solid #6c2a2a}
     .msg.info{background:#1e263b;color:#d6e4ff;border:1px solid #2a3f6c}
 
-    /* Sections */
     section{display:none}
     section.active{display:block}
 
-    /* Leaderboard */
     .lb-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
     .rank-chip{padding:6px 10px;border-radius:999px;background:var(--chip);cursor:pointer;border:1px solid #0006}
     .rank-chip.active{background:var(--brand)}
@@ -75,17 +65,12 @@
     tbody td{padding:0 12px;border-bottom:1px solid #444;height:var(--rowh);vertical-align:middle}
     .pfpWrap{display:flex;align-items:center;gap:8px;height:100%}
     .flag{font-size:22px;line-height:1}
-    .pfp{
-      height:calc(var(--rowh) - 12px);
-      width:calc(var(--rowh) - 12px);
-      object-fit:cover;border-radius:8px;border:1px solid #0007;background:#111;
-    }
+    .pfp{height:calc(var(--rowh) - 12px);width:calc(var(--rowh) - 12px);object-fit:cover;border-radius:8px;border:1px solid #0007;background:#111}
     .pfp.placeholder{display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#aaa}
     .lb-pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
     .lb-pager .btn{padding:8px 12px}
     .name-muted{color:#cfcfcf}
 
-    /* PFP Picker */
     .pfp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
     .pfp-grid{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px}
     @media (max-width:1100px){ .pfp-grid{grid-template-columns:repeat(5,1fr)} }
@@ -105,7 +90,7 @@
   <header class="topbar">
     <div class="topwrap">
       <div class="brand">PJSK LOUNGE</div>
-      <nav class="tabs">
+      <nav class="tabs" id="tabs">
         <button class="tabbtn active" data-tab="home">Home</button>
         <button class="tabbtn" data-tab="leaderboard">Leaderboard</button>
         <button class="tabbtn" data-tab="profile">Edit Profile</button>
@@ -122,7 +107,6 @@
       </div>
 
       <div id="authArea" class="grid cols-2">
-        <!-- Login -->
         <div class="card">
           <h2 style="margin:0 0 10px">Iniciar sesión</h2>
           <div class="field">
@@ -141,7 +125,6 @@
           <div id="loginMsg"></div>
         </div>
 
-        <!-- Register -->
         <div class="card">
           <h2 style="margin:0 0 10px">Crear cuenta</h2>
           <div class="field">
@@ -264,9 +247,7 @@
   </main>
 </div>
 
-<!-- Firebase (modular) -->
 <script type="module">
-  // ==== IMPORTS ====
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -277,7 +258,6 @@
     query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ==== CONFIGURA TUS CREDENCIALES ====
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
@@ -287,21 +267,33 @@
     appId: "TU_APP_ID",
   };
 
-  // ==== INIT ====
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db   = getFirestore(app);
 
-  // ==== Helpers UI ====
   const $  = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
   const show = (el, on=true)=> el && (el.style.display = on ? "" : "none");
-  function showMsg(el, text, type){ el.className = "msg " + (type||"info"); el.textContent = text; el.style.display = text ? "block" : "none"; }
-  function escapeHtml(s){ return String(s??"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]); }
-  function setActiveTab(name){ $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name)); $$("main section").forEach(s=>s.classList.toggle("active", s.id===name)); }
-  $$(".tabbtn").forEach(b => b.addEventListener("click", ()=> setActiveTab(b.dataset.tab)));
 
-  // ==== Discord validation ====
+  // ✅ FIX: escapeHtml sin error de sintaxis
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  // Tabs
+  function setActiveTab(name){
+    $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
+    $$("main section").forEach(s=>s.classList.toggle("active", s.id===name));
+  }
+  // Delegación robusta (por si en el futuro cambias los botones)
+  $("#tabs").addEventListener("click", (e)=>{
+    const btn = e.target.closest(".tabbtn");
+    if(btn && btn.dataset.tab) setActiveTab(btn.dataset.tab);
+  });
+
+  // Discord validation
   function validateDiscordUsername(u){
     if(!u) return false;
     u = u.trim().replace(/^@/,'');
@@ -310,15 +302,14 @@
     return legacy.test(u) || modern.test(u);
   }
 
-  // ==== Flag emoji from country code (e.g. "PE" -> 🇵🇪) ====
   function flagEmojiFromCC(cc){
     if(!cc || typeof cc!=="string" || cc.length<2) return "🏳️";
     const up = cc.trim().slice(0,2).toUpperCase();
-    const A = 0x1F1E6; // Regional Indicator Symbol Letter A
+    const A = 0x1F1E6;
     return String.fromCodePoint(...[...up].map(ch => A + (ch.charCodeAt(0)-65)));
   }
 
-  // ==== AUTH: Register / Login / Verify / Reset ====
+  // AUTH
   $("#btnRegister").addEventListener("click", async ()=>{
     const email = $("#regEmail").value.trim();
     const pass  = $("#regPass").value.trim();
@@ -386,7 +377,7 @@
     }else{
       show(welcomeArea,false); show(authArea,true);
     }
-    await loadLeaderboard(); // refresca
+    await loadLeaderboard();
   });
 
   $("#btnResendVerify").addEventListener("click", async ()=>{
@@ -408,20 +399,11 @@
     }
   }
 
-  // ===== LEADERBOARD (filtro + paginación) =====
-  const stateLB = {
-    allUsers: [], // cache
-    filtered: [],
-    pageSize: 10,
-    page: 1,
-    rank: "All"
-  };
+  function showMsg(el, text, type){ el.className = "msg " + (type||"info"); el.textContent = text; el.style.display = text ? "block" : "none"; }
 
-  // UI controls
-  $("#pageSize").addEventListener("change", ()=>{
-    stateLB.pageSize = parseInt($("#pageSize").value,10);
-    stateLB.page = 1; renderLeaderboard();
-  });
+  // LEADERBOARD
+  const stateLB = { allUsers: [], filtered: [], pageSize: 10, page: 1, rank: "All" };
+  $("#pageSize").addEventListener("change", ()=>{ stateLB.pageSize = parseInt($("#pageSize").value,10); stateLB.page = 1; renderLeaderboard(); });
   $$(".rank-chip").forEach(ch=>{
     ch.addEventListener("click", ()=>{
       $$(".rank-chip").forEach(x=>x.classList.remove("active"));
@@ -439,7 +421,6 @@
   async function loadLeaderboard(){
     const body = $("#lbBody"); body.innerHTML = `<tr><td colspan="5" style="text-align:center">Cargando…</td></tr>`;
     try{
-      // Trae hasta 500 usuarios ordenados por score
       const qy = query(collection(db,"users"), orderBy("score","desc"));
       const snap = await getDocs(qy);
       const arr = [];
@@ -451,7 +432,6 @@
           countryCode: (d.countryCode||"").trim(), pfpUrl: (d.pfpUrl||"").trim()
         });
       });
-      // Si no hay datos, usa ejemplos
       if(arr.length===0){
         for(let i=0;i<12;i++){
           arr.push({ uid:"demo"+i, score: (1200 - i*10), rank: i%3===0?"Diamond":(i%3===1?"Gold":"Bronze"),
@@ -470,15 +450,12 @@
 
   function renderLeaderboard(){
     const rowsEl = $("#lbBody");
-    // filtrar por rango
     stateLB.filtered = stateLB.allUsers.filter(u => stateLB.rank==="All" ? true : (u.rank===stateLB.rank));
-    // paginación
     const totalPages = Math.max(1, Math.ceil(stateLB.filtered.length / stateLB.pageSize));
     stateLB.page = Math.min(stateLB.page, totalPages);
     const start = (stateLB.page-1)*stateLB.pageSize;
     const pageData = stateLB.filtered.slice(start, start + stateLB.pageSize);
 
-    // render
     let html = "";
     for(let i=0;i<pageData.length;i++){
       const u = pageData[i];
@@ -504,37 +481,26 @@
         </tr>`;
     }
     rowsEl.innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:16px">Sin datos</td></tr>`;
-    // pager
     $("#pageInfo").textContent = `Página ${stateLB.page} / ${totalPages}`;
     $("#btnPrev").disabled = (stateLB.page<=1);
     $("#btnNext").disabled = (stateLB.page>=totalPages);
   }
 
-  // ===== PFP PICKER (sekai.best) =====
+  // PFP PICKER
   const CARD_APIS = [
-    // Intentos típicos (uno o más suelen funcionar)
     "https://sekai.best/api/v2/cards.json",
     "https://sekai.best/api/cards.json",
     "https://sekai.best/api/cards",
   ];
-  // Patrón público conocido para thumbnails:
-  // - normal:  .../thumbnail/chara_card/{assetbundleName}_normal.png
-  // - trained: .../thumbnail/chara_card/{assetbundleName}_after_training.png
   const IMAGE_BASES = [
     "https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/",
     "https://storage.sekai.best/sekai-assets/thumbnail/chara_card/",
   ];
 
-  const statePFP = {
-    cards: [],
-    filtered: [],
-    version: "both",
-    search: "",
-    selectedUrl: ""
-  };
+  const statePFP = { cards: [], filtered: [], version: "both", search: "", selectedUrl: "" };
 
   $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
-  $("#pfpSearch").addEventListener("input", ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
+  $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
   $("#btnClearPfp").addEventListener("click", async ()=>{
     const u = auth.currentUser; if(!u) return;
     try{
@@ -551,11 +517,7 @@
       if(snap.exists()){
         const d=snap.data();
         statePFP.selectedUrl = d.pfpUrl || "";
-        if(statePFP.selectedUrl){
-          $("#pfpSelected").textContent = "PFP actual guardado.";
-        } else {
-          $("#pfpSelected").textContent = "";
-        }
+        $("#pfpSelected").textContent = statePFP.selectedUrl ? "PFP actual guardado." : "";
       }
     }catch{}
   }
@@ -563,14 +525,10 @@
   function cardImageUrls(assetbundleName){
     const fileNormal  = `${assetbundleName}_normal.png`;
     const fileTrained = `${assetbundleName}_after_training.png`;
-    const urls = [];
-    for(const base of IMAGE_BASES){ urls.push({ normal: base + fileNormal, trained: base + fileTrained }); }
-    // usa el primer base por defecto
-    return urls[0];
+    return { normal: IMAGE_BASES[0] + fileNormal, trained: IMAGE_BASES[0] + fileTrained };
   }
 
   function normalizeCard(c){
-    // Intentamos mapear diferentes posibles formatos
     const id = c.id || c.cardId || c.resourceId || c.seq || c.card_id || c.assetBundleId || c.assetbundleId || c.assetbundleid || c.assetbundle_id || c.assetbundle || c.assetbundleName || c.assetBundleName;
     const asset = c.assetbundleName || c.assetBundleName || c.assetbundleName || c.assetbundle || c.assetBundle;
     const name = c.name || c.title || c.cardName || "";
@@ -600,14 +558,12 @@
           raw = await res.json();
           ok = true; break;
         }
-      }catch{ /* intenta siguiente */ }
+      }catch{ /* siguiente */ }
     }
     if(!ok){
-      showMsg(info,"No pudimos leer la lista de cartas desde sekai.best. Aún puedes pegar manualmente una URL de imagen si lo necesitas.","err");
+      showMsg(info,"No pudimos leer la lista de cartas desde sekai.best. (CORS o endpoint caído).","err");
       statePFP.cards = []; statePFP.filtered = []; renderCardGrid(); return;
     }
-
-    // algunas APIs devuelven objeto con 'data' o lista directa
     const list = Array.isArray(raw) ? raw : (raw.data || raw.cards || raw.result || []);
     const mapped = [];
     for(const item of list){
@@ -622,12 +578,11 @@
 
   function filterCards(){
     const q = statePFP.search;
-    const ver = statePFP.version; // both | normal | trained
+    const ver = statePFP.version;
     statePFP.filtered = statePFP.cards.filter(c=>{
       const hay = (c.name||"").toLowerCase().includes(q) || String(c.id).toLowerCase().includes(q) || String(c.characterId).toLowerCase().includes(q) || c.assetbundleName.toLowerCase().includes(q);
       return hay;
     }).map(c=>{
-      // expandimos en dos entradas si 'both'
       if(ver==="normal") return [{...c, show:"normal"}];
       if(ver==="trained") return [{...c, show:"trained"}];
       return [{...c, show:"normal"}, {...c, show:"trained"}];
@@ -664,6 +619,7 @@
           statePFP.selectedUrl = url;
           $("#pfpSelected").textContent = "PFP actualizado ✔";
           await loadLeaderboard();
+          setActiveTab("leaderboard");
         }catch(err){
           showMsg($("#pfpInfo"), "No se pudo guardar el PFP: "+err.message, "err");
         }
@@ -671,9 +627,9 @@
     });
   }
 
-  // ===== Inicializaciones =====
-  fetchCards(); // cargar cartas para el picker
-  loadLeaderboard(); // primera carga del ranking
+  // Arranque
+  fetchCards();
+  loadLeaderboard();
 </script>
 </body>
 </html>
