@@ -2,14 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>PJSK LOUNGE</title>
+  <title>PJSK LOUNGE – Season Beta</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
       --bg:#383838; --panel:#2a2a2a; --text:#fff; --muted:#bfbfbf;
       --hover:#595959; --accent:#6c6cf0; --warn:#f0a66c; --ok:#35c07a;
-      --head:#030050; --row1:#333; --row2:#2a2a2a; --chip:#737373;
-      --danger:#e26b6b;
+      --head:#030050; --row1:#333; --row2:#2a2a2a; --chip:#737373; --danger:#e26b6b;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,95 +16,64 @@
     a{color:inherit;text-decoration:none}
     #app{min-height:100%}
 
-    header.topbar{
-      background:var(--panel);border-bottom:1px solid #0006;
-      position:sticky;top:0;z-index:10;
-    }
+    header.topbar{background:var(--panel);border-bottom:1px solid #0006;position:sticky;top:0;z-index:10}
     .wrap{max-width:1100px;margin:0 auto;padding:14px 18px;display:flex;gap:12px;align-items:center}
-    .brand{font-weight:700;letter-spacing:.3px}
+    .brand{font-weight:800;letter-spacing:.3px}
     .tabs{margin-left:auto;display:flex;gap:8px}
-    .tabs button{
-      background:transparent;color:var(--text);border:1px solid #0006;border-radius:8px;
-      padding:8px 12px;cursor:pointer
-    }
+    .tabs button{background:transparent;color:var(--text);border:1px solid #0006;border-radius:8px;padding:8px 12px;cursor:pointer}
     .tabs button.active{background:var(--hover)}
+
     main{max-width:1100px;margin:16px auto;padding:12px}
-
     .panel{background:var(--panel);border:1px solid #0006;border-radius:10px;padding:16px}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-
-    h1{margin:.2rem 0 1rem 0;font-size:1.6rem}
+    h1{margin:.2rem 0 1rem 0;font-size:1.8rem;text-align:center}
     h2{margin:1rem 0 .5rem 0;font-size:1.2rem}
     p.muted{color:var(--muted);margin:.25rem 0}
-
-    /* Formularios */
-    form{display:grid;gap:10px}
-    input,select{
-      width:100%;padding:10px;border-radius:8px;border:1px solid #0006;background:#1f1f1f;color:var(--text)
-    }
     .row{display:flex;gap:8px;align-items:center}
-    .row .grow{flex:1}
-    .btn{
-      background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600
-    }
-    .btn.secondary{background:#5050aa66;border:1px solid #6c6cf099}
-    .btn.warn{background:var(--warn)}
-    .btn.danger{background:var(--danger)}
-    .btn.ghost{background:transparent;border:1px solid #0006}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    .chip{display:inline-flex;align-items:center;gap:6px;background:var(--chip);color:#fff;padding:4px 8px;border-radius:999px;font-size:.85rem}
+    /* Leaderboard header */
+    .lb-controls{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:10px}
+    .search{width:380px;max-width:80vw;padding:10px;border-radius:8px;border:1px solid #0006;background:#1f1f1f;color:var(--text);text-align:center}
+    .dropdown{position:relative}
+    .dropbtn{background:#425; border:1px solid #638; color:#fff; padding:9px 12px; border-radius:8px; cursor:pointer}
+    .menu{position:absolute;top:40px;right:0;background:#1f1f1f;border:1px solid #0006;border-radius:8px;display:none;min-width:160px;z-index:20}
+    .menu button{display:block;width:100%;text-align:left;background:transparent;border:none;color:#fff;padding:8px 10px;cursor:pointer}
+    .menu button:hover{background:#2a2a2a}
+    .dropdown.open .menu{display:block}
 
-    /* Perfil */
-    .profile{
-      display:flex;gap:16px;align-items:center;flex-wrap:wrap
-    }
-    .pfp{
-      width:72px;height:72px;border-radius:999px;background:#1f1f1f;border:2px solid #0006;
-      background-size:cover;background-position:center;cursor:pointer;position:relative
-    }
-    .pfp::after{
-      content:"Editar";position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
-      font-size:.7rem;background:#000a;padding:2px 6px;border-radius:8px
-    }
-    .badge{padding:2px 6px;border-radius:6px;font-size:.8rem}
-    .badge.ok{background:#2a5;}.badge.warn{background:#a82}
-    .help{font-size:.9rem;color:var(--muted)}
-
-    /* Leaderboard */
+    /* Table */
     table{width:100%;border-collapse:separate;border-spacing:0}
-    thead th{
-      font-weight:700;text-align:left;padding:10px;border-bottom:1px solid #0006;background:var(--head)
-    }
+    thead th{font-weight:700;text-align:left;padding:10px;border-bottom:1px solid #0006;background:var(--head)}
     tbody tr:nth-child(odd){background:var(--row1)}
     tbody tr:nth-child(even){background:var(--row2)}
     td{padding:10px;border-bottom:1px solid #0006}
-    .cell-user{display:flex;align-items:center;gap:12px}
-    .flag-pfp{display:inline-flex;align-items:center;gap:8px}
+    .you{outline:1px solid #6c6cf0;background:#6c6cf01a}
+    .player-cell{display:flex;align-items:center;gap:10px}
     .flag{width:26px;height:18px;border:1px solid #0006;border-radius:3px;object-fit:cover}
-    .pfp-small{
-      width:26px;height:26px;border-radius:999px;border:2px solid #0006;object-fit:cover
-    }
-    .you{border:1px solid #6c6cf0;background:#6c6cf01a;border-radius:8px}
+    .pfp-small{width:26px;height:26px;border-radius:50%;border:2px solid #0006;object-fit:cover}
+    .name{font-weight:600}
+    .mmr{font-weight:600}
+    .rank{font-weight:700}
 
-    /* Modal cartas */
-    .modal-backdrop{
-      position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50
-    }
-    .modal{width:min(900px,95vw);max-height:85vh;overflow:auto;background:var(--panel);border:1px solid #0006;border-radius:12px;padding:16px}
-    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
-    .card{
-      background:#1f1f1f;border:1px solid #0006;border-radius:12px;padding:8px;cursor:pointer;display:flex;flex-direction:column;gap:6px
-    }
+    /* Edit Profile */
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .btn{background:var(--accent);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+    .btn.ghost{background:transparent;border:1px solid #0006}
+    .btn.warn{background:var(--warn)}
+    .btn.danger{background:var(--danger)}
+    .help{font-size:.9rem;color:var(--muted)}
+    form{display:grid;gap:10px}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #0006;background:#1f1f1f;color:var(--text)}
+
+    .pfp-big{width:84px;height:84px;border-radius:50%;border:2px solid #0006;background:#1f1f1f;background-size:cover;background-position:center}
+    .notice{background:#0006;border:1px dashed #999;border-radius:8px;padding:10px;color:#eee;margin-top:8px}
+
+    /* Cards grid */
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:10px}
+    .card{background:#1f1f1f;border:1px solid #0006;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px}
     .card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
     .card h4{margin:0;font-size:.95rem}
     .card .rarity{font-size:.75rem;color:var(--muted)}
-    .close-x{float:right;cursor:pointer;font-weight:700}
-
-    .notice{
-      background:#0006;border:1px dashed #999;border-radius:8px;padding:10px;color:#eee
-    }
+    .card .set{margin-top:6px}
   </style>
 </head>
 <body>
@@ -114,109 +82,114 @@
     <div class="wrap">
       <div class="brand">PJSK LOUNGE</div>
       <div class="tabs">
-        <button id="tab-home" class="active">Home</button>
-        <button id="tab-lb">Leaderboard</button>
+        <button id="tab-lb" class="active">Leaderboard</button>
+        <button id="tab-edit">Edit Profile</button>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- HOME -->
-    <section id="home" class="panel">
-      <h1>Welcome to PJSK LOUNGE</h1>
-      <p class="muted">Proyecto competitivo con Discord Bot y Página. Aquí puedes registrarte/iniciar sesión, vincular tu casilla del leaderboard (creada al unirte al servidor de Discord) y configurar tu <b>PFP</b> con cartas.</p>
+    <!-- ================== LEADERBOARD ================== -->
+    <section id="leaderboard" class="panel">
+      <h1>PJSK LOUNGE – Season Beta</h1>
 
-      <div id="auth-area" class="grid2">
-        <!-- Columna izquierda: autenticado / perfil -->
-        <div class="panel" id="perfil-panel" style="display:none">
-          <h2>Tu perfil</h2>
-          <div class="profile">
-            <div id="pfp" class="pfp" title="Click para elegir carta"></div>
-            <div>
-              <div id="user-email"></div>
-              <div id="email-verif"></div>
-              <div id="vinculo-discord" class="help"></div>
-              <div class="row" style="margin-top:8px;gap:10px">
-                <button class="btn" id="btn-vincular">Vincular con Discord</button>
-                <button class="btn warn" id="btn-reenviar" title="Reenviar verificación a tu email">Reenviar verificación</button>
-                <button class="btn danger" id="btn-logout">Logout</button>
-              </div>
-            </div>
+      <div class="lb-controls">
+        <input id="q" class="search" placeholder="Buscar por nombre…" />
+        <div class="dropdown" id="dd-rangos">
+          <button class="dropbtn" id="btn-rangos">Rangos ▾</button>
+          <div class="menu" id="menu-rangos">
+            <button data-rank="ALL">Todos</button>
+            <button data-rank="Diamond">Diamond</button>
+            <button data-rank="Platinum">Platinum</button>
+            <button data-rank="Gold">Gold</button>
+            <button data-rank="Silver">Silver</button>
+            <button data-rank="Bronze">Bronze</button>
+            <button data-rank="Iron">Iron</button>
+            <button data-rank="Placement">Placement</button>
           </div>
-          <div class="notice" style="margin-top:12px">
-            <b>Set PFP:</b> debes estar <b>vinculado</b> a tu casilla de Discord para que se refleje en el leaderboard.
-          </div>
-        </div>
-
-        <!-- Columna derecha: login/register/reset (cuando no autenticado) -->
-        <div id="forms-panel" class="panel">
-          <h2>Acceso</h2>
-          <div class="row">
-            <button class="btn ghost" id="show-login">Login</button>
-            <button class="btn ghost" id="show-register">Register</button>
-            <button class="btn ghost" id="show-reset">Reset password</button>
-          </div>
-
-          <form id="form-login" style="display:none">
-            <h3>Iniciar sesión</h3>
-            <input id="login-email" type="email" placeholder="Email" required />
-            <input id="login-pass" type="password" placeholder="Contraseña" required />
-            <button class="btn" type="submit">Login</button>
-          </form>
-
-          <form id="form-register" style="display:none">
-            <h3>Crear cuenta</h3>
-            <input id="reg-email" type="email" placeholder="Email" required />
-            <input id="reg-pass" type="password" placeholder="Contraseña" required />
-            <div class="row">
-              <input id="reg-username" class="grow" placeholder="Tu username de Discord (exacto)" />
-            </div>
-            <button class="btn" type="submit">Registrar y enviar verificación</button>
-            <p class="help">Al registrarte puedes ingresar tu <b>username de Discord</b> para vincular tu casilla si ya estás en el servidor.</p>
-          </form>
-
-          <form id="form-reset" style="display:none">
-            <h3>Reset password</h3>
-            <input id="reset-email" type="email" placeholder="Email" required />
-            <button class="btn" type="submit">Enviar correo de reseteo</button>
-          </form>
         </div>
       </div>
-    </section>
 
-    <!-- LEADERBOARD -->
-    <section id="leaderboard" class="panel" style="display:none">
-      <h2>Leaderboard</h2>
       <table>
         <thead>
           <tr>
-            <th style="width:50px">#</th>
-            <th>Jugador</th>
-            <th>Username</th>
-            <th style="width:160px">País + PFP</th>
+            <th style="width:60px">#</th>
+            <th>Player</th>
+            <th style="width:120px">MMR</th>
+            <th style="width:140px">Rango</th>
           </tr>
         </thead>
         <tbody id="lb-body"></tbody>
       </table>
     </section>
+
+    <!-- ================== EDIT PROFILE ================== -->
+    <section id="edit" class="panel" style="display:none">
+      <h2>Edit Profile</h2>
+
+      <div id="edit-guest">
+        <div class="notice"><b>You need to register or login to set a pfp</b></div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="panel">
+            <h3>Login</h3>
+            <form id="form-login">
+              <input id="login-email" type="email" placeholder="Email" required />
+              <input id="login-pass" type="password" placeholder="Contraseña" required />
+              <button class="btn" type="submit">Login</button>
+            </form>
+            <div class="row" style="margin-top:8px">
+              <button class="btn ghost" id="btn-reset-open">Reset password</button>
+            </div>
+            <form id="form-reset" style="display:none;margin-top:8px">
+              <input id="reset-email" type="email" placeholder="Email" required />
+              <button class="btn warn" type="submit">Enviar reset</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h3>Register</h3>
+            <form id="form-register">
+              <input id="reg-email" type="email" placeholder="Email" required />
+              <input id="reg-pass" type="password" placeholder="Contraseña" required />
+              <input id="reg-username" placeholder="Tu username de Discord (exacto)" />
+              <button class="btn" type="submit">Registrar y verificar</button>
+            </form>
+            <p class="help">Ingresa tu username de Discord para intentar vincular automáticamente tu casilla.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="edit-auth" style="display:none">
+        <div class="row" style="gap:14px;align-items:center">
+          <div id="pfp" class="pfp-big" title="Tu PFP"></div>
+          <div>
+            <div id="user-email" style="font-weight:600"></div>
+            <div id="email-verif" class="help"></div>
+            <div id="vinculo-discord" class="help" style="margin-top:4px"></div>
+            <div class="row" style="margin-top:8px;gap:10px">
+              <button class="btn" id="btn-vincular">Vincular con Discord</button>
+              <button class="btn warn" id="btn-reenviar">Reenviar verificación</button>
+              <button class="btn danger" id="btn-logout">Logout</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice" id="link-hint" style="display:none;margin-top:10px">
+          Debes <b>vincular tu casilla de Discord</b> para que el PFP se refleje en el leaderboard.
+        </div>
+
+        <h3 style="margin-top:14px">Cartas (en vivo)</h3>
+        <div id="cards" class="cards"></div>
+      </div>
+    </section>
   </main>
 </div>
 
-<!-- Modal selector de cartas -->
-<div id="cards-modal" class="modal-backdrop" role="dialog" aria-modal="true">
-  <div class="modal">
-    <span class="close-x" id="close-cards">✕</span>
-    <h3>Elige tu carta para el PFP</h3>
-    <p class="help">Al seleccionar, se actualizará tu perfil y tu casilla del leaderboard.</p>
-    <div id="cards-grid" class="cards"></div>
-  </div>
-</div>
-
-<!-- Firebase (modular) -->
+<!-- Firebase v10 (modular) -->
 <script type="module">
-  // =============================
-  //  Firebase inicialización
-  // =============================
+  // =========================
+  // Firebase init
+  // =========================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
   import {
     getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -227,7 +200,7 @@
     collection, query, where, orderBy, onSnapshot, getDocs, limit
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-  // TODO: Reemplaza con tu configuración
+  // TODO: coloca tu configuración
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
@@ -237,421 +210,337 @@
     appId: "TU_APP_ID"
   };
 
-  const app   = initializeApp(firebaseConfig);
-  const auth  = getAuth(app);
-  const db    = getFirestore(app);
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
 
-  // =============================
-  //  Utilidades UI
-  // =============================
-  const $ = (sel)=>document.querySelector(sel);
-  const el = (tag, attrs={}, ...children)=>{
-    const n=document.createElement(tag);
-    Object.entries(attrs).forEach(([k,v])=>{
-      if(k==='class') n.className=v;
-      else if(k==='style') n.style.cssText=v;
-      else if(k.startsWith('on') && typeof v==='function') n.addEventListener(k.slice(2),v);
-      else n.setAttribute(k,v);
-    });
-    for (const c of children) n.append(c);
-    return n;
-  };
+  // =========================
+  // Helpers UI
+  // =========================
+  const $ = (s)=>document.querySelector(s);
+  const el=(t,a={},...c)=>{const n=document.createElement(t);Object.entries(a).forEach(([k,v])=>{
+    if(k==='class') n.className=v; else if(k==='style') n.style.cssText=v;
+    else if(k.startsWith('on')&&typeof v==='function') n.addEventListener(k.slice(2),v);
+    else n.setAttribute(k,v);
+  }); c.forEach(x=>n.append(x)); return n;};
 
   // Tabs
-  const tabHome = $("#tab-home");
-  const tabLb   = $("#tab-lb");
-  const secHome = $("#home");
-  const secLb   = $("#leaderboard");
-  tabHome.addEventListener("click", ()=>{
-    tabHome.classList.add("active"); tabLb.classList.remove("active");
-    secHome.style.display="block"; secLb.style.display="none";
+  const tabLb=$("#tab-lb"), tabEdit=$("#tab-edit");
+  const secLb=$("#leaderboard"), secEdit=$("#edit");
+  const activate=(tab)=>{ if(tab==='lb'){tabLb.classList.add('active');tabEdit.classList.remove('active');secLb.style.display='block';secEdit.style.display='none';}
+                          else{tabEdit.classList.add('active');tabLb.classList.remove('active');secEdit.style.display='block';secLb.style.display='none';}};
+  tabLb.addEventListener('click',()=>activate('lb'));
+  tabEdit.addEventListener('click',()=>activate('edit'));
+  activate('lb');
+
+  // =========================
+  // Leaderboard (en vivo)
+  // =========================
+  const lbBody = $("#lb-body");
+  const qInput = $("#q");
+  const dd     = $("#dd-rangos");
+  const btnR   = $("#btn-rangos");
+  const menuR  = $("#menu-rangos");
+  let rankFilter = "ALL";
+  let allRows = [];
+
+  btnR.addEventListener("click",()=> dd.classList.toggle("open"));
+  menuR.addEventListener("click",(e)=>{
+    const btn = e.target.closest("button"); if(!btn) return;
+    rankFilter = btn.dataset.rank || "ALL";
+    btnR.textContent = (rankFilter==="ALL" ? "Rangos ▾" : `${rankFilter} ▾`);
+    dd.classList.remove("open");
+    renderLeaderboard();
   });
-  tabLb.addEventListener("click", ()=>{
-    tabLb.classList.add("active"); tabHome.classList.remove("active");
-    secHome.style.display="none"; secLb.style.display="block";
+  document.addEventListener("click",(e)=>{ if(!dd.contains(e.target)) dd.classList.remove("open"); });
+
+  qInput.addEventListener("input", ()=> renderLeaderboard());
+
+  const rankColors = {
+    Diamond:"#7ab2ff", Platinum:"#9fb7ff", Gold:"#f0b233",
+    Silver:"#c6cbd3", Bronze:"#c9743a", Iron:"#7a7a7a", Placement:"#ff8c39"
+  };
+
+  const lbQuery = query(collection(db,"members"), orderBy("mmr","desc"));
+  onSnapshot(lbQuery, (snap)=>{
+    allRows = [];
+    snap.forEach(d=> allRows.push({ id:d.id, ...d.data() }));
+    renderLeaderboard();
   });
 
-  // Panels y forms
-  const perfilPanel = $("#perfil-panel");
-  const formsPanel  = $("#forms-panel");
-  const showLogin   = $("#show-login");
-  const showReg     = $("#show-register");
-  const showReset   = $("#show-reset");
-  const fLogin      = $("#form-login");
-  const fRegister   = $("#form-register");
-  const fReset      = $("#form-reset");
-
-  function showForm(which){
-    fLogin.style.display   = which==='login' ? 'grid':'none';
-    fRegister.style.display= which==='register' ? 'grid':'none';
-    fReset.style.display   = which==='reset' ? 'grid':'none';
+  function filteredRows(){
+    const term = (qInput.value||"").toLowerCase().trim();
+    return allRows.filter(r=>{
+      const okRank = (rankFilter==="ALL") || (r.rank===rankFilter);
+      const name = (r.showname||r.nickname||r.username||"").toLowerCase();
+      return okRank && (term==="" || name.includes(term));
+    });
   }
-  showLogin.addEventListener("click", ()=>showForm('login'));
-  showReg.addEventListener("click", ()=>showForm('register'));
-  showReset.addEventListener("click", ()=>showForm('reset'));
-  // por defecto muestra login
-  showForm('login');
 
-  // Perfil UI refs
-  const pfpDiv        = $("#pfp");
+  function renderLeaderboard(){
+    const rows = filteredRows();
+    lbBody.innerHTML = "";
+    let pos=1;
+    for(const r of rows){
+      const tr = document.createElement("tr");
+      if (auth.currentUser && r.uid===auth.currentUser.uid) tr.classList.add("you");
+
+      // Col # (posición)
+      const tdPos = el("td",{}, String(pos++));
+
+      // Player: bandera + pfp + nombre
+      const flagUrl = r.countryCode ? `https://flagcdn.com/24/${String(r.countryCode).toLowerCase()}.png` : "";
+      const flagImg = flagUrl ? el("img",{class:"flag",src:flagUrl,alt:r.countryCode}) : el("div",{class:"flag",style:"background:#222"});
+      const pfp = r.pfpUrl ? el("img",{class:"pfp-small",src:r.pfpUrl,alt:"pfp"}) : el("div",{class:"pfp-small",style:"background:#222"});
+      const name = el("span",{class:"name"}, r.showname || r.nickname || r.username || "—");
+      const tdPlayer = el("td",{}, el("div",{class:"player-cell"}, flagImg, pfp, name));
+
+      // MMR
+      const tdMMR = el("td",{class:"mmr"}, String(r.mmr ?? 0));
+
+      // Rank
+      const rk = r.rank || "Placement";
+      const color = rankColors[rk] || "#fff";
+      const tdRank = el("td",{class:"rank", style:`color:${color}`}, rk);
+
+      tr.append(tdPos, tdPlayer, tdMMR, tdRank);
+      lbBody.append(tr);
+    }
+  }
+
+  // =========================
+  // Auth + Edit Profile
+  // =========================
+  const editGuest = $("#edit-guest");
+  const editAuth  = $("#edit-auth");
+  const btnResetOpen = $("#btn-reset-open");
+  const fLogin  = $("#form-login");
+  const fReset  = $("#form-reset");
+  const fReg    = $("#form-register");
+
+  btnResetOpen.addEventListener("click",()=> fReset.style.display = (fReset.style.display==='none'?'grid':'none'));
+
+  const pfpBig        = $("#pfp");
   const userEmailDiv  = $("#user-email");
   const emailVerifDiv = $("#email-verif");
   const vinculoDiv    = $("#vinculo-discord");
   const btnVincular   = $("#btn-vincular");
   const btnReenviar   = $("#btn-reenviar");
   const btnLogout     = $("#btn-logout");
+  const linkHint      = $("#link-hint");
 
-  // Modal cartas
-  const modal    = $("#cards-modal");
-  const closeX   = $("#close-cards");
-  const cardsGrid= $("#cards-grid");
-  closeX.addEventListener("click", ()=> modal.style.display='none');
-  modal.addEventListener("click",(e)=>{ if(e.target===modal) modal.style.display='none'; });
+  let currentProfile=null;
+  let linkedMemberDoc=null;
 
-  // Estado global
-  let currentUser = null;            // auth user
-  let linkedMemberDoc = null;        // doc de members vinculado a este uid (si existe)
-  let currentProfile = null;         // doc de profiles/{uid}
-
-  // ===========
-  //  Auth
-  // ===========
-  fRegister.addEventListener("submit", async (e)=>{
+  // Forms
+  fReg.addEventListener("submit", async (e)=>{
     e.preventDefault();
     const email = $("#reg-email").value.trim();
     const pass  = $("#reg-pass").value;
     const discU = ($("#reg-username").value||"").trim();
 
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    const cred = await createUserWithEmailAndPassword(auth,email,pass);
     await sendEmailVerification(cred.user);
-
-    // Crea profile
     await setDoc(doc(db,"profiles", cred.user.uid),{
-      email,
-      username: discU || null,
-      pfpUrl: null,
-      emailVerified: cred.user.emailVerified,
-      createdAt: serverTimestamp()
+      email, username: discU||null, pfpUrl:null, emailVerified: cred.user.emailVerified, createdAt: serverTimestamp()
     });
-
-    // Intenta vincular si dio username
-    if (discU){
-      await linkDiscordRowByUsername(cred.user.uid, discU);
-    }
-    alert("Registro completado. Revisa tu correo para verificar la cuenta.");
+    if(discU) { try{ await linkDiscordRowByUsername(cred.user.uid, discU); }catch{} }
+    alert("Registro completado. Revisa tu correo para verificar.");
+    activate('edit');
   });
 
   fLogin.addEventListener("submit", async (e)=>{
     e.preventDefault();
     const email = $("#login-email").value.trim();
     const pass  = $("#login-pass").value;
-    await signInWithEmailAndPassword(auth, email, pass);
+    await signInWithEmailAndPassword(auth,email,pass);
+    activate('edit');
   });
 
   fReset.addEventListener("submit", async (e)=>{
     e.preventDefault();
     const email = $("#reset-email").value.trim();
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth,email);
     alert("Si el correo existe, se envió el reset.");
   });
 
   btnReenviar.addEventListener("click", async ()=>{
-    if(currentUser) {
-      await sendEmailVerification(currentUser);
-      alert("Verificación reenviada.");
-    }
+    if(auth.currentUser){ await sendEmailVerification(auth.currentUser); alert("Verificación reenviada."); }
   });
 
-  btnLogout.addEventListener("click", async ()=>{
-    await signOut(auth);
-  });
+  btnLogout.addEventListener("click", async ()=>{ await signOut(auth); activate('lb'); });
 
   onAuthStateChanged(auth, async (user)=>{
-    currentUser = user;
-    if (user){
-      formsPanel.style.display = "none";
-      perfilPanel.style.display= "block";
-
+    if(user){
+      editGuest.style.display="none";
+      editAuth.style.display="block";
       await user.reload();
-      const verified = user.emailVerified;
 
-      // Cargar profile
+      // profile
       const pref = doc(db,"profiles", user.uid);
-      const psnap = await getDoc(pref);
-      if (psnap.exists()){
-        currentProfile = { id: psnap.id, ...psnap.data() };
-      } else {
-        // crea si no existe por seguridad
-        await setDoc(pref, {
-          email: user.email, username: null, pfpUrl: null,
-          emailVerified: user.emailVerified, createdAt: serverTimestamp()
-        });
-        currentProfile = { id: user.uid, email: user.email, pfpUrl:null, emailVerified: user.emailVerified };
+      const psnap= await getDoc(pref);
+      if(psnap.exists()) currentProfile = { id:psnap.id, ...psnap.data() };
+      else {
+        await setDoc(pref,{ email:user.email, username:null, pfpUrl:null, emailVerified:user.emailVerified, createdAt:serverTimestamp() });
+        currentProfile = { id:user.uid, email:user.email, pfpUrl:null, emailVerified:user.emailVerified };
       }
 
       userEmailDiv.textContent = user.email || "(sin email)";
-      emailVerifDiv.innerHTML  = verified
-        ? `<span class="badge ok">Correo verificado</span>`
-        : `<span class="badge warn">Correo no verificado</span>`;
+      emailVerifDiv.innerHTML  = user.emailVerified ? `<span style="color:#7bd27b">Correo verificado</span>` : `<span class="help">Correo no verificado</span>`;
 
-      // Buscar si ya está vinculado en members por uid
+      // buscar vínculo existente
       linkedMemberDoc = await findMemberByUid(user.uid);
-
-      // Si no está vinculado pero el profile tiene username guardado, intenta vincular
-      if (!linkedMemberDoc && currentProfile?.username){
-        try {
-          linkedMemberDoc = await linkDiscordRowByUsername(user.uid, currentProfile.username);
-        } catch(e){
-          console.warn("No se pudo vincular automáticamente:", e);
-        }
+      if(!linkedMemberDoc && currentProfile?.username){
+        try { linkedMemberDoc = await linkDiscordRowByUsername(user.uid, currentProfile.username); } catch {}
       }
 
-      // Pinta PFP
       const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
-      pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
+      pfpBig.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
 
-      // Texto de vínculo
       if (linkedMemberDoc){
-        vinculoDiv.innerHTML = `Vinculado a: <b>${linkedMemberDoc.showname || linkedMemberDoc.nickname || linkedMemberDoc.username}</b> <span class="chip">discordId: ${linkedMemberDoc.discordId}</span>`;
+        linkHint.style.display="none";
+        vinculoDiv.innerHTML = `Vinculado a: <b>${linkedMemberDoc.showname || linkedMemberDoc.nickname || linkedMemberDoc.username}</b> <span class="help">discordId: ${linkedMemberDoc.discordId || linkedMemberDoc.id}</span>`;
       } else {
-        vinculoDiv.innerHTML = `No vinculado. <span class="chip">Usa "Vincular con Discord"</span>`;
+        linkHint.style.display="block";
+        vinculoDiv.innerHTML = `No vinculado. Usa "Vincular con Discord".`;
       }
+
+      // activar pestaña edit
+      activate('edit');
     } else {
-      // no autenticado
-      perfilPanel.style.display= "none";
-      formsPanel.style.display = "block";
-      showForm('login');
-      currentProfile = null;
-      linkedMemberDoc= null;
-      pfpDiv.style.backgroundImage = "none";
+      // guest
+      editAuth.style.display="none";
+      editGuest.style.display="block";
+      currentProfile=null; linkedMemberDoc=null;
+      pfpBig.style.backgroundImage="none";
     }
   });
 
-  // ===========
-  //  VINCULAR
-  // ===========
+  // Vincular
   btnVincular.addEventListener("click", async ()=>{
-    if(!currentUser){ alert("Primero inicia sesión"); return; }
-
-    const modo = prompt("Escribe tu username de Discord EXACTO (o pega tu discordId si lo sabes). Ejemplos:\n- username\n- 123456789012345678 (discordId)");
+    if(!auth.currentUser){ alert("Primero inicia sesión"); return; }
+    const modo = prompt("Escribe tu username de Discord EXACTO o pega tu discordId:");
     if(!modo) return;
 
-    if (/^\d{16,20}$/.test(modo)){ // parece discordId
-      const linked = await linkDiscordRowByDiscordId(currentUser.uid, modo);
-      if (linked) {
+    try{
+      const linked = /^\d{16,20}$/.test(modo)
+        ? await linkDiscordRowByDiscordId(auth.currentUser.uid, modo)
+        : await linkDiscordRowByUsername(auth.currentUser.uid, modo);
+
+      if(linked){
         linkedMemberDoc = linked;
-        // reflejar PFP
-        const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
-        pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
-        vinculoDiv.innerHTML = `Vinculado a: <b>${linked.showname || linked.nickname || linked.username}</b> <span class="chip">discordId: ${linked.discordId}</span>`;
+        const url = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
+        pfpBig.style.backgroundImage = url ? `url("${url}")` : "none";
+        linkHint.style.display="none";
+        vinculoDiv.innerHTML = `Vinculado a: <b>${linked.showname || linked.nickname || linked.username}</b> <span class="help">discordId: ${linked.discordId || linked.id}</span>`;
         alert("¡Vinculado correctamente!");
       } else {
-        alert("No se encontró ese discordId o ya estaba reclamado.");
+        alert("No se encontró esa casilla o ya está reclamada.");
       }
-      return;
-    }
-
-    // si no es ID, tomamos como username
-    const linked = await linkDiscordRowByUsername(currentUser.uid, modo);
-    if (linked){
-      linkedMemberDoc = linked;
-      const pfpUrl = currentProfile?.pfpUrl || linkedMemberDoc?.pfpUrl || "";
-      pfpDiv.style.backgroundImage = pfpUrl ? `url("${pfpUrl}")` : "none";
-      vinculoDiv.innerHTML = `Vinculado a: <b>${linked.showname || linked.nickname || linked.username}</b> <span class="chip">discordId: ${linked.discordId}</span>`;
-      alert("¡Vinculado correctamente!");
-    } else {
-      alert("No se encontró ese username en el leaderboard o ya está reclamado.");
-    }
+    }catch(e){ alert(e.message || "No se pudo vincular."); }
   });
 
   async function findMemberByUid(uid){
     const qRef = query(collection(db,"members"), where("uid","==",uid), limit(1));
     const snap = await getDocs(qRef);
-    if (!snap.empty){
-      const d = snap.docs[0];
-      return { id: d.id, ...d.data() };
-    }
+    if(!snap.empty){ const d=snap.docs[0]; return { id:d.id, ...d.data() }; }
     return null;
   }
-
   async function linkDiscordRowByUsername(uid, username){
-    const uname = username.trim();
-    const unameLower = uname.toLowerCase();
+    const unameLower = username.trim().toLowerCase();
     const qRef = query(collection(db,"members"), where("usernameLower","==",unameLower), limit(1));
     const snap = await getDocs(qRef);
     if (snap.empty) return null;
-    const d = snap.docs[0];
-    const data = d.data();
-    // si ya está reclamado por otro, no permitir
-    if (data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
-    // escribe vínculo en members y profile
-    await updateDoc(doc(db,"members", d.id), { uid });
-    await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || d.id });
+    const d = snap.docs[0], data = d.data();
+    if (data.uid && data.uid!==uid) throw new Error("Casilla ya reclamada por otro usuario.");
+    await updateDoc(doc(db,"members",d.id), { uid });
+    await updateDoc(doc(db,"profiles",uid), { username:data.username, discordId:data.discordId || d.id });
     return { id:d.id, ...data, uid };
   }
-
   async function linkDiscordRowByDiscordId(uid, discordId){
-    const ref = doc(db,"members", discordId);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) return null;
-    const data = snap.data();
-    if (data.uid && data.uid !== uid) throw new Error("Casilla ya reclamada por otro usuario.");
-    await updateDoc(ref, { uid });
-    await updateDoc(doc(db,"profiles", uid), { username: data.username, discordId: data.discordId || discordId });
+    const ref=doc(db,"members",discordId); const s=await getDoc(ref);
+    if(!s.exists()) return null; const data=s.data();
+    if(data.uid && data.uid!==uid) throw new Error("Casilla ya reclamada por otro usuario.");
+    await updateDoc(ref,{ uid });
+    await updateDoc(doc(db,"profiles",uid), { username:data.username, discordId:data.discordId || discordId });
     return { id:discordId, ...data, uid };
   }
 
-  // ==========================
-  //  Selector de cartas / PFP
-  // ==========================
-  pfpDiv.addEventListener("click", async ()=>{
-    if (!currentUser){ alert("Inicia sesión primero."); return; }
-    if (!linkedMemberDoc){ alert("Vincula tu casilla de Discord antes de elegir PFP."); return; }
-
-    // Carga cartas (todas). Si quieres filtrar por inventario, descomenta el bloque de owned.
-    const cards = await loadCards();
-    // const owned = await loadOwnedCardIds(currentUser.uid);
-    // const usable = cards.filter(c=> owned.has(c.id));
-
-    renderCards(cards /* usable */);
-    modal.style.display = 'flex';
-  });
-
-  async function loadCards(){
-    const out = [];
-    const snap = await getDocs(collection(db,"cards"));
-    snap.forEach(d=>{
-      out.push({ id:d.id, ...d.data() });
+  // =========================
+  // Cartas (en vivo) + Set PFP
+  // =========================
+  const cardsGrid = $("#cards");
+  let stopCards = null;
+  function startCardsLive(){
+    if(stopCards) return;
+    const qCards = query(collection(db,"cards"), orderBy("sort"));
+    stopCards = onSnapshot(qCards, (snap)=>{
+      const cards=[]; snap.forEach(d=> cards.push({ id:d.id, ...d.data() }));
+      renderCards(cards);
     });
-    return out;
   }
-  async function loadOwnedCardIds(uid){
-    const set = new Set();
-    const snap = await getDocs(collection(db, `inventory/${uid}/ownedCards`));
-    snap.forEach(d=> set.add(d.id));
-    return set;
-  }
+  function stopCardsLive(){ if(stopCards){ stopCards(); stopCards=null; } }
 
   function renderCards(cards){
-    cardsGrid.innerHTML = "";
-    for (const c of cards){
-      const cardEl = el("div", {class:"card", onclick: ()=> selectCard(c)});
-      const img = el("img", {src:c.imageUrl || "", alt:c.name||"card"});
-      const name= el("h4", {}, c.name || "Card");
-      const rar = el("div", {class:"rarity"}, c.rarity || "—");
-      cardEl.append(img, name, rar);
+    cardsGrid.innerHTML="";
+    for(const c of cards){
+      const cardEl = el("div",{class:"card"},
+        el("img",{src:c.imageUrl||"",alt:c.name||"card"}),
+        el("h4",{}, c.name || "Card"),
+        el("div",{class:"rarity"}, c.rarity || "—"),
+        el("button",{class:"btn set", onclick:()=>selectCard(c)}, "Set as Profile")
+      );
       cardsGrid.append(cardEl);
     }
   }
 
   async function selectCard(card){
     try{
-      if (!currentUser || !linkedMemberDoc) return;
-
-      // 1) Actualiza perfil
-      await updateDoc(doc(db,"profiles", currentUser.uid), { pfpUrl: card.imageUrl });
-
-      // 2) Actualiza members/{discordId} (para que el leaderboard lo refleje)
+      if(!auth.currentUser){ alert("Inicia sesión primero."); return; }
+      if(!linkedMemberDoc){ alert("Vincula tu casilla de Discord antes de elegir PFP."); return; }
+      const uid = auth.currentUser.uid;
       const discordId = linkedMemberDoc.discordId || linkedMemberDoc.id;
+
+      await updateDoc(doc(db,"profiles", uid), { pfpUrl: card.imageUrl });
       await updateDoc(doc(db,"members", discordId), { pfpUrl: card.imageUrl });
 
-      // 3) Refresca UI local
-      pfpDiv.style.backgroundImage = `url("${card.imageUrl}")`;
-      modal.style.display='none';
+      pfpBig.style.backgroundImage = `url("${card.imageUrl}")`;
       alert("PFP actualizado.");
-
-    } catch(err){
-      console.error(err);
-      alert("No se pudo actualizar el PFP. Revisa reglas de seguridad y colecciones.");
-    }
+    }catch(e){ console.error(e); alert("No se pudo actualizar el PFP."); }
   }
 
-  // ==========================
-  //  Leaderboard en vivo
-  // ==========================
-  const lbBody = $("#lb-body");
+  // Inicia/para stream de cartas según pestaña
+  tabEdit.addEventListener("click", startCardsLive);
+  tabLb.addEventListener("click", stopCardsLive);
 
-  // Cambia "orderBy('orderIndex')" por 'mmr' si prefieres
-  const lbQuery = query(collection(db, "members"), orderBy("orderIndex"));
-  onSnapshot(lbQuery, (snap)=>{
-    const rows = [];
-    snap.forEach(d=> rows.push({ id:d.id, ...d.data() }));
-    renderLeaderboard(rows);
-  });
+  // Arranca stream si ya estás en edit tras login
+  onAuthStateChanged(auth, (u)=>{ if(u && tabEdit.classList.contains("active")) startCardsLive(); });
 
-  function renderLeaderboard(rows){
-    lbBody.innerHTML = "";
-    let pos = 1;
-    for (const r of rows){
-      const isYou = currentUser && (r.uid === currentUser.uid);
-
-      const tr = document.createElement("tr");
-      if (isYou) tr.classList.add("you");
-
-      const tdPos = el("td", {}, String(pos++));
-      const tdPlayer = el("td", {class:"cell-user"},
-        el("div", {},
-          el("div", {}, r.showname || r.nickname || "—"),
-          el("div", {class:"help"}, r.discordId ? `ID: ${r.discordId}` : "")
-        )
-      );
-      const tdUsername = el("td", {}, r.username || "—");
-
-      // País + PFP (PFP a la derecha de la bandera)
-      const flagUrl = r.countryCode ? `https://flagcdn.com/24/${(r.countryCode||"").toLowerCase()}.png` : "";
-      const flagImg = flagUrl ? el("img",{class:"flag", src:flagUrl, alt:r.countryCode}) : el("div",{class:"flag", style:"background:#222"});
-      const pfp = r.pfpUrl ? el("img",{class:"pfp-small", src:r.pfpUrl, alt:"pfp"}) : el("div",{class:"pfp-small", style:"background:#222"});
-
-      const tdCountry = el("td", {},
-        el("div",{class:"flag-pfp"}, flagImg, pfp) // <— PFP queda a la derecha
-      );
-
-      tr.append(tdPos, tdPlayer, tdUsername, tdCountry);
-      lbBody.append(tr);
-    }
-  }
-
-  // ==========================
-  //  Notas de seguridad
-  // ==========================
+  // =========================
+  // Reglas Firestore sugeridas
+  // =========================
   /*
-  Firestore Rules sugeridas:
-
   rules_version = '2';
   service cloud.firestore {
     match /databases/{db}/documents {
       function signedIn() { return request.auth != null; }
       function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
 
-      // Perfil: cada quien solo su doc
       match /profiles/{uid} {
-        allow read: if signedIn(); // o true si quieres público
-        allow create: if isOwner(uid);
-        allow update: if isOwner(uid);
+        allow read: if signedIn();   // o true si deseas público
+        allow create, update: if isOwner(uid);
       }
-
-      // Leaderboard/members: lectura pública, escritura controlada
       match /members/{discordId} {
         allow read: if true;
-
-        // Permite reclamar solo si el doc no tiene uid o ya es del mismo usuario.
-        allow update: if signedIn()
-          && (
-               (!existsAfter(/databases/$(db)/documents/members/$(discordId)).uid) ||
-               (resource.data.uid == request.auth.uid) ||
-               (request.resource.data.uid == request.auth.uid && resource.data.uid == null)
-             );
-
-        // Opcionalmente restringe actualizar pfpUrl sólo si ya es su casilla:
-        allow update: if signedIn() && resource.data.uid == request.auth.uid;
+        // Solo el dueño puede reclamar/editar su pfp
+        allow update: if signedIn() && (
+           (!existsAfter(/databases/$(db)/documents/members/$(discordId)).uid) ||
+           (resource.data.uid == request.auth.uid) ||
+           (request.resource.data.uid == request.auth.uid && resource.data.uid == null)
+        );
       }
-
       match /cards/{cardId} {
         allow read: if true;
-      }
-
-      match /inventory/{uid}/{any=**} {
-        allow read: if isOwner(uid);
       }
     }
   }
@@ -659,6 +548,5 @@
 </script>
 </body>
 </html>
-
 
 
