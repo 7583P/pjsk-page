@@ -90,90 +90,35 @@
     section{display:none}
     section.active{display:block}
 
-    /* ================== LEADERBOARD (usa tu estética) ================== */
-    #lbApp {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0; /* ya estamos dentro de .card */
-      background-color: transparent; /* card hace el fondo */
-    }
-    #lbApp h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #lbApp .controls {
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    /* ================== LEADERBOARD ================== */
+    #lbApp { max-width: 1000px; margin: 0 auto; padding: 0; background-color: transparent; }
+    #lbApp h1 { font-size: 2em; margin-bottom: 20px; text-align: center; }
+    #lbApp .controls { margin-bottom: 15px; text-align: center; }
     #lbApp input[type="text"] {
-      padding: 5px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 4px;
-      text-align: center;
-      background: #555;
-      color: #fff;
+      padding: 5px; width: 80%; max-width: 400px; border: none; border-radius: 4px;
+      text-align: center; background: #555; color: #fff;
     }
-    #lbApp .dropdown {
-      position: relative;
-      display: inline-block;
-      margin-left: 10px;
-      font-family: sans-serif;
-    }
+    #lbApp .dropdown { position: relative; display: inline-block; margin-left: 10px; }
     #lbApp .dropbtn {
-      background: #737373;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      color: #fff;
-      font-weight: bold;
-      white-space: nowrap;
+      background: #737373; border: none; padding: 6px 12px; cursor: pointer;
+      border-radius: 4px; color: #fff; font-weight: bold; white-space: nowrap;
     }
-
-    /* Gradiente de textos */
-    #lbApp .text-gradient,
-    #lbApp .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    #lbApp .text-gradient, #lbApp .name-gradient {
+      display: inline-block; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-
     #lbApp .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 220px;
-      background-color: #595959;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      z-index: 1000;
-      border-radius: 4px;
-      overflow: hidden;
+      display: none; position: absolute; top: 100%; left: 0; min-width: 260px;
+      background-color: #3a3a3a; box-shadow: 0 2px 6px rgba(0,0,0,0.35); z-index: 1000; border-radius: 6px; overflow: hidden;
     }
     #lbApp .dropdown-content a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      font-size: 14px;
-      white-space: nowrap;
-      color: #fff;
+      display: block; padding: 10px 12px; text-decoration: none; font-size: 14px; white-space: nowrap; color: #fff;
+      border-bottom: 1px solid #00000022;
     }
-    #lbApp .dropdown-content a:hover .text-gradient { opacity: 0.9; }
+    #lbApp .dropdown-content a:last-child { border-bottom: none; }
+    #lbApp .dropdown-content a:hover .text-gradient { opacity: 0.95; }
 
-    #lbApp table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    #lbApp th, #lbApp td {
-      padding: 10px;
-      text-align: center;
-      color: #fff;
-    }
+    #lbApp table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    #lbApp th, #lbApp td { padding: 10px; text-align: center; color: #fff; }
     #lbApp th { background-color: #030050; }
     #lbApp td { border-bottom: 1px solid #555; }
     #lbApp tbody tr:nth-child(odd)  { background-color: #333; }
@@ -181,12 +126,8 @@
 
     /* Posición + bandera + PFP */
     #lbApp .position-cell {
-      position: relative;
-      text-align: center;
-      padding-right: 120px; /* espacio para bandera + pfp */
-      height: var(--rowhLB);
+      position: relative; text-align: center; padding-right: 120px; height: var(--rowhLB);
     }
-    #lbApp .position-cell .position-number { display: inline-block; }
     #lbApp .position-cell .flag {
       width: 24px; position: absolute; top: 50%; right: 72px; transform: translateY(-50%);
       border-radius: 3px; box-shadow: 0 0 0 1px #0008;
@@ -215,29 +156,15 @@
       background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color: currentColor !important
     }
 
-    #lbApp .pagination {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
+    #lbApp .pagination { margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; }
     #lbApp .pagination button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      background: #555;
-      color: #fff;
-      cursor: pointer;
+      padding: 4px 8px; border: none; border-radius: 4px; background: #555; color: #fff; cursor: pointer;
     }
     #lbApp .pagination button:disabled { opacity: 0.4; cursor: default; }
     #lbApp .pagination input[type="number"] {
       width: 50px; padding: 4px; text-align: center; border-radius: 4px;
       border: 1px solid #555; background: #2a2a2a; color: #fff;
     }
-
-    /* etiqueta de fallo de verificación en el nombre */
-    #lbApp .fail { color: var(--err); font-size: 12px; margin-left: 8px; vertical-align: middle }
 
     /* ===== PFP Picker ===== */
     .pfp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
@@ -261,7 +188,8 @@
       <nav class="tabs" id="tabs">
         <button class="tabbtn active" data-tab="home">Home</button>
         <button class="tabbtn" data-tab="leaderboard">Leaderboard</button>
-        <button class="tabbtn" id="tabProfile" data-tab="profile" disabled>Edit Profile</button>
+        <!-- SIEMPRE clickeable -->
+        <button class="tabbtn" id="tabProfile" data-tab="profile">Edit Profile</button>
       </nav>
     </div>
   </header>
@@ -342,7 +270,7 @@
           <div class="step">
             <div>
               <strong>2) Verificación de Email</strong><br>
-              <span class="help">Busca el correo y haz click en “Verify”.</span>
+              <span class="help">Tienes <b>5 minutos</b> desde login/registro para verificar.</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <span id="mailBadge" class="badge">Pendiente</span>
@@ -353,10 +281,10 @@
           <div class="step">
             <div>
               <strong>Acceso a Edit PFP</strong><br>
-              <span class="help">Se habilita cuando ambos pasos estén OK.</span>
+              <span class="help">Se habilita cuando ambos pasos estén OK dentro de los 5 min.</span>
             </div>
             <div>
-              <button id="btnGoProfile" class="btn small" disabled>Ir a Edit Profile</button>
+              <button id="btnGoProfile" class="btn small">Ir a Edit Profile</button>
               <button id="btnLogout" class="btn small ghost" disabled>Log out</button>
             </div>
           </div>
@@ -378,7 +306,7 @@
             <div class="dropdown" @click.stop>
               <button class="dropbtn" @click.stop="menuOpen = !menuOpen">
                 <template v-if="selectedRank">
-                  <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
+                  <span :class="['text-gradient','rank-'+selectedRank]">{{ displayRank(selectedRank) }}</span>
                   <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
                 </template>
                 <template v-else>
@@ -393,7 +321,7 @@
             </div>
 
             <button v-if="selectedRank" @click="clearRank" style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
-              Mostrar todos ▾
+              Mostrar todos
             </button>
           </div>
 
@@ -404,7 +332,7 @@
             <tbody>
               <tr v-for="p in paginatedPlayers" :key="p.id" :style="{height:'var(--rowhLB)'}">
                 <td class="position-cell">
-                  <span :class="['position-number','text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
+                  <span :class="['text-gradient','rank-'+p.rank]">{{ playerRankMap[p.id] }}</span>
                   <img v-if="p.country" :src="flagUrl(p.country)" :alt="p.country" class="flag" />
                   <img v-if="pfpMap[p.name?.toLowerCase?.()]" :src="pfpMap[p.name.toLowerCase()]" alt="pfp" class="pfp-sq" />
                 </td>
@@ -437,6 +365,10 @@
     <section id="profile">
       <div class="card">
         <h2 style="margin:0 0 10px">Set PFP</h2>
+
+        <!-- Puerta de acceso -->
+        <div id="profileGate" class="msg info" style="display:none">You must be registered/logged in</div>
+
         <p class="help" style="margin:0 0 12px">
           Selecciona cualquier carta (normal / entrenada). Si el catálogo no carga, pega una URL manual.
         </p>
@@ -485,7 +417,7 @@
         menuOpen: false,
         pfpMap: {},  // nameLower -> url
         ranks: [
-          { key:'Iron', label:'Iron', range:'0-100' },
+          { key:'Iron', label:'Iron', range:'↓0-100' },
           { key:'Bronze', label:'Bronze', range:'101-200' },
           { key:'Silver', label:'Silver', range:'201-300' },
           { key:'Gold', label:'Gold', range:'301-400' },
@@ -494,8 +426,8 @@
           { key:'Crystal', label:'Crystal', range:'601-700' },
           { key:'Master', label:'Master', range:'701-800' },
           { key:'Champion', label:'Champion', range:'801-900' },
-          { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
-          { key:'Legend', label:'Legend', range:'+1000' }
+          { key:'GrandChampion', label:'GrandChampion', range:'901-999' },
+          { key:'Legend', label:'Legend', range:'↑1000' }
         ]
       }
     },
@@ -546,7 +478,7 @@
           const demo = Array.from({length:60}).map((_,i)=>({
             id:'demo'+i, name: i%7===0? 'usuario123' : ('usuario'+(100+i)),
             mmr: 1000 - i*7,
-            rank: ['Gold','Platinum','Diamond','Bronze','Silver','Master','Legend'][i%7],
+            rank: ['Iron','Bronze','Silver','Gold','Platinum','Diamond','Legend'][i%7],
             country: i%2===0?'pe':'us',
             verified: i%11!==0
           })).sort((a,b)=> b.mmr - a.mmr);
@@ -562,7 +494,7 @@
         }catch(e){ console.warn('PFP map error', e); }
       },
       flagUrl(cc){ return `https://flagcdn.com/24x18/${String(cc||'').toLowerCase()}.png`; },
-      displayRank(rank){ return rank==='GrandChampion' ? 'Grand Champion' : rank; },
+      displayRank(rank){ return rank==='GrandChampion' ? 'GrandChampion' : rank; },
       splitName(name){
         const emojiPres = /\p{Emoji_Presentation}/u;
         return Array.from(String(name||'')).map(c=>({ char:c, isEmoji: emojiPres.test(c) }));
@@ -597,6 +529,7 @@
     getFirestore, doc, setDoc, updateDoc, getDoc, getDocs, collection, serverTimestamp, query, limit, Timestamp
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+  // ======= RELLENA ESTO CON TU PROYECTO FIREBASE =======
   const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_AUTH_DOMAIN",
@@ -605,17 +538,18 @@
     messagingSenderId: "TU_SENDER_ID",
     appId: "TU_APP_ID",
   };
+  // =====================================================
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-  await setPersistence(auth, browserLocalPersistence);
+  // Estado de puerta a Edit Profile
+  let CAN_EDIT_PROFILE = false;
 
+  // Helpers DOM
   const $  = (sel)=>document.querySelector(sel);
   const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
   const show = (el,on=true)=> el && (el.style.display = on ? "" : "none");
   function showMsg(el, text, type){ el.className = "msg " + (type||"info"); el.textContent = text; el.style.display = text ? "block" : "none"; }
 
+  // Validación de Discord/Showname
   function validateDiscord(u){
     if(!u) return false;
     u = u.trim().replace(/^@/,'');
@@ -624,321 +558,423 @@
     return legacy.test(u) || modern.test(u);
   }
   const genCode=()=> Math.random().toString(36).slice(2,8).toUpperCase();
+  const nowTs = ()=> Timestamp.fromDate(new Date());
 
-  // ===== Tabs
+  // Tabs
   function setActiveTab(name){
     $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
     $$("main section").forEach(s=>s.classList.toggle("active", s.id===name));
+    if(name==="profile"){
+      // Puerta de acceso visible si no cumple
+      $("#pfpSearch").disabled = !CAN_EDIT_PROFILE;
+      $("#pfpVersion").disabled = !CAN_EDIT_PROFILE;
+      $("#btnClearPfp").disabled = !CAN_EDIT_PROFILE;
+      $("#manualUrl").disabled = !CAN_EDIT_PROFILE;
+      $("#btnSetManual").disabled = !CAN_EDIT_PROFILE;
+      show($("#profileGate"), !CAN_EDIT_PROFILE);
+    }
   }
   $("#tabs").addEventListener("click",(e)=>{
     const btn = e.target.closest(".tabbtn");
-    if(!btn || btn.disabled) return;
+    if(!btn) return;
     setActiveTab(btn.dataset.tab);
   });
 
-  // ===== Discord OAuth (popup)
-  const OAUTH_URL = "https://TU_BACKEND/oauth/discord/start";
-  async function openDiscord(flow){
-    if(!auth.currentUser){ alert("Primero inicia sesión o regístrate."); return; }
-    const uid = auth.currentUser.uid;
-    window.open(`${OAUTH_URL}?uid=${encodeURIComponent(uid)}&flow=${flow}`, "_blank", "width=520,height=650");
-  }
-  $("#btnLoginDiscord").addEventListener("click",()=>openDiscord("login"));
-  $("#btnRegisterDiscord").addEventListener("click",()=>openDiscord("register"));
-  window.addEventListener("message", async (ev)=>{
-    if(ev.data === "discord-linked"){
-      showMsg($("#welcomeMsg"), "Discord conectado ✔", "ok");
-      if(auth.currentUser){
-        const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
-        const udoc = await getDoc(doc(db,"users",auth.currentUser.uid));
-        hydrateVerifyUI({
-          discordVerified: vdoc.exists() ? !!vdoc.data().discordVerified : true,
-          emailVerified: auth.currentUser.emailVerified,
-          code: vdoc.exists()? vdoc.data().code : $("#discCode").textContent,
-          showName: udoc.exists()? (udoc.data().showName || udoc.data().discordName) : "usuario123"
+  // ===== Inicio seguro (evita await toplevel en navegadores viejos)
+  (async function init(){
+    try{
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db   = getFirestore(app);
+      await setPersistence(auth, browserLocalPersistence);
+
+      // Exponer para otras funciones
+      window.__app = { auth, db };
+
+      // Discord OAuth (popup)
+      const OAUTH_URL = "https://TU_BACKEND/oauth/discord/start";
+      async function openDiscord(flow){
+        if(!auth.currentUser){ alert("Primero inicia sesión o regístrate."); return; }
+        const uid = auth.currentUser.uid;
+        const w = window.open(`${OAUTH_URL}?uid=${encodeURIComponent(uid)}&flow=${flow}`, "_blank", "width=520,height=650");
+        if(!w) alert("Permite ventanas emergentes para continuar con Discord.");
+      }
+      $("#btnLoginDiscord").addEventListener("click",()=>openDiscord("login"));
+      $("#btnRegisterDiscord").addEventListener("click",()=>openDiscord("register"));
+
+      // Mensajes del backend
+      window.addEventListener("message", async (ev)=>{
+        if(ev.data === "discord-linked"){
+          showMsg($("#welcomeMsg"), "Discord conectado ✔", "ok");
+          await refreshVerifyUI();
+        }
+        if(ev.data === "discord-failed"){
+          showMsg($("#welcomeMsg"), "failed to verificate", "err");
+          await refreshVerifyUI();
+        }
+      });
+
+      // --- Registro
+      $("#btnRegister").addEventListener("click", async ()=>{
+        const discord = $("#regDiscord").value.trim();
+        const email   = $("#regEmail").value.trim();
+        const pass    = $("#regPass").value.trim();
+        const el = $("#regMsg"); showMsg(el,"","info");
+        if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
+        if(!validateDiscord(discord)){ showMsg(el,"Discord/Showname inválido.","err"); return; }
+        try{
+          const cred = await createUserWithEmailAndPassword(auth, email, pass);
+          const user = cred.user;
+          await updateProfile(user, { displayName: discord });
+          await setDoc(doc(db,"users",user.uid), {
+            uid:user.uid, email, showName: discord, discordName: discord,
+            emailVerified: user.emailVerified || false,
+            discordVerified: false, pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+          }, {merge:true});
+
+          // Generar código de Discord y arrancar ventana de email 5 min
+          const {code}=await createOrRefreshCode(user.uid, true, db);
+          await startEmailWindow(user.uid, db);
+          await sendEmailVerification(user);
+
+          show($("#authArea"), false); show($("#welcomeArea"), true);
+          await hydrateVerifyUI({ codeOverride: code });
+
+          showMsg(el,"Cuenta creada. Revisa tu correo (tienes 5 minutos) y vincula Discord.","ok");
+        }catch(err){
+          const map={
+            "auth/email-already-in-use":"Ese email ya está registrado.",
+            "auth/invalid-email":"Email inválido.",
+            "auth/weak-password":"La contraseña es muy débil (mínimo 6)."
+          };
+          const msg = (err?.message||"").includes("api-key-not-valid")
+            ? "Error de Firebase: API key inválida o mal configurada. Pega el firebaseConfig correcto en el código."
+            : (map[err.code] || ("Error al registrar: "+err.message));
+          showMsg(el, msg, "err");
+        }
+      });
+
+      // --- Login
+      $("#btnLogin").addEventListener("click", async ()=>{
+        const discord = $("#loginDiscord").value.trim();
+        const email   = $("#loginEmail").value.trim();
+        const pass    = $("#loginPass").value.trim();
+        const el = $("#loginMsg"); showMsg(el,"","info");
+        if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
+        try{
+          const cred = await signInWithEmailAndPassword(auth, email, pass);
+          const user = cred.user;
+          await ensureUserDiscord(user.uid, discord, db);
+
+          // Si aún no está verificado, abre ventana de 5 min
+          if(!user.emailVerified){ await startEmailWindow(user.uid, db); await sendEmailVerification(user); }
+
+          show($("#authArea"), false); show($("#welcomeArea"), true);
+          await hydrateVerifyUI({});
+          showMsg(el,"Login correcto. Completa verificación si falta.","ok");
+        }catch(err){
+          const map={
+            "auth/invalid-email":"Email inválido.",
+            "auth/user-disabled":"Usuario deshabilitado.",
+            "auth/user-not-found":"No existe cuenta con ese email.",
+            "auth/wrong-password":"Contraseña incorrecta."
+          };
+          const msg = (err?.message||"").includes("api-key-not-valid")
+            ? "Error de Firebase: API key inválida o mal configurada. Pega el firebaseConfig correcto en el código."
+            : (map[err.code] || ("Error al iniciar sesión: "+err.message));
+          showMsg($("#loginMsg"), msg, "err");
+        }
+      });
+
+      $("#btnReset").addEventListener("click", async ()=>{
+        const email = $("#loginEmail").value.trim() || prompt("Escribe tu email para enviar el reset:");
+        if(!email) return;
+        try{ await sendPasswordResetEmail(auth,email); showMsg($("#loginMsg"),"Te enviamos un correo para resetear tu contraseña.","ok"); }
+        catch(err){ showMsg($("#loginMsg"),"No pudimos enviar el reset: "+err.message,"err"); }
+      });
+
+      $("#btnResendFromLogin").addEventListener("click", async ()=>{
+        if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión.","err"); return; }
+        try{
+          await startEmailWindow(auth.currentUser.uid, db);
+          await sendEmailVerification(auth.currentUser);
+          showMsg($("#loginMsg"),"Correo reenviado. Tienes 5 minutos desde ahora.","ok");
+          await refreshVerifyUI();
+        }catch(err){ showMsg($("#loginMsg"),"No se pudo reenviar: "+err.message,"err"); }
+      });
+
+      onAuthStateChanged(auth, async (user)=>{
+        if(user){
+          show($("#authArea"), false); show($("#welcomeArea"), true);
+          await hydrateVerifyUI({});
+        }else{
+          show($("#welcomeArea"), false); show($("#authArea"), true);
+          CAN_EDIT_PROFILE = false;
+          $("#btnLogout").disabled = true;
+        }
+      });
+
+      $("#btnResendVerify").addEventListener("click", async ()=>{
+        const { auth, db } = window.__app;
+        if(!auth.currentUser) return;
+        try{
+          await startEmailWindow(auth.currentUser.uid, db);
+          await sendEmailVerification(auth.currentUser);
+          showMsg($("#welcomeMsg"),"Correo reenviado. Tienes 5 minutos desde ahora.","ok");
+          await refreshVerifyUI();
+        }catch(err){ showMsg($("#welcomeMsg"),"No se pudo reenviar: "+err.message,"err"); }
+      });
+
+      $("#btnIHaveVerified").addEventListener("click", async ()=>{
+        const { auth } = window.__app;
+        if(!auth.currentUser) return;
+        await auth.currentUser.reload();
+        await refreshVerifyUI();
+      });
+
+      $("#btnCopyCode").addEventListener("click", ()=>{
+        const code = $("#discCode").textContent.trim();
+        navigator.clipboard.writeText(code);
+        showMsg($("#welcomeMsg"),"Código copiado.","ok");
+      });
+
+      $("#btnRegenCode").addEventListener("click", async ()=>{
+        const { auth, db } = window.__app;
+        if(!auth.currentUser) return;
+        const {code}=await createOrRefreshCode(auth.currentUser.uid,true,db);
+        $("#discCode").textContent = code;
+        showMsg($("#welcomeMsg"),"Nuevo código generado.","ok");
+      });
+
+      $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
+      $("#btnLogout").addEventListener("click", async ()=>{
+        const { auth } = window.__app;
+        await signOut(auth); setActiveTab("home");
+      });
+
+      // ====== Firestore utilities ======
+      async function ensureUserDiscord(uid, discord, db){
+        const uref = doc(db,"users",uid);
+        const snap = await getDoc(uref);
+        if(!snap.exists() || (snap.data().showName||"") !== discord){
+          await setDoc(uref,{ showName:discord, discordName:discord, updatedAt:serverTimestamp() },{merge:true});
+        }
+      }
+
+      async function createOrRefreshCode(uid, regenerate, db){
+        const vref=doc(db,"verifications",uid); const v=await getDoc(vref);
+        const newCode=genCode();
+        if(!v.exists() || regenerate){
+          await setDoc(vref,{
+            uid, code:newCode, codeCreatedAt: serverTimestamp(),
+            discordVerified: v.exists()? !!v.data().discordVerified : false
+          },{merge:true});
+          return { code:newCode };
+        }
+        const d=v.data(); return { code: d.code||newCode };
+      }
+
+      async function startEmailWindow(uid, db){
+        const endsAt = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
+        await setDoc(doc(db,"verifications",uid), { emailWindowEndsAt: endsAt }, {merge:true});
+        return endsAt;
+      }
+
+      async function readVerifyState(){
+        const { auth, db } = window.__app;
+        const u = auth.currentUser;
+        if(!u) return null;
+        const vdoc = await getDoc(doc(db,"verifications",u.uid));
+        const udoc = await getDoc(doc(db,"users",u.uid));
+        const v = vdoc.exists()? vdoc.data() : {};
+        const showName = udoc.exists()? (udoc.data().showName || u.displayName || u.email.split("@")[0]) : (u.displayName || u.email.split("@")[0]);
+        return {
+          showName,
+          discordVerified: !!v.discordVerified,
+          emailVerified: !!u.emailVerified,
+          emailWindowEndsAt: v.emailWindowEndsAt || null,
+          code: v.code || "------"
+        };
+      }
+
+      function stillInWindow(endsAt){
+        if(!endsAt) return false;
+        try{
+          const end = endsAt.toDate ? endsAt.toDate() : new Date(endsAt);
+          return Date.now() <= end.getTime();
+        }catch{ return false; }
+      }
+
+      async function hydrateVerifyUI({ codeOverride }){
+        const s = await readVerifyState();
+        if(!s){ CAN_EDIT_PROFILE=false; return; }
+
+        $("#welcomeName").textContent = s.showName || "usuario123";
+        $("#discCode").textContent = codeOverride || s.code || "------";
+
+        // Estado de badges
+        $("#discBadge").textContent = s.discordVerified ? "Verificado" : "Pendiente";
+        $("#discBadge").className   = "badge" + (s.discordVerified ? " ok" : "");
+
+        const inWindow = stillInWindow(s.emailWindowEndsAt);
+        const emailOk  = s.emailVerified && inWindow;
+        $("#mailBadge").textContent = emailOk ? "Verificado" : (s.emailVerified && !inWindow ? "Fuera de tiempo" : "Pendiente");
+        $("#mailBadge").className   = "badge" + (emailOk ? " ok" : "");
+
+        // Habilitación
+        CAN_EDIT_PROFILE = s.discordVerified && emailOk;
+        $("#btnLogout").disabled = false;
+
+        if(CAN_EDIT_PROFILE){
+          showMsg($("#welcomeMsg"),"¡Todo listo! Ya puedes ir a Edit Profile.","ok");
+          $("#tabProfile").classList.remove("disabled");
+        }else{
+          const why = !s.discordVerified
+            ? "Vincula tu Discord para continuar."
+            : (!s.emailVerified ? "Verifica tu correo." : "Verificado fuera de los 5 min. Reenvía el correo y verifica de nuevo.");
+          showMsg($("#welcomeMsg"),`Completa las verificaciones: ${why}`,"info");
+        }
+      }
+
+      async function refreshVerifyUI(){ await hydrateVerifyUI({}); }
+
+      // ========= PFP: catálogo =========
+      const IMAGE_BASES = [
+        "https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/",
+        "https://storage.sekai.best/sekai-assets/thumbnail/chara_card/",
+      ];
+      const CARD_APIS = [
+        "https://raw.githubusercontent.com/Sekai-World/sekai-master-db-diff/master/cards.json",
+        "https://sekai.best/api/v2/cards.json",
+        "https://sekai.best/api/cards.json",
+      ];
+
+      function urlsFromAsset(assetbundleName){
+        const normal  = `${assetbundleName}_normal.png`;
+        const trained = `${assetbundleName}_after_training.png`;
+        return { normal: IMAGE_BASES[0]+normal, trained: IMAGE_BASES[0]+trained };
+      }
+      function normalizeCard(c){
+        const asset = c.assetbundleName || c.assetBundleName || c.assetbundle || c.assetBundle;
+        const id    = c.id || c.cardId || c.resourceId || c.seq || c.card_id || asset;
+        const name  = c.name || c.title || c.cardName || "";
+        if(!asset) return null;
+        const u = urlsFromAsset(asset);
+        return { id: id??asset, name, assetbundleName: asset, imgNormal:u.normal, imgTrained:u.trained };
+      }
+
+      const statePFP = { cards:[], filtered:[], version:"both", search:"" };
+
+      async function fetchCards(){
+        const info = $("#pfpInfo");
+        showMsg(info,"Cargando cartas…","info");
+        let ok=false, raw=null;
+        for(const api of CARD_APIS){
+          try{
+            const res = await fetch(api, { mode:"cors", cache:"no-store" });
+            if(res.ok){ raw = await res.json(); ok=true; break; }
+          }catch{}
+        }
+        if(!ok){
+          showMsg(info,"No pudimos leer la lista de cartas desde sekai.best / GitHub. Usa la URL manual temporalmente.","err");
+          return;
+        }
+        const list = Array.isArray(raw) ? raw : (raw.data||raw.cards||raw.result||[]);
+        const mapped = [];
+        for(const item of list){ const m = normalizeCard(item); if(m) mapped.push(m); }
+        statePFP.cards = mapped;
+        filterCards(); renderCardGrid();
+        showMsg(info,`Cartas cargadas: ${mapped.length}.`, "ok");
+      }
+
+      function filterCards(){
+        const q = statePFP.search.toLowerCase();
+        const ver=statePFP.version;
+        statePFP.filtered = statePFP.cards.filter(c=>{
+          return (c.name||"").toLowerCase().includes(q) || String(c.id).toLowerCase().includes(q) || c.assetbundleName.toLowerCase().includes(q);
+        }).flatMap(c=>{
+          if(ver==="normal") return [{...c,show:"normal"}];
+          if(ver==="trained") return [{...c,show:"trained"}];
+          return [{...c,show:"normal"},{...c,show:"trained"}];
         });
       }
-    }
-    if(ev.data === "discord-failed"){
-      showMsg($("#welcomeMsg"), "failed to verificate", "err");
-    }
-  });
-
-  // ===== Auth: Register
-  $("#btnRegister").addEventListener("click", async ()=>{
-    const discord = $("#regDiscord").value.trim();
-    const email   = $("#regEmail").value.trim();
-    const pass    = $("#regPass").value.trim();
-    const el = $("#regMsg"); showMsg(el,"","info");
-    if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
-    if(!validateDiscord(discord)){ showMsg(el,"Discord/Showname inválido.","err"); return; }
-    try{
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      const user = cred.user;
-      await updateProfile(user, { displayName: discord });
-      await setDoc(doc(db,"users",user.uid), {
-        uid:user.uid, email, showName: discord, discordName: discord,
-        emailVerified: user.emailVerified || false,
-        discordVerified: false, pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
-      }, {merge:true});
-      const {code}=await createOrRefreshCode(user.uid, true);
-      await sendEmailVerification(user);
-      show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified:false, emailVerified:false, code, showName:discord});
-      showMsg(el,"Cuenta creada. Revisa los pasos de verificación abajo.","ok");
-    }catch(err){
-      const map={"auth/email-already-in-use":"Ese email ya está registrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"La contraseña es muy débil (mínimo 6)."};
-      showMsg(el, map[err.code] || ("Error al registrar: "+err.message), "err");
-    }
-  });
-
-  // ===== Auth: Login
-  $("#btnLogin").addEventListener("click", async ()=>{
-    const discord = $("#loginDiscord").value.trim();
-    const email   = $("#loginEmail").value.trim();
-    const pass    = $("#loginPass").value.trim();
-    const el = $("#loginMsg"); showMsg(el,"","info");
-    if(!discord || !email || !pass){ showMsg(el,"Completa Discord/Showname, email y contraseña.","err"); return; }
-    try{
-      const cred = await signInWithEmailAndPassword(auth, email, pass);
-      const user = cred.user;
-      await ensureUserDiscord(user.uid, discord);
-      const {code}=await createOrRefreshCode(user.uid, false);
-      await user.reload();
-      const vdoc = await getDoc(doc(db,"verifications",user.uid));
-      const v = vdoc.exists() ? vdoc.data() : {discordVerified:false, emailVerified:user.emailVerified};
-      show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified:!!v.discordVerified, emailVerified: user.emailVerified, code, showName:discord});
-      showMsg(el,"Login correcto. Completa verificación si falta.","ok");
-    }catch(err){
-      const map={"auth/invalid-email":"Email inválido.","auth/user-disabled":"Usuario deshabilitado.","auth/user-not-found":"No existe cuenta con ese email.","auth/wrong-password":"Contraseña incorrecta."};
-      showMsg(el, map[err.code] || ("Error al iniciar sesión: "+err.message), "err");
-    }
-  });
-
-  $("#btnReset").addEventListener("click", async ()=>{
-    const email = $("#loginEmail").value.trim() || prompt("Escribe tu email para enviar el reset:");
-    if(!email) return;
-    try{ await sendPasswordResetEmail(auth,email); showMsg($("#loginMsg"),"Te enviamos un correo para resetear tu contraseña.","ok"); }
-    catch(err){ showMsg($("#loginMsg"),"No pudimos enviar el reset: "+err.message,"err"); }
-  });
-
-  $("#btnResendFromLogin").addEventListener("click", async ()=>{
-    if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión.","err"); return; }
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#loginMsg"),"Correo reenviado.","ok"); }
-    catch(err){ showMsg($("#loginMsg"),"No se pudo reenviar: "+err.message,"err"); }
-  });
-
-  onAuthStateChanged(auth, async (user)=>{
-    if(user){
-      const udoc = await getDoc(doc(db,"users",user.uid));
-      const vdoc = await getDoc(doc(db,"verifications",user.uid));
-      const showName = udoc.exists() ? (udoc.data().showName || user.displayName || user.email.split("@")[0]) : (user.displayName || user.email.split("@")[0]);
-      let code = vdoc.exists() ? (vdoc.data().code) : genCode();
-      if(!vdoc.exists()){
-        await setDoc(doc(db,"verifications",user.uid), {
-          uid:user.uid, discordName:showName, code, discordVerified:false, emailVerified:user.emailVerified, codeCreatedAt: serverTimestamp()
-        }, {merge:true});
+      function renderCardGrid(){
+        const grid = $("#pfpGrid");
+        if(statePFP.filtered.length===0){ grid.innerHTML = `<div class="help">Sin resultados. Prueba otro término.</div>`; return; }
+        grid.innerHTML = statePFP.filtered.map(c=>{
+          const img = c.show==="trained" ? c.imgTrained : c.imgNormal;
+          const ver = c.show==="trained" ? "Trained" : "Normal";
+          return `
+            <div class="card-tile" data-url="${img}" data-asset="${c.assetbundleName}">
+              <img class="tile-img" loading="lazy" src="${img}" alt="#${c.id}">
+              <div class="tile-meta">
+                <span class="badge">${ver}</span>
+                <span>#${c.id}</span>
+              </div>
+            </div>`;
+        }).join("");
+        $$(".card-tile").forEach(tile=>{
+          tile.addEventListener("click", ()=> setPfpUrl(tile.dataset.url));
+        });
       }
-      show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false, emailVerified: user.emailVerified, code, showName});
-    }else{
-      show($("#welcomeArea"), false); show($("#authArea"), true);
-      $("#tabProfile").disabled = true;
+
+      $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
+      $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
+
+      $("#btnSetManual").addEventListener("click", async ()=>{
+        const url = $("#manualUrl").value.trim();
+        if(!url) return;
+        await setPfpUrl(url);
+      });
+
+      $("#btnClearPfp").addEventListener("click", async ()=>{
+        const { auth, db } = window.__app;
+        const u = auth.currentUser; if(!u) return;
+        await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
+        const key = await getDisplayKey(u.uid, db);
+        await setDoc(doc(db,"pfps", key), { url:"", updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+        alert("PFP eliminado.");
+      });
+
+      async function getDisplayKey(uid, db){
+        const { auth } = window.__app;
+        const s = await getDoc(doc(db,"users",uid));
+        const showName = s.exists()? (s.data().showName || s.data().discordName || auth.currentUser.displayName || auth.currentUser.email.split("@")[0]) : (auth.currentUser.displayName || auth.currentUser.email.split("@")[0]);
+        return String(showName||"").toLowerCase();
+      }
+
+      async function setPfpUrl(url){
+        if(!CAN_EDIT_PROFILE){ alert("Completa verificación de correo y vinculación de Discord primero."); return; }
+        const { auth, db } = window.__app;
+        const u = auth.currentUser; if(!u){ setActiveTab("home"); alert("Inicia sesión y completa verificaciones."); return; }
+        await updateDoc(doc(db,"users",u.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
+        const key = await getDisplayKey(u.uid, db);
+        await setDoc(doc(db,"pfps", key), { url, updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+        alert("PFP actualizado ✔");
+      }
+
+      // Exponer para Vue (leaderboard)
+      window.loadPfpMap = async function(){
+        const { db } = window.__app;
+        const snap = await getDocs(query(collection(db,"pfps"), limit(2000)));
+        const map = {};
+        snap.forEach(d=>{
+          const url = (d.data().url||"").trim();
+          if(url) map[d.id] = url;
+        });
+        return map;
+      }
+
+      // start
+      fetchCards();
+
+    }catch(e){
+      console.error("Falló la inicialización de Firebase:", e);
+      if((e?.message||"").includes("apiKey") || (e?.message||"").includes("api-key-not-valid")){
+        alert("Firebase API key inválida o faltante. Reemplaza firebaseConfig con tus credenciales.");
+      }
     }
-  });
-
-  $("#btnResendVerify").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#welcomeMsg"),"Correo de verificación reenviado.","ok"); }
-    catch(err){ showMsg($("#welcomeMsg"),"No se pudo reenviar: "+err.message,"err"); }
-  });
-  $("#btnIHaveVerified").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
-    await auth.currentUser.reload();
-    const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
-    const udoc = await getDoc(doc(db,"users",auth.currentUser.uid));
-    hydrateVerifyUI({
-      discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false,
-      emailVerified: auth.currentUser.emailVerified,
-      code: vdoc.exists()? vdoc.data().code : "------",
-      showName: udoc.exists()? udoc.data().showName : "usuario123"
-    });
-  });
-
-  $("#btnCopyCode").addEventListener("click", ()=>{
-    const code = $("#discCode").textContent.trim();
-    navigator.clipboard.writeText(code);
-    showMsg($("#welcomeMsg"),"Código copiado.","ok");
-  });
-
-  $("#btnRegenCode").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
-    const {code}=await createOrRefreshCode(auth.currentUser.uid,true);
-    $("#discCode").textContent = code;
-    showMsg($("#welcomeMsg"),"Nuevo código generado.","ok");
-  });
-
-  $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
-  $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); setActiveTab("home"); });
-
-  async function ensureUserDiscord(uid, discord){
-    const uref = doc(db,"users",uid);
-    const snap = await getDoc(uref);
-    if(!snap.exists() || (snap.data().showName||"") !== discord){
-      await setDoc(uref,{ showName:discord, discordName:discord, updatedAt:serverTimestamp() },{merge:true});
-    }
-  }
-
-  async function createOrRefreshCode(uid, regenerate){
-    const vref=doc(db,"verifications",uid); const v=await getDoc(vref);
-    const newCode=genCode(); const expiresAt = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
-    if(!v.exists() || regenerate){
-      await setDoc(vref,{ uid, code:newCode, expiresAt, discordVerified:false },{merge:true});
-      return { code:newCode, expiresAt};
-    }
-    const d=v.data(); return { code: d.code||newCode, expiresAt: d.expiresAt || expiresAt };
-  }
-
-  function hydrateVerifyUI({discordVerified, emailVerified, code, showName}){
-    $("#welcomeName").textContent = showName || "usuario123";
-    $("#discCode").textContent = code || "------";
-    $("#discBadge").textContent = discordVerified ? "Verificado" : "Pendiente";
-    $("#discBadge").className = "badge" + (discordVerified ? " ok" : "");
-    $("#mailBadge").textContent = emailVerified ? "Verificado" : "Pendiente";
-    $("#mailBadge").className = "badge" + (emailVerified ? " ok" : "");
-    const ready = discordVerified && emailVerified;
-    $("#btnGoProfile").disabled = !ready;
-    $("#btnLogout").disabled   = !ready;
-    $("#tabProfile").disabled  = !ready;
-    if(ready){ showMsg($("#welcomeMsg"),"¡Todo listo! Ya puedes ir a Edit Profile.","ok"); }
-    else { showMsg($("#welcomeMsg"),"Completa las verificaciones para habilitar Edit Profile.","info"); }
-  }
-
-  // ========= PFP: catálogo =========
-  const IMAGE_BASES = [
-    "https://sekai-res.dnaroma.eu/file/sekai-assets/thumbnail/chara_card/",
-    "https://storage.sekai.best/sekai-assets/thumbnail/chara_card/",
-  ];
-  const CARD_APIS = [
-    "https://raw.githubusercontent.com/Sekai-World/sekai-master-db-diff/master/cards.json",
-    "https://sekai.best/api/v2/cards.json",
-    "https://sekai.best/api/cards.json",
-  ];
-
-  function urlsFromAsset(assetbundleName){
-    const normal  = `${assetbundleName}_normal.png`;
-    const trained = `${assetbundleName}_after_training.png`;
-    return { normal: IMAGE_BASES[0]+normal, trained: IMAGE_BASES[0]+trained };
-  }
-  function normalizeCard(c){
-    const asset = c.assetbundleName || c.assetBundleName || c.assetbundle || c.assetBundle;
-    const id    = c.id || c.cardId || c.resourceId || c.seq || c.card_id || asset;
-    const name  = c.name || c.title || c.cardName || "";
-    if(!asset) return null;
-    const u = urlsFromAsset(asset);
-    return { id: id??asset, name, assetbundleName: asset, imgNormal:u.normal, imgTrained:u.trained };
-  }
-
-  const statePFP = { cards:[], filtered:[], version:"both", search:"" };
-
-  async function fetchCards(){
-    const info = $("#pfpInfo");
-    showMsg(info,"Cargando cartas…","info");
-    let ok=false, raw=null;
-    for(const api of CARD_APIS){
-      try{
-        const res = await fetch(api, { mode:"cors", cache:"no-store" });
-        if(res.ok){ raw = await res.json(); ok=true; break; }
-      }catch{}
-    }
-    if(!ok){
-      showMsg(info,"No pudimos leer la lista de cartas desde sekai.best / GitHub. Usa la URL manual temporalmente.","err");
-      return;
-    }
-    const list = Array.isArray(raw) ? raw : (raw.data||raw.cards||raw.result||[]);
-    const mapped = [];
-    for(const item of list){ const m = normalizeCard(item); if(m) mapped.push(m); }
-    statePFP.cards = mapped;
-    filterCards(); renderCardGrid();
-    showMsg(info,`Cartas cargadas: ${mapped.length}.`, "ok");
-  }
-
-  function filterCards(){
-    const q = statePFP.search.toLowerCase();
-    const ver=statePFP.version;
-    statePFP.filtered = statePFP.cards.filter(c=>{
-      return (c.name||"").toLowerCase().includes(q) || String(c.id).toLowerCase().includes(q) || c.assetbundleName.toLowerCase().includes(q);
-    }).map(c=>{
-      if(ver==="normal") return [{...c,show:"normal"}];
-      if(ver==="trained") return [{...c,show:"trained"}];
-      return [{...c,show:"normal"},{...c,show:"trained"}];
-    }).flat();
-  }
-  function renderCardGrid(){
-    const grid = $("#pfpGrid");
-    if(statePFP.filtered.length===0){ grid.innerHTML = `<div class="help">Sin resultados. Prueba otro término.</div>`; return; }
-    grid.innerHTML = statePFP.filtered.map(c=>{
-      const img = c.show==="trained" ? c.imgTrained : c.imgNormal;
-      const ver = c.show==="trained" ? "Trained" : "Normal";
-      return `
-        <div class="card-tile" data-url="${img}" data-asset="${c.assetbundleName}">
-          <img class="tile-img" loading="lazy" src="${img}" alt="#${c.id}">
-          <div class="tile-meta">
-            <span class="badge">${ver}</span>
-            <span>#${c.id}</span>
-          </div>
-        </div>`;
-    }).join("");
-    $$(".card-tile").forEach(tile=>{
-      tile.addEventListener("click", ()=> setPfpUrl(tile.dataset.url));
-    });
-  }
-
-  $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
-  $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
-
-  $("#btnSetManual").addEventListener("click", async ()=>{
-    const url = $("#manualUrl").value.trim();
-    if(!url) return;
-    await setPfpUrl(url);
-  });
-
-  $("#btnClearPfp").addEventListener("click", async ()=>{
-    const u = auth.currentUser; if(!u) return;
-    await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
-    const key = await getDisplayKey(u.uid);
-    await setDoc(doc(db,"pfps", key), { url:"", updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
-    alert("PFP eliminado.");
-  });
-
-  async function getDisplayKey(uid){
-    const s = await getDoc(doc(db,"users",uid));
-    const showName = s.exists()? (s.data().showName || s.data().discordName || auth.currentUser.displayName || auth.currentUser.email.split("@")[0]) : (auth.currentUser.displayName || auth.currentUser.email.split("@")[0]);
-    return String(showName||"").toLowerCase();
-  }
-
-  async function setPfpUrl(url){
-    const u = auth.currentUser; if(!u){ setActiveTab("home"); alert("Inicia sesión y completa verificaciones."); return; }
-    await updateDoc(doc(db,"users",u.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
-    const key = await getDisplayKey(u.uid);
-    await setDoc(doc(db,"pfps", key), { url, updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
-    alert("PFP actualizado ✔");
-  }
-
-  // Exponer para Vue (leaderboard)
-  window.loadPfpMap = async function(){
-    const snap = await getDocs(query(collection(db,"pfps"), limit(2000)));
-    const map = {};
-    snap.forEach(d=>{
-      const url = (d.data().url||"").trim();
-      if(url) map[d.id] = url;
-    });
-    return map;
-  }
-
-  // start
-  fetchCards();
+  })();
 </script>
 </body>
 </html>
