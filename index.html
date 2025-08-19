@@ -90,103 +90,45 @@
     section{display:none}
     section.active{display:block}
 
-    /* ================== LEADERBOARD (usa tu estética) ================== */
-    #lbApp {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0; /* ya estamos dentro de .card */
-      background-color: transparent; /* card hace el fondo */
-    }
-    #lbApp h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #lbApp .controls {
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    /* ================== LEADERBOARD ================== */
+    #lbApp {max-width: 1000px;margin: 0 auto;padding: 0;background-color: transparent;}
+    #lbApp h1 {font-size: 2em;margin-bottom: 20px;text-align: center;}
+    #lbApp .controls {margin-bottom: 15px;text-align: center;}
     #lbApp input[type="text"] {
-      padding: 5px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 4px;
-      text-align: center;
-      background: #555;
-      color: #fff;
+      padding: 5px;width: 80%;max-width: 400px;border: none;border-radius: 4px;text-align: center;background: #555;color: #fff;
     }
-    #lbApp .dropdown {
-      position: relative;
-      display: inline-block;
-      margin-left: 10px;
-      font-family: sans-serif;
-    }
+
+    #lbApp .dropdown {position: relative;display: inline-block;margin-left: 10px}
     #lbApp .dropbtn {
-      background: #737373;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      color: #fff;
-      font-weight: bold;
-      white-space: nowrap;
+      background: #737373;border: none;padding: 6px 12px;cursor: pointer;border-radius: 8px;color: #fff;font-weight: 700;white-space: nowrap;
     }
-
-    /* Gradiente de textos */
-    #lbApp .text-gradient,
-    #lbApp .name-gradient {
-      display: inline-block;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
     #lbApp .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 220px;
-      background-color: #595959;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      z-index: 1000;
-      border-radius: 4px;
-      overflow: hidden;
+      display: none;position: absolute;top: 120%;left: 0;min-width: 260px;background-color: #2e2e2e;border:1px solid #0006;
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);z-index: 1000;border-radius: 10px;overflow: hidden;
     }
     #lbApp .dropdown-content a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      font-size: 14px;
-      white-space: nowrap;
-      color: #fff;
+      display: block;padding: 10px 12px;text-decoration: none;font-size: 14px;white-space: nowrap;color: #fff;
     }
-    #lbApp .dropdown-content a:hover .text-gradient { opacity: 0.9; }
+    #lbApp .dropdown-content a:hover {background:#3a3a3a}
 
-    #lbApp table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+    /* Gradientes para textos */
+    #lbApp .text-gradient, #lbApp .name-gradient{
+      display:inline-block;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
-    #lbApp th, #lbApp td {
-      padding: 10px;
-      text-align: center;
-      color: #fff;
-    }
-    #lbApp th { background-color: #030050; }
-    #lbApp td { border-bottom: 1px solid #555; }
-    #lbApp tbody tr:nth-child(odd)  { background-color: #333; }
-    #lbApp tbody tr:nth-child(even) { background-color: #2a2a2a; }
+    #lbApp .name-gradient .emoji{background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color: currentColor !important}
+
+    #lbApp table {width: 100%;border-collapse: collapse;margin-top: 10px}
+    #lbApp th, #lbApp td {padding: 10px;text-align: center;color: #fff}
+    #lbApp th {background-color: #030050}
+    #lbApp td {border-bottom: 1px solid #555}
+    #lbApp tbody tr:nth-child(odd)  {background-color: #333}
+    #lbApp tbody tr:nth-child(even) {background-color: #2a2a2a}
 
     /* Posición + bandera + PFP */
     #lbApp .position-cell {
-      position: relative;
-      text-align: center;
-      padding-right: 120px; /* espacio para bandera + pfp */
-      height: var(--rowhLB);
+      position: relative;text-align: center;padding-right: 120px;height: var(--rowhLB);
     }
-    #lbApp .position-cell .position-number { display: inline-block; }
+    #lbApp .position-cell .position-number {display: inline-block}
     #lbApp .position-cell .flag {
       width: 24px; position: absolute; top: 50%; right: 72px; transform: translateY(-50%);
       border-radius: 3px; box-shadow: 0 0 0 1px #0008;
@@ -197,7 +139,7 @@
       border-radius:8px;border:1px solid #0007;object-fit:cover;background:#111
     }
 
-    /* Rangos (degradado derecha → izquierda) */
+    /* Rangos (degradado dere → izq) */
     .rank-Placement   { background-image: linear-gradient(to left, #ff7000, #ff4600); }
     .rank-Iron        { background-image: linear-gradient(to left, #616161, #2e2e2e); }
     .rank-Bronze      { background-image: linear-gradient(to left, #6d2a00, #3d1d00); }
@@ -211,33 +153,14 @@
     .rank-GrandChampion { background-image: linear-gradient(to left, #ff0800, #570300); white-space: nowrap; }
     .rank-Legend      { background-image: linear-gradient(to left, #c9f4ff, #c9f4ff); }
 
-    #lbApp .name-gradient .emoji{
-      background:none !important;-webkit-background-clip:initial !important;-webkit-text-fill-color: currentColor !important
-    }
-
-    #lbApp .pagination {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
+    #lbApp .pagination {margin-top: 15px;display:flex;justify-content:center;align-items:center;gap:8px}
     #lbApp .pagination button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      background: #555;
-      color: #fff;
-      cursor: pointer;
+      padding: 4px 8px;border: none;border-radius: 4px;background: #555;color: #fff;cursor: pointer;
     }
-    #lbApp .pagination button:disabled { opacity: 0.4; cursor: default; }
+    #lbApp .pagination button:disabled {opacity: .4;cursor: default}
     #lbApp .pagination input[type="number"] {
-      width: 50px; padding: 4px; text-align: center; border-radius: 4px;
-      border: 1px solid #555; background: #2a2a2a; color: #fff;
+      width: 50px; padding: 4px; text-align: center; border-radius: 4px;border: 1px solid #555; background: #2a2a2a; color: #fff;
     }
-
-    /* etiqueta de fallo de verificación en el nombre */
-    #lbApp .fail { color: var(--err); font-size: 12px; margin-left: 8px; vertical-align: middle }
 
     /* ===== PFP Picker ===== */
     .pfp-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
@@ -261,7 +184,8 @@
       <nav class="tabs" id="tabs">
         <button class="tabbtn active" data-tab="home">Home</button>
         <button class="tabbtn" data-tab="leaderboard">Leaderboard</button>
-        <button class="tabbtn" id="tabProfile" data-tab="profile" disabled>Edit Profile</button>
+        <!-- SIEMPRE clickeable -->
+        <button class="tabbtn" id="tabProfile" data-tab="profile">Edit Profile</button>
       </nav>
     </div>
   </header>
@@ -273,6 +197,8 @@
         <h1>Welcome to PJSK LOUNGE</h1>
         <p>PJSK competitive — Discord Bot + Page.</p>
       </div>
+
+      <div id="configError" class="card msg err" style="display:none"></div>
 
       <div id="authArea" class="grid cols-2">
         <!-- Login -->
@@ -292,7 +218,7 @@
           </div>
           <button id="btnLogin" class="btn full">Entrar</button>
           <div class="oauth-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button id="btnLoginDiscord" class="btn discord">Conectar con Discord</button>
+            <button id="btnLoginDiscord" class="btn discord">Vincular con Discord</button>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap">
             <button id="btnReset" class="btn ghost">Reset password</button>
@@ -318,7 +244,7 @@
           </div>
           <button id="btnRegister" class="btn full">Crear cuenta</button>
           <div class="oauth-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button id="btnRegisterDiscord" class="btn discord">Conectar con Discord</button>
+            <button id="btnRegisterDiscord" class="btn discord">Vincular con Discord</button>
           </div>
           <div id="regMsg"></div>
         </div>
@@ -341,8 +267,8 @@
           </div>
           <div class="step">
             <div>
-              <strong>2) Verificación de Email</strong><br>
-              <span class="help">Busca el correo y haz click en “Verify”.</span>
+              <strong>2) Verificación de Email (5 min)</strong><br>
+              <span class="help">Se envía un correo y caduca en <span id="emailTimer">—:—</span>.</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <span id="mailBadge" class="badge">Pendiente</span>
@@ -353,11 +279,11 @@
           <div class="step">
             <div>
               <strong>Acceso a Edit PFP</strong><br>
-              <span class="help">Se habilita cuando ambos pasos estén OK.</span>
+              <span class="help">Se habilita cuando <b>Discord</b> esté verificado.</span>
             </div>
             <div>
-              <button id="btnGoProfile" class="btn small" disabled>Ir a Edit Profile</button>
-              <button id="btnLogout" class="btn small ghost" disabled>Log out</button>
+              <button id="btnGoProfile" class="btn small">Ir a Edit Profile</button>
+              <button id="btnLogout" class="btn small ghost">Log out</button>
             </div>
           </div>
         </div>
@@ -378,8 +304,8 @@
             <div class="dropdown" @click.stop>
               <button class="dropbtn" @click.stop="menuOpen = !menuOpen">
                 <template v-if="selectedRank">
-                  <span :class="['text-gradient','rank-'+selectedRank]">Filtrar por {{ displayRank(selectedRank) }}</span>
-                  <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
+                  <span :class="['text-gradient','rank-'+selectedRank]">{{ displayRank(selectedRank) }}</span>
+                  <span> ({{ filteredCount }}) ▾</span>
                 </template>
                 <template v-else>
                   <span class="text-gradient rank-Legend">Rangos ▾</span>
@@ -387,13 +313,15 @@
               </button>
               <div id="rankList" class="dropdown-content" v-show="menuOpen">
                 <a v-for="r in ranks" :key="r.key" href="#" @click.prevent="selectRank(r.key)">
-                  <span :class="['text-gradient','rank-'+r.key]">{{ r.label }} ({{ r.range }})</span>
+                  <span :class="['text-gradient','rank-'+r.key]">{{ r.label }}</span>
                 </a>
               </div>
             </div>
 
-            <button v-if="selectedRank" @click="clearRank" style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">
-              Mostrar todos ▾
+            <button v-if="selectedRank"
+                    @click="clearRank"
+                    style="margin-left:10px; background:#555; color:#fff; padding:6px 12px; border:none; border-radius:8px; cursor:pointer;">
+              Mostrar todo
             </button>
           </div>
 
@@ -415,7 +343,7 @@
                       <span v-else>{{ seg.char }}</span>
                     </template>
                   </span>
-                  <span v-if="p.verified === false || p.discordVerified === false || p.dv === false" class="fail">failed to verificate</span>
+                  <span v-if="p.verified === false || p.discordVerified === false || p.dv === false" class="fail" style="color:#ff6b6b;margin-left:8px;font-size:12px;">failed to verificate</span>
                 </td>
                 <td><span :class="['text-gradient','rank-'+p.rank]">{{ p.mmr }}</span></td>
                 <td><span :class="['text-gradient','rank-'+p.rank]">{{ displayRank(p.rank) }}</span></td>
@@ -437,30 +365,34 @@
     <section id="profile">
       <div class="card">
         <h2 style="margin:0 0 10px">Set PFP</h2>
-        <p class="help" style="margin:0 0 12px">
-          Selecciona cualquier carta (normal / entrenada). Si el catálogo no carga, pega una URL manual.
-        </p>
 
-        <div class="pfp-toolbar">
-          <input id="pfpSearch" type="text" placeholder="Buscar por nombre, id, asset..." style="min-width:260px">
-          <select id="pfpVersion">
-            <option value="both">Mostrar: ambas versiones</option>
-            <option value="normal">Solo no entrenada</option>
-            <option value="trained">Solo entrenada</option>
-          </select>
-          <button id="btnClearPfp" class="btn warn">Eliminar PFP</button>
+        <div id="profileGate" class="msg info" style="display:none">
+          You must be registered/logged in and link your Discord to edit your PFP.
         </div>
 
-        <div id="pfpInfo" class="msg info" style="display:none"></div>
-        <div id="pfpGrid" class="pfp-grid"></div>
-
-        <div class="field" style="margin-top:12px">
-          <label>Fallback manual (si la lista no carga)</label>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <input id="manualUrl" type="text" placeholder="https://...png" style="min-width:360px;flex:1">
-            <button id="btnSetManual" class="btn">Usar esta imagen</button>
+        <div id="profileContent">
+          <p class="help" style="margin:0 0 12px">
+            Selecciona cualquier carta (normal / entrenada). Si el catálogo no carga, pega una URL manual.
+          </p>
+          <div class="pfp-toolbar">
+            <input id="pfpSearch" type="text" placeholder="Buscar por nombre, id, asset..." style="min-width:260px">
+            <select id="pfpVersion">
+              <option value="both">Mostrar: ambas versiones</option>
+              <option value="normal">Solo no entrenada</option>
+              <option value="trained">Solo entrenada</option>
+            </select>
+            <button id="btnClearPfp" class="btn warn">Eliminar PFP</button>
           </div>
-          <span class="help danger">Usa imágenes cuadradas 1:1 para encajar perfecto.</span>
+          <div id="pfpInfo" class="msg info" style="display:none"></div>
+          <div id="pfpGrid" class="pfp-grid"></div>
+          <div class="field" style="margin-top:12px">
+            <label>Fallback manual (si la lista no carga)</label>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <input id="manualUrl" type="text" placeholder="https://...png" style="min-width:360px;flex:1">
+              <button id="btnSetManual" class="btn">Usar esta imagen</button>
+            </div>
+            <span class="help danger">Usa imágenes cuadradas 1:1 para encajar perfecto.</span>
+          </div>
         </div>
       </div>
     </section>
@@ -485,17 +417,17 @@
         menuOpen: false,
         pfpMap: {},  // nameLower -> url
         ranks: [
-          { key:'Iron', label:'Iron', range:'0-100' },
-          { key:'Bronze', label:'Bronze', range:'101-200' },
-          { key:'Silver', label:'Silver', range:'201-300' },
-          { key:'Gold', label:'Gold', range:'301-400' },
-          { key:'Platinum', label:'Platinum', range:'401-500' },
-          { key:'Diamond', label:'Diamond', range:'501-600' },
-          { key:'Crystal', label:'Crystal', range:'601-700' },
-          { key:'Master', label:'Master', range:'701-800' },
-          { key:'Champion', label:'Champion', range:'801-900' },
-          { key:'GrandChampion', label:'Grand Champion', range:'901-999' },
-          { key:'Legend', label:'Legend', range:'+1000' }
+          { key:'Iron',          label:'Iron (↓0-100)' },
+          { key:'Bronze',        label:'Bronze (101-200)' },
+          { key:'Silver',        label:'Silver (201-300)' },
+          { key:'Gold',          label:'Gold (301-400)' },
+          { key:'Platinum',      label:'Platinum (401-500)' },
+          { key:'Diamond',       label:'Diamond (501-600)' },
+          { key:'Crystal',       label:'Crystal (601-700)' },
+          { key:'Master',        label:'Master (701-800)' },
+          { key:'Champion',      label:'Champion (801-900)' },
+          { key:'GrandChampion', label:'GrandChampion (901-999)' },
+          { key:'Legend',        label:'Legend (↑1000)' }
         ]
       }
     },
@@ -586,6 +518,18 @@
 </script>
 
 <!-- Firebase + Auth + Discord OAuth (popup) + PFP -->
+<!-- OPCIONAL: pega tu config aquí para evitar editar el JS -->
+<script id="fb-config" type="application/json">
+{
+  "apiKey": "TU_API_KEY",
+  "authDomain": "TU_AUTH_DOMAIN",
+  "projectId": "TU_PROJECT_ID",
+  "storageBucket": "TU_BUCKET",
+  "messagingSenderId": "TU_SENDER_ID",
+  "appId": "TU_APP_ID"
+}
+</script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
@@ -597,20 +541,48 @@
     getFirestore, doc, setDoc, updateDoc, getDoc, getDocs, collection, serverTimestamp, query, limit, Timestamp
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+  // ========== CONFIG FIREBASE (con validación) ==========
+  // 1) Lee desde el script fb-config (recomendado para no tocar JS)
+  let externalCfg = {};
+  try {
+    const node = document.getElementById('fb-config');
+    if (node?.textContent) externalCfg = JSON.parse(node.textContent);
+  } catch {}
+
+  // 2) Fallback si no se usa fb-config:
   const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_BUCKET",
-    messagingSenderId: "TU_SENDER_ID",
-    appId: "TU_APP_ID",
+    apiKey: externalCfg.apiKey || "TU_API_KEY",
+    authDomain: externalCfg.authDomain || "TU_AUTH_DOMAIN",
+    projectId: externalCfg.projectId || "TU_PROJECT_ID",
+    storageBucket: externalCfg.storageBucket || "TU_BUCKET",
+    messagingSenderId: externalCfg.messagingSenderId || "TU_SENDER_ID",
+    appId: externalCfg.appId || "TU_APP_ID",
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-  await setPersistence(auth, browserLocalPersistence);
+  function isPlaceholder(v){ return !v || /^TU_/.test(v) || v === "TU_BUCKET" || v === "TU_SENDER_ID" || v === "TU_APP_ID"; }
+  function ensureValidFirebaseConfig(cfg){
+    const bad = Object.entries(cfg).filter(([k,v])=>isPlaceholder(v)).map(([k])=>k);
+    if (bad.length){
+      const msg = `Config de Firebase inválida. Faltan: ${bad.join(", ")}.
+      Coloca tus credenciales reales en <script id="fb-config">…</script> o en la constante firebaseConfig.`;
+      const box = document.getElementById('configError');
+      if (box){ box.style.display='block'; box.textContent = msg; }
+      // Deshabilitar acciones de auth para evitar errores confusos
+      ["btnLogin","btnRegister","btnLoginDiscord","btnRegisterDiscord","btnReset","btnResendFromLogin"].forEach(id=>{
+        const el = document.getElementById(id); if(el){ el.disabled = true; el.classList.add('disabled'); }
+      });
+      return false;
+    }
+    return true;
+  }
 
+  const cfgOK = ensureValidFirebaseConfig(firebaseConfig);
+  const app  = cfgOK ? initializeApp(firebaseConfig) : null;
+  const auth = cfgOK ? getAuth(app) : null;
+  const db   = cfgOK ? getFirestore(app) : null;
+  if (auth) await setPersistence(auth, browserLocalPersistence);
+
+  // ========== Utilidades UI ==========
   const $  = (sel)=>document.querySelector(sel);
   const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
   const show = (el,on=true)=> el && (el.style.display = on ? "" : "none");
@@ -629,35 +601,52 @@
   function setActiveTab(name){
     $$(".tabbtn").forEach(b=>b.classList.toggle("active", b.dataset.tab===name));
     $$("main section").forEach(s=>s.classList.toggle("active", s.id===name));
+    if(name === 'profile') checkProfileAccess();
   }
   $("#tabs").addEventListener("click",(e)=>{
     const btn = e.target.closest(".tabbtn");
-    if(!btn || btn.disabled) return;
+    if(!btn) return;
     setActiveTab(btn.dataset.tab);
   });
 
   // ===== Discord OAuth (popup)
   const OAUTH_URL = "https://TU_BACKEND/oauth/discord/start";
   async function openDiscord(flow){
-    if(!auth.currentUser){ alert("Primero inicia sesión o regístrate."); return; }
+    if(!auth?.currentUser){ alert("Primero inicia sesión o regístrate."); return; }
     const uid = auth.currentUser.uid;
     window.open(`${OAUTH_URL}?uid=${encodeURIComponent(uid)}&flow=${flow}`, "_blank", "width=520,height=650");
   }
-  $("#btnLoginDiscord").addEventListener("click",()=>openDiscord("login"));
-  $("#btnRegisterDiscord").addEventListener("click",()=>openDiscord("register"));
+  $("#btnLoginDiscord")?.addEventListener("click",()=>openDiscord("login"));
+  $("#btnRegisterDiscord")?.addEventListener("click",()=>openDiscord("register"));
+
+  // Validación de coincidencia de nombre al volver del OAuth
+  async function enforceDiscordMatch(uid){
+    const udoc = await getDoc(doc(db,"users",uid));
+    const vdoc = await getDoc(doc(db,"verifications",uid));
+    const showName = udoc.exists()? (udoc.data().showName || udoc.data().discordName) : null;
+    const discordName = vdoc.exists()? vdoc.data().discordName : null;
+    if(!showName || !discordName) return false;
+    const ok = String(showName).trim().toLowerCase() === String(discordName).trim().toLowerCase();
+    if(!ok){
+      await setDoc(doc(db,"verifications",uid), { discordVerified:false, mismatch:true }, {merge:true});
+      showMsg($("#welcomeMsg"), "El Discord autorizado no coincide con tu username/showname registrado.", "err");
+    }
+    return ok;
+  }
+
+  // Mensajes post-OAuth
   window.addEventListener("message", async (ev)=>{
-    if(ev.data === "discord-linked"){
-      showMsg($("#welcomeMsg"), "Discord conectado ✔", "ok");
-      if(auth.currentUser){
-        const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
-        const udoc = await getDoc(doc(db,"users",auth.currentUser.uid));
-        hydrateVerifyUI({
-          discordVerified: vdoc.exists() ? !!vdoc.data().discordVerified : true,
-          emailVerified: auth.currentUser.emailVerified,
-          code: vdoc.exists()? vdoc.data().code : $("#discCode").textContent,
-          showName: udoc.exists()? (udoc.data().showName || udoc.data().discordName) : "usuario123"
-        });
-      }
+    if(ev.data === "discord-linked" && auth?.currentUser){
+      const ok = await enforceDiscordMatch(auth.currentUser.uid);
+      const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
+      hydrateVerifyUI({
+        discordVerified: ok && vdoc.exists() ? !!vdoc.data().discordVerified : ok,
+        emailVerified: auth.currentUser.emailVerified,
+        code: vdoc.exists()? vdoc.data().code : $("#discCode").textContent,
+        emailDeadline: vdoc.exists()? vdoc.data().emailDeadline : null,
+        showName: (await getDoc(doc(db,"users",auth.currentUser.uid))).data()?.showName || "usuario123"
+      });
+      if(!ok) setActiveTab("home");
     }
     if(ev.data === "discord-failed"){
       showMsg($("#welcomeMsg"), "failed to verificate", "err");
@@ -665,7 +654,8 @@
   });
 
   // ===== Auth: Register
-  $("#btnRegister").addEventListener("click", async ()=>{
+  $("#btnRegister")?.addEventListener("click", async ()=>{
+    if(!auth) return;
     const discord = $("#regDiscord").value.trim();
     const email   = $("#regEmail").value.trim();
     const pass    = $("#regPass").value.trim();
@@ -682,10 +672,13 @@
         discordVerified: false, pfpUrl:"", createdAt:serverTimestamp(), updatedAt:serverTimestamp()
       }, {merge:true});
       const {code}=await createOrRefreshCode(user.uid, true);
+      // Email verification + deadline 5 min
       await sendEmailVerification(user);
+      const deadline = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
+      await setDoc(doc(db,"verifications",user.uid), { emailDeadline: deadline }, {merge:true});
       show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified:false, emailVerified:false, code, showName:discord});
-      showMsg(el,"Cuenta creada. Revisa los pasos de verificación abajo.","ok");
+      hydrateVerifyUI({discordVerified:false, emailVerified:false, code, emailDeadline:deadline, showName:discord});
+      showMsg(el,"Cuenta creada. Completa verificación (Discord requerido para PFP).", "ok");
     }catch(err){
       const map={"auth/email-already-in-use":"Ese email ya está registrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"La contraseña es muy débil (mínimo 6)."};
       showMsg(el, map[err.code] || ("Error al registrar: "+err.message), "err");
@@ -693,7 +686,8 @@
   });
 
   // ===== Auth: Login
-  $("#btnLogin").addEventListener("click", async ()=>{
+  $("#btnLogin")?.addEventListener("click", async ()=>{
+    if(!auth) return;
     const discord = $("#loginDiscord").value.trim();
     const email   = $("#loginEmail").value.trim();
     const pass    = $("#loginPass").value.trim();
@@ -704,28 +698,47 @@
       const user = cred.user;
       await ensureUserDiscord(user.uid, discord);
       const {code}=await createOrRefreshCode(user.uid, false);
+      // Auto-enviar verificación de email al hacer login si aún no está verificado (y programar 5 min)
+      if(!user.emailVerified){
+        await sendEmailVerification(user);
+        const deadline = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
+        await setDoc(doc(db,"verifications",user.uid), { emailDeadline: deadline }, {merge:true});
+      }
       await user.reload();
       const vdoc = await getDoc(doc(db,"verifications",user.uid));
       const v = vdoc.exists() ? vdoc.data() : {discordVerified:false, emailVerified:user.emailVerified};
       show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified:!!v.discordVerified, emailVerified: user.emailVerified, code, showName:discord});
-      showMsg(el,"Login correcto. Completa verificación si falta.","ok");
+      hydrateVerifyUI({
+        discordVerified: !!v.discordVerified,
+        emailVerified: user.emailVerified,
+        code,
+        emailDeadline: v.emailDeadline || null,
+        showName: discord
+      });
+      showMsg(el,"Login correcto. Vincula Discord si aún no lo hiciste para poder usar PFP.", "ok");
     }catch(err){
       const map={"auth/invalid-email":"Email inválido.","auth/user-disabled":"Usuario deshabilitado.","auth/user-not-found":"No existe cuenta con ese email.","auth/wrong-password":"Contraseña incorrecta."};
       showMsg(el, map[err.code] || ("Error al iniciar sesión: "+err.message), "err");
     }
   });
 
-  $("#btnReset").addEventListener("click", async ()=>{
+  $("#btnReset")?.addEventListener("click", async ()=>{
+    if(!auth) return;
     const email = $("#loginEmail").value.trim() || prompt("Escribe tu email para enviar el reset:");
     if(!email) return;
     try{ await sendPasswordResetEmail(auth,email); showMsg($("#loginMsg"),"Te enviamos un correo para resetear tu contraseña.","ok"); }
     catch(err){ showMsg($("#loginMsg"),"No pudimos enviar el reset: "+err.message,"err"); }
   });
 
-  $("#btnResendFromLogin").addEventListener("click", async ()=>{
-    if(!auth.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión.","err"); return; }
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#loginMsg"),"Correo reenviado.","ok"); }
+  $("#btnResendFromLogin")?.addEventListener("click", async ()=>{
+    if(!auth?.currentUser){ showMsg($("#loginMsg"),"Primero inicia sesión.","err"); return; }
+    try{
+      await sendEmailVerification(auth.currentUser);
+      const deadline = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
+      await setDoc(doc(db,"verifications",auth.currentUser.uid), { emailDeadline: deadline }, {merge:true});
+      showMsg($("#loginMsg"),"Correo reenviado (caduca en 5 min).","ok");
+      hydrateVerifyUI({emailVerified:false, discordVerified:false, code: $("#discCode").textContent, emailDeadline:deadline, showName: auth.currentUser.displayName || ""});
+    }
     catch(err){ showMsg($("#loginMsg"),"No se pudo reenviar: "+err.message,"err"); }
   });
 
@@ -741,20 +754,30 @@
         }, {merge:true});
       }
       show($("#authArea"), false); show($("#welcomeArea"), true);
-      hydrateVerifyUI({discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false, emailVerified: user.emailVerified, code, showName});
+      hydrateVerifyUI({
+        discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false,
+        emailVerified: user.emailVerified,
+        code,
+        emailDeadline: vdoc.exists()? vdoc.data().emailDeadline : null,
+        showName
+      });
     }else{
       show($("#welcomeArea"), false); show($("#authArea"), true);
-      $("#tabProfile").disabled = true;
     }
   });
 
-  $("#btnResendVerify").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
-    try{ await sendEmailVerification(auth.currentUser); showMsg($("#welcomeMsg"),"Correo de verificación reenviado.","ok"); }
-    catch(err){ showMsg($("#welcomeMsg"),"No se pudo reenviar: "+err.message,"err"); }
+  $("#btnResendVerify")?.addEventListener("click", async ()=>{
+    if(!auth?.currentUser) return;
+    try{
+      await sendEmailVerification(auth.currentUser);
+      const deadline = Timestamp.fromDate(new Date(Date.now()+5*60*1000));
+      await setDoc(doc(db,"verifications",auth.currentUser.uid), { emailDeadline: deadline }, {merge:true});
+      showMsg($("#welcomeMsg"),"Correo de verificación reenviado (caduca en 5 min).","ok");
+      startEmailCountdown(deadline);
+    }catch(err){ showMsg($("#welcomeMsg"),"No se pudo reenviar: "+err.message,"err"); }
   });
-  $("#btnIHaveVerified").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
+  $("#btnIHaveVerified")?.addEventListener("click", async ()=>{
+    if(!auth?.currentUser) return;
     await auth.currentUser.reload();
     const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
     const udoc = await getDoc(doc(db,"users",auth.currentUser.uid));
@@ -762,25 +785,26 @@
       discordVerified: vdoc.exists()? !!vdoc.data().discordVerified : false,
       emailVerified: auth.currentUser.emailVerified,
       code: vdoc.exists()? vdoc.data().code : "------",
+      emailDeadline: vdoc.exists()? vdoc.data().emailDeadline : null,
       showName: udoc.exists()? udoc.data().showName : "usuario123"
     });
   });
 
-  $("#btnCopyCode").addEventListener("click", ()=>{
+  $("#btnCopyCode")?.addEventListener("click", ()=>{
     const code = $("#discCode").textContent.trim();
     navigator.clipboard.writeText(code);
     showMsg($("#welcomeMsg"),"Código copiado.","ok");
   });
 
-  $("#btnRegenCode").addEventListener("click", async ()=>{
-    if(!auth.currentUser) return;
+  $("#btnRegenCode")?.addEventListener("click", async ()=>{
+    if(!auth?.currentUser) return;
     const {code}=await createOrRefreshCode(auth.currentUser.uid,true);
     $("#discCode").textContent = code;
     showMsg($("#welcomeMsg"),"Nuevo código generado.","ok");
   });
 
-  $("#btnGoProfile").addEventListener("click", ()=> setActiveTab("profile"));
-  $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); setActiveTab("home"); });
+  $("#btnGoProfile")?.addEventListener("click", ()=> setActiveTab("profile"));
+  $("#btnLogout")?.addEventListener("click", async ()=>{ if(auth) await signOut(auth); setActiveTab("home"); });
 
   async function ensureUserDiscord(uid, discord){
     const uref = doc(db,"users",uid);
@@ -800,19 +824,37 @@
     const d=v.data(); return { code: d.code||newCode, expiresAt: d.expiresAt || expiresAt };
   }
 
-  function hydrateVerifyUI({discordVerified, emailVerified, code, showName}){
+  // Countdown UI para email (5 min)
+  let emailTimerHandle = null;
+  function startEmailCountdown(deadlineTs){
+    clearInterval(emailTimerHandle);
+    if(!deadlineTs){ $("#emailTimer").textContent = "—:—"; return; }
+    function tick(){
+      const left = deadlineTs.toMillis() - Date.now();
+      if(left <= 0){ $("#emailTimer").textContent = "00:00"; clearInterval(emailTimerHandle); return; }
+      const m = Math.floor(left/60000), s = Math.floor((left%60000)/1000);
+      $("#emailTimer").textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    tick();
+    emailTimerHandle = setInterval(tick, 1000);
+  }
+
+  function hydrateVerifyUI({discordVerified, emailVerified, code, emailDeadline, showName}){
     $("#welcomeName").textContent = showName || "usuario123";
     $("#discCode").textContent = code || "------";
     $("#discBadge").textContent = discordVerified ? "Verificado" : "Pendiente";
     $("#discBadge").className = "badge" + (discordVerified ? " ok" : "");
     $("#mailBadge").textContent = emailVerified ? "Verificado" : "Pendiente";
     $("#mailBadge").className = "badge" + (emailVerified ? " ok" : "");
-    const ready = discordVerified && emailVerified;
-    $("#btnGoProfile").disabled = !ready;
-    $("#btnLogout").disabled   = !ready;
-    $("#tabProfile").disabled  = !ready;
-    if(ready){ showMsg($("#welcomeMsg"),"¡Todo listo! Ya puedes ir a Edit Profile.","ok"); }
-    else { showMsg($("#welcomeMsg"),"Completa las verificaciones para habilitar Edit Profile.","info"); }
+    startEmailCountdown(emailDeadline || null);
+
+    // Acceso a PFP SOLO por Discord
+    if(discordVerified){
+      showMsg($("#welcomeMsg"),"Discord verificado. Ya puedes ir a Edit Profile para elegir tu PFP.","ok");
+    }else{
+      showMsg($("#welcomeMsg"),"Vincula y autoriza tu Discord para habilitar Edit Profile.","info");
+    }
+    checkProfileAccess(discordVerified);
   }
 
   // ========= PFP: catálogo =========
@@ -895,20 +937,20 @@
     });
   }
 
-  $("#pfpVersion").addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
-  $("#pfpSearch").addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
+  $("#pfpVersion")?.addEventListener("change", ()=>{ statePFP.version=$("#pfpVersion").value; filterCards(); renderCardGrid(); });
+  $("#pfpSearch")?.addEventListener("input",  ()=>{ statePFP.search=$("#pfpSearch").value.trim().toLowerCase(); filterCards(); renderCardGrid(); });
 
-  $("#btnSetManual").addEventListener("click", async ()=>{
+  $("#btnSetManual")?.addEventListener("click", async ()=>{
     const url = $("#manualUrl").value.trim();
     if(!url) return;
     await setPfpUrl(url);
   });
 
-  $("#btnClearPfp").addEventListener("click", async ()=>{
-    const u = auth.currentUser; if(!u) return;
-    await updateDoc(doc(db,"users",u.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
-    const key = await getDisplayKey(u.uid);
-    await setDoc(doc(db,"pfps", key), { url:"", updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+  $("#btnClearPfp")?.addEventListener("click", async ()=>{
+    if(!auth?.currentUser) return;
+    await updateDoc(doc(db,"users",auth.currentUser.uid), { pfpUrl:"", updatedAt:serverTimestamp() });
+    const key = await getDisplayKey(auth.currentUser.uid);
+    await setDoc(doc(db,"pfps", key), { url:"", updatedAt: serverTimestamp(), by:auth.currentUser.uid }, {merge:true});
     alert("PFP eliminado.");
   });
 
@@ -919,10 +961,16 @@
   }
 
   async function setPfpUrl(url){
-    const u = auth.currentUser; if(!u){ setActiveTab("home"); alert("Inicia sesión y completa verificaciones."); return; }
-    await updateDoc(doc(db,"users",u.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
-    const key = await getDisplayKey(u.uid);
-    await setDoc(doc(db,"pfps", key), { url, updatedAt: serverTimestamp(), by:u.uid }, {merge:true});
+    if(!auth?.currentUser){ setActiveTab("home"); alert("Inicia sesión."); return; }
+    // Gate: requiere Discord verificado
+    const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
+    if(!vdoc.exists() || !vdoc.data().discordVerified){
+      alert("Debes vincular y autorizar tu Discord primero.");
+      return;
+    }
+    await updateDoc(doc(db,"users",auth.currentUser.uid), { pfpUrl:url, updatedAt:serverTimestamp() });
+    const key = await getDisplayKey(auth.currentUser.uid);
+    await setDoc(doc(db,"pfps", key), { url, updatedAt: serverTimestamp(), by:auth.currentUser.uid }, {merge:true});
     alert("PFP actualizado ✔");
   }
 
@@ -937,8 +985,20 @@
     return map;
   }
 
+  // ===== Gate de Profile (siempre clickeable la pestaña)
+  async function checkProfileAccess(forceDiscordOk){
+    const content = $("#profileContent");
+    const gate    = $("#profileGate");
+    if(!auth?.currentUser){
+      show(gate,true); show(content,false); return;
+    }
+    const vdoc = await getDoc(doc(db,"verifications",auth.currentUser.uid));
+    const ok = typeof forceDiscordOk === "boolean" ? forceDiscordOk : (vdoc.exists() && !!vdoc.data().discordVerified);
+    show(gate,!ok); show(content,ok);
+  }
+
   // start
-  fetchCards();
+  if (cfgOK) fetchCards();
 </script>
 </body>
 </html>
