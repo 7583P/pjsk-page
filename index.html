@@ -199,7 +199,7 @@
     <section id="home" class="active">
       <div class="hero card">
         <h1>Welcome to PJSK LOUNGE</h1>
-        <p>PJSK competitive — Discord Bot + Page.</p>
+        <p>PJSK LOUNGE, competitive project for PJSK with a Discord Bot especially created for the project.</p>
       </div>
 
       <div id="authArea" class="grid cols-2">
@@ -208,23 +208,23 @@
           <h2 style="margin:0 0 10px">Log in</h2>
           <div class="field">
             <label for="loginDiscord">Discord username o Showname</label>
-            <input id="loginDiscord" type="text" placeholder="usuario123 o usuario#0001" />
+            <input id="loginDiscord" type="text" placeholder="user123 o user#0001" />
           </div>
           <div class="field">
             <label for="loginEmail">Email</label>
-            <input id="loginEmail" type="email" placeholder="usuario123@email.com" autocomplete="username" />
+            <input id="loginEmail" type="email" placeholder="user123@email.com" autocomplete="username" />
           </div>
           <div class="field">
-            <label for="loginPass">Contraseña</label>
+            <label for="loginPass">Password</label>
             <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" />
           </div>
-          <button id="btnLogin" class="btn full">Entrar</button>
+          <button id="btnLogin" class="btn full">Enter</button>
           <div class="oauth-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button id="btnLoginDiscord" class="btn discord">Conectar con Discord</button>
+            <button id="btnLoginDiscord" class="btn discord">Conectar with Discord</button>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap">
             <button id="btnReset" class="btn ghost">Reset password</button>
-            <button id="btnResendFromLogin" class="btn ghost">Reenviar verificación email</button>
+            <button id="btnResendFromLogin" class="btn ghost">Resend verification email</button>
           </div>
           <div id="loginMsg"></div>
         </div>
@@ -234,19 +234,19 @@
           <h2 style="margin:0 0 10px">Register</h2>
           <div class="field">
             <label for="regDiscord">Discord username o Showname</label>
-            <input id="regDiscord" type="text" placeholder="usuario123 o usuario#0001" />
+            <input id="regDiscord" type="text" placeholder="user123 o user#0001" />
           </div>
           <div class="field">
             <label for="regEmail">Email</label>
-            <input id="regEmail" type="email" placeholder="usuario123@email.com" autocomplete="email" />
+            <input id="regEmail" type="email" placeholder="user123@email.com" autocomplete="email" />
           </div>
           <div class="field">
             <label for="regPass">Contraseña</label>
-            <input id="regPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+            <input id="regPass" type="password" placeholder="Mín 6 characters" autocomplete="new-password" />
           </div>
-          <button id="btnRegister" class="btn full">Crear cuenta</button>
+          <button id="btnRegister" class="btn full">Create account</button>
           <div class="oauth-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button id="btnRegisterDiscord" class="btn discord">Conectar con Discord</button>
+            <button id="btnRegisterDiscord" class="btn discord">Conectar with Discord</button>
           </div>
           <div id="regMsg"></div>
         </div>
@@ -254,28 +254,28 @@
 
       <!-- Pasos de verificación -->
       <div id="welcomeArea" class="card" style="display:none">
-        <h2 style="margin:0 0 6px">¡Hola, <span id="welcomeName">usuario123</span>!</h2>
+        <h2 style="margin:0 0 6px">¡Hola, <span id="welcomeName">user123</span>!</h2>
         <div class="steps">
           <div class="step">
             <div>
               <strong>1) Verificación de Discord</strong><br>
-              <span class="help">Opción A: Conecta tu Discord. Opción B: DM al bot <code>/verify <span id="discCode">------</span></code></span>
+              <span class="help">Opción A: Conect your Discord. Opción B: DM bot <code>/verify <span id="discCode">------</span></code></span>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <span id="discBadge" class="badge">Pendiente</span>
-              <button id="btnCopyCode" class="btn small ghost">Copiar código</button>
-              <button id="btnRegenCode" class="btn small ghost">Re-generar</button>
+              <button id="btnCopyCode" class="btn small ghost">Copy code</button>
+              <button id="btnRegenCode" class="btn small ghost">Re-generate</button>
             </div>
           </div>
           <div class="step">
             <div>
               <strong>2) Verificación de Email</strong><br>
-              <span class="help">Tienes <b>5 minutos</b> desde login/registro para verificar.</span>
+              <span class="help">You have <b>5 minutes</b> since login/registro to verificate.</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <span id="mailBadge" class="badge">Pendiente</span>
-              <button id="btnResendVerify" class="btn small warn">Reenviar email</button>
-              <button id="btnIHaveVerified" class="btn small ghost">Ya verifiqué</button>
+              <button id="btnResendVerify" class="btn small warn">Resend email</button>
+              <button id="btnIHaveVerified" class="btn small ghost">i verified</button>
             </div>
           </div>
           <div class="step">
@@ -310,7 +310,7 @@
                   <span :class="['text-gradient','rank-'+selectedRank]">({{ filteredCount }}) ▾</span>
                 </template>
                 <template v-else>
-                  <span class="text-gradient rank-Legend">Rangos ▾</span>
+                  <span class="text-gradient rank-Legend">Ranges ▾</span>
                 </template>
               </button>
               <div id="rankList" class="dropdown-content" v-show="menuOpen">
