@@ -178,6 +178,78 @@
     .tile-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#0a0c11}
     .tile-meta{padding:8px;font-size:.85rem;color:#ddd;display:flex;justify-content:space-between;gap:8px}
     .danger{color:#ffb3b3}
+    /* ===== MOBILE (portrait) — compactar Leaderboard ===== */
+@media (max-width: 430px) and (orientation: portrait) {
+
+  /* Fila más baja en móviles */
+  :root { --rowhLB: 42px; }
+
+  /* Panel/target generales un poco más compactos */
+  .container { padding: 12px !important; }
+  .card { padding: 12px !important; border-radius: 14px !important; }
+
+  /* Títulos y controles más chicos */
+  #lbApp h1 { font-size: 20px; margin-bottom: 10px; }
+  #lbApp .controls { margin-bottom: 8px; }
+  #lbApp input[type="text"] { height: 34px; font-size: 14px; width: 100%; max-width: none; }
+  #lbApp .dropbtn { padding: 6px 10px; font-size: 13px; }
+  #lbApp .dropdown-content { min-width: 200px; }
+
+  /* Tabla: fijar layout y compactar celdas */
+  #lbApp table { width: 100%; table-layout: fixed; }
+  #lbApp th, #lbApp td {
+    padding: 6px 6px;
+    font-size: 13px;
+    line-height: 1.15;
+    height: var(--rowhLB);
+  }
+
+  /* Anchos de columnas: # | Player | MMR | Rango */
+  #lbApp thead th:nth-child(1),
+  #lbApp tbody td:nth-child(1) { width: 64px; text-align: center; }  /* ranking + flag + pfp */
+  #lbApp thead th:nth-child(3),
+  #lbApp tbody td:nth-child(3) { width: 64px; text-align: right; }   /* MMR */
+  #lbApp thead th:nth-child(4),
+  #lbApp tbody td:nth-child(4) { width: 92px; text-align: center; }  /* Rango */
+
+  /* Player ocupa el resto + elipsis si es largo */
+  #lbApp thead th:nth-child(2),
+  #lbApp tbody td:nth-child(2) {
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Ajustes del primer <td> (#) con flag + pfp */
+  #lbApp .position-cell { padding-right: 64px; }           /* antes 120px */
+  #lbApp .position-cell .flag {
+    width: 16px; height: 12px;
+    right: 40px;                                          /* antes 72px */
+    top: 50%; transform: translateY(-50%);
+  }
+  #lbApp .position-cell .pfp-sq {
+    right: 6px;
+    width: calc(var(--rowhLB) - 12px);                    /* ~30px */
+    height: calc(var(--rowhLB) - 12px);
+    border-radius: 6px;
+  }
+
+  /* Texto con gradiente y emojis */
+  #lbApp .name-gradient { font-size: 13px; }
+}
+
+/* (Opcional) En teléfonos muy chicos, esconder la columna Rango
+   para ganar espacio extra (descomenta si lo necesitas) */
+/*
+@media (max-width: 360px) and (orientation: portrait) {
+  #lbApp thead th:nth-child(4),
+  #lbApp tbody td:nth-child(4) { display:none; }
+  #lbApp thead th:nth-child(2),
+  #lbApp tbody td:nth-child(2) { width:auto; }
+}
+*/
+
   </style>
 </head>
 <body>
