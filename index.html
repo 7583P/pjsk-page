@@ -180,64 +180,51 @@
     .danger{color:#ffb3b3}
     /* ===== MOBILE (portrait) — compactar Leaderboard ===== */
 @media (max-width: 430px) and (orientation: portrait) {
+  /* ...dejas lo demás como ya lo tienes... */
 
-  /* Fila más baja en móviles */
-  :root { --rowhLB: 42px; }
-
-  /* Panel/target generales un poco más compactos */
-  .container { padding: 12px !important; }
-  .card { padding: 12px !important; border-radius: 14px !important; }
-
-  /* Títulos y controles más chicos */
-  #lbApp h1 { font-size: 20px; margin-bottom: 10px; }
-  #lbApp .controls { margin-bottom: 8px; }
-  #lbApp input[type="text"] { height: 34px; font-size: 14px; width: 100%; max-width: none; }
-  #lbApp .dropbtn { padding: 6px 10px; font-size: 13px; }
-  #lbApp .dropdown-content { min-width: 200px; }
-
-  /* Tabla: fijar layout y compactar celdas */
-  #lbApp table { width: 100%; table-layout: fixed; }
-  #lbApp th, #lbApp td {
-    padding: 6px 6px;
-    font-size: 13px;
-    line-height: 1.15;
-    height: var(--rowhLB);
-  }
-
-  /* Anchos de columnas: # | Player | MMR | Rango */
+  /* 1) Primera columna: ancho fijo para que la bandera no “empuje” al número */
   #lbApp thead th:nth-child(1),
-  #lbApp tbody td:nth-child(1) { width: 64px; text-align: center; }  /* ranking + flag + pfp */
-  #lbApp thead th:nth-child(3),
-  #lbApp tbody td:nth-child(3) { width: 64px; text-align: right; }   /* MMR */
-  #lbApp thead th:nth-child(4),
-  #lbApp tbody td:nth-child(4) { width: 92px; text-align: center; }  /* Rango */
-
-  /* Player ocupa el resto + elipsis si es largo */
-  #lbApp thead th:nth-child(2),
-  #lbApp tbody td:nth-child(2) {
-    width: auto;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  #lbApp tbody td:nth-child(1){
+    width: 72px;                 /* puedes bajar a 64px si quieres aún más compacto */
+    text-align: left;
   }
 
-  /* Ajustes del primer <td> (#) con flag + pfp */
-  #lbApp .position-cell { padding-right: 64px; }           /* antes 120px */
-  #lbApp .position-cell .flag {
+  /* 2) Número + bandera uno al lado del otro (la bandera NO es absoluta) */
+  #lbApp .position-cell{
+    position: relative;
+    display: flex;               /* número + bandera en línea */
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;                    /* “poquito de distancia” entre número y bandera */
+    padding-left: 8px;
+    padding-right: 52px;         /* reserva para el PFP a la derecha */
+  }
+
+  /* 3) Reservar un mínimo para el número (1–3 dígitos) y que no se mueva */
+  #lbApp .position-cell > span:first-child{
+    min-width: 22px;             /* asegura espacio del número */
+    text-align: right;
+  }
+
+  /* 4) La bandera ahora es estática, chiquita y pegada al número */
+  #lbApp .position-cell .flag{
+    position: static;            /* ← importante: deja de ser absolute */
     width: 16px; height: 12px;
-    right: 40px;                                          /* antes 72px */
-    top: 50%; transform: translateY(-50%);
+    margin-left: 2px;            /* mínima separación respecto al número */
+    transform: none;
+    box-shadow: 0 0 0 1px #0008;
   }
-  #lbApp .position-cell .pfp-sq {
+
+  /* 5) El PFP sigue anclado a la derecha del <td> */
+  #lbApp .position-cell .pfp-sq{
+    position: absolute;
     right: 6px;
-    width: calc(var(--rowhLB) - 12px);                    /* ~30px */
+    width: calc(var(--rowhLB) - 12px);
     height: calc(var(--rowhLB) - 12px);
     border-radius: 6px;
   }
-
-  /* Texto con gradiente y emojis */
-  #lbApp .name-gradient { font-size: 13px; }
 }
+
 
 /* (Opcional) En teléfonos muy chicos, esconder la columna Rango
    para ganar espacio extra (descomenta si lo necesitas) */
